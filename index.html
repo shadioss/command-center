@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHADY AI — Command Center</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&display=swap');
+:root{--cyan:#00f5ff;--blue:#0080ff;--purple:#8000ff;--green:#00ff88;--orange:#ff8c00;--pink:#ff0080;--red:#ff2244;--dark:#020818;--card:rgba(0,20,50,0.85);--border:rgba(0,245,255,0.2);--text:#a0d4ff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--dark);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.03) 1px,transparent 1px);background-size:50px 50px;animation:gridMove 20s linear infinite;pointer-events:none}
+@keyframes gridMove{0%{transform:translateY(0)}100%{transform:translateY(50px)}}
+body::after{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:scan 4s linear infinite;pointer-events:none;z-index:999}
+@keyframes scan{0%{top:0}100%{top:100vh}}
+.header{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--border);background:rgba(0,10,30,0.9);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.logo{display:flex;align-items:center;gap:15px}
+.logo-icon{width:50px;height:50px;border:2px solid var(--cyan);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;animation:pulse 2s ease-in-out infinite;box-shadow:0 0 20px rgba(0,245,255,0.4)}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(0,245,255,0.4)}50%{box-shadow:0 0 40px rgba(0,245,255,0.8),0 0 60px rgba(0,245,255,0.3)}}
+.logo-text{font-family:'Orbitron',monospace}
+.logo-title{font-size:22px;font-weight:900;color:var(--cyan);letter-spacing:4px}
+.logo-sub{font-size:11px;color:rgba(0,245,255,0.5);letter-spacing:6px}
+.header-right{display:flex;align-items:center;gap:30px}
+.status-pill{display:flex;align-items:center;gap:8px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:20px;padding:6px 16px;font-size:12px;color:var(--green);letter-spacing:2px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:blink 1s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.clock{font-family:'Orbitron',monospace;font-size:14px;color:var(--cyan);letter-spacing:2px}
+.metrics-bar{display:flex;gap:0;border-bottom:1px solid var(--border);background:rgba(0,10,25,0.6)}
+.metric{flex:1;padding:18px 30px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:4px}
+.metric:last-child{border-right:none}
+.metric-label{font-size:10px;letter-spacing:3px;color:rgba(160,212,255,0.5);text-transform:uppercase}
+.metric-value{font-family:'Orbitron',monospace;font-size:26px;font-weight:700}
+.metric-sub{font-size:11px;color:rgba(160,212,255,0.4)}
+.cv{color:var(--cyan)}.gv{color:var(--green)}.ov{color:var(--orange)}.pv{color:var(--purple)}
+.main{padding:30px 40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.dept-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;position:relative;overflow:hidden;transition:all 0.3s ease;cursor:pointer}
+.dept-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.dept-card:hover{transform:translateY(-4px);border-color:rgba(0,245,255,0.5);box-shadow:0 10px 40px rgba(0,0,0,0.5),0 0 20px rgba(0,245,255,0.1)}
+.dept-card.etsy::before{background:linear-gradient(90deg,#ff6b35,#f7931e)}
+.dept-card.fiverr::before{background:linear-gradient(90deg,#1dbf73,#00d26a)}
+.dept-card.tiktok::before{background:linear-gradient(90deg,#ff0050,#00f2ea)}
+.dept-card.n8n::before{background:linear-gradient(90deg,#ea4b71,#ff6d00)}
+.dept-card.research::before{background:linear-gradient(90deg,#8000ff,#0080ff)}
+.dept-card.revenue::before{background:linear-gradient(90deg,#00f5ff,#00ff88)}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.card-icon{font-size:36px;line-height:1}
+.card-status{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;padding:4px 10px;border-radius:10px}
+.status-live{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.3)}
+.status-building{background:rgba(255,140,0,0.1);color:var(--orange);border:1px solid rgba(255,140,0,0.3)}
+.status-planned{background:rgba(128,0,255,0.1);color:#a066ff;border:1px solid rgba(128,0,255,0.3)}
+.card-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;letter-spacing:2px}
+.card-desc{font-size:12px;color:rgba(160,212,255,0.5);letter-spacing:1px;margin-bottom:20px}
+.agents-section{margin-bottom:18px}
+.agents-label{font-size:10px;letter-spacing:3px;color:rgba(160,212,255,0.4);text-transform:uppercase;margin-bottom:10px}
+.agents-grid{display:flex;gap:8px;flex-wrap:wrap}
+.agent-node{display:flex;align-items:center;gap:6px;background:rgba(0,245,255,0.05);border:1px solid rgba(0,245,255,0.15);border-radius:6px;padding:5px 10px;font-size:11px;color:rgba(160,212,255,0.7);transition:all 0.3s}
+.agent-node:hover{background:rgba(0,245,255,0.1);border-color:rgba(0,245,255,0.4);color:var(--cyan)}
+.agent-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s ease-in-out infinite}
+.agent-dot.orange{background:var(--orange)}.agent-dot.purple{background:#a066ff}.agent-dot.blue{background:var(--blue)}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-box{background:rgba(0,0,0,0.3);border:1px solid rgba(0,245,255,0.1);border-radius:8px;padding:10px 12px}
+.stat-num{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;color:var(--cyan);line-height:1}
+.stat-lbl{font-size:10px;color:rgba(160,212,255,0.4);letter-spacing:1px;margin-top:3px}
+.progress-section{margin-top:4px}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:rgba(160,212,255,0.4);margin-bottom:6px;letter-spacing:1px}
+.progress-bar{height:4px;background:rgba(0,245,255,0.1);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;border-radius:2px;transition:width 1.5s ease}
+.fill-green{background:linear-gradient(90deg,var(--green),#00ffcc)}
+.fill-orange{background:linear-gradient(90deg,var(--orange),#ffcc00)}
+.fill-purple{background:linear-gradient(90deg,var(--purple),var(--blue))}
+.fill-cyan{background:linear-gradient(90deg,var(--cyan),var(--blue))}
+.fill-pink{background:linear-gradient(90deg,var(--pink),var(--purple))}
+.dept-card.wide{grid-column:span 3}.dept-card.double{grid-column:span 2}
+.activity-feed{display:flex;flex-direction:column;gap:8px;max-height:160px;overflow-y:auto}
+.activity-item{display:flex;align-items:center;gap:12px;padding:8px 12px;background:rgba(0,0,0,0.2);border-radius:6px;border-left:3px solid var(--green);font-size:12px}
+.activity-item.warn{border-left-color:var(--orange)}.activity-item.info{border-left-color:var(--blue)}
+.activity-time{color:rgba(160,212,255,0.3);font-size:10px;letter-spacing:1px;min-width:50px}
+.activity-text{color:rgba(160,212,255,0.7)}
+.activity-badge{margin-left:auto;font-size:9px;padding:2px 8px;border-radius:8px;background:rgba(0,255,136,0.1);color:var(--green);letter-spacing:1px;white-space:nowrap}
+.activity-badge.warn{background:rgba(255,140,0,0.1);color:var(--orange)}.activity-badge.info{background:rgba(0,128,255,0.1);color:var(--blue)}
+.dept-card .corner{position:absolute;width:20px;height:20px;border-color:var(--cyan);border-style:solid;opacity:0.3}
+.corner.tl{top:8px;left:8px;border-width:2px 0 0 2px}.corner.br{bottom:8px;right:8px;border-width:0 2px 2px 0}
+.listing-rows{display:flex;flex-direction:column;gap:6px}
+.listing-row{display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;font-size:11px}
+.listing-num{font-family:'Orbitron',monospace;font-size:10px;color:rgba(160,212,255,0.3);min-width:16px}
+.listing-name{color:rgba(160,212,255,0.7);flex:1}
+.listing-price{font-family:'Orbitron',monospace;font-size:11px;color:var(--green)}
+.listing-status{width:6px;height:6px;border-radius:50%;background:var(--green)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(0,0,0,0.3)}::-webkit-scrollbar-thumb{background:rgba(0,245,255,0.3);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">&#x2B21;</div>
+    <div class="logo-text">
+      <div class="logo-title">SHADY AI</div>
+      <div class="logo-sub">COMMAND CENTER v1.0</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-pill"><div class="status-dot"></div>ALL SYSTEMS ONLINE</div>
+    <div class="clock" id="clock">--:--:--</div>
+  </div>
+</div>
+<div class="metrics-bar">
+  <div class="metric"><div class="metric-label">Active Departments</div><div class="metric-value cv">3</div><div class="metric-sub">of 5 total</div></div>
+  <div class="metric"><div class="metric-label">Total AI Agents</div><div class="metric-value gv">7</div><div class="metric-sub">across all depts</div></div>
+  <div class="metric"><div class="metric-label">Etsy Listings Live</div><div class="metric-value ov">6</div><div class="metric-sub">ShadyPrintables</div></div>
+  <div class="metric"><div class="metric-label">Potential Revenue</div><div class="metric-value pv">$42.94</div><div class="metric-sub">per full conversion</div></div>
+  <div class="metric"><div class="metric-label">Phase 1 Progress</div><div class="metric-value cv">35%</div><div class="metric-sub">Etsy complete</div></div>
+</div>
+<div class="main">
+  <div class="dept-card etsy double"><div class="corner tl"></div><div class="corner br"></div>
+    <div class="card-header">
+      <div><div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;"><div class="card-icon">&#128717;</div><div><div class="card-title">ETSY DEPARTMENT</div><div class="card-desc">ShadyPrintables &mdash; Digital Printables Store</div></div></div></div>
+      <div class="card-status status-live"><div class="status-dot"></div>LIVE</div>
+    </div>
+    <div class="agents-section"><div class="agents-label">Active Agents (3)</div><div class="agents-grid"><div class="agent-node"><div class="agent-dot"></div>Listing Builder</div><div class="agent-node"><div class="agent-dot"></div>PDF Generator</div><div class="agent-node"><div class="agent-dot"></div>Market Researcher</div></div></div>
+    <div class="stats-row"><div class="stat-box"><div class="stat-num" style="color:var(--orange)">6</div><div class="stat-lbl">Active Listings</div></div><div class="stat-box"><div class="stat-num" style="color:var(--green)">999</div><div class="stat-lbl">Stock Per Listing</div></div></div>
+    <div class="listing-rows">
+      <div class="listing-row"><div class="listing-num">01</div><div class="listing-name">2026 Monthly Budget Planner</div><div class="listing-price">$5.99</div><div class="listing-status"></div></div>
+      <div class="listing-row"><div class="listing-num">02</div><div class="listing-name">Kids Activity Sheets</div><div class="listing-price">$3.99</div><div class="listing-status"></div></div>
+      <div class="listing-row"><div class="listing-num">03</div><div class="listing-name">2026 Mental Health Journal</div><div class="listing-price">$9.99</div><div class="listing-status"></div></div>
+      <div class="listing-row"><div class="listing-num">04</div><div class="listing-name">2026 Daily Habit Tracker</div><div class="listing-price">$3.99</div><div class="listing-status"></div></div>
+      <div class="listing-row"><div class="listing-num">05</div><div class="listing-name">2026 Weekly Meal Planner</div><div class="listing-price">$6.99</div><div class="listing-status"></div></div>
+      <div class="listing-row"><div class="listing-num">06</div><div class="listing-name">2026 Wedding Planner</div><div class="listing-price">$12.99</div><div class="listing-status"></div></div>
+    </div>
+  </div>
+  <div class="dept-card n8n"><div class="corner tl"></div><div class="corner br"></div>
+    <div class="card-header"><div><div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;"><div class="card-icon">&#9881;&#65039;</div><div><div class="card-title">N8N AUTOMATION</div><div class="card-desc">Workflow Engine &amp; AI Orchestration</div></div></div></div><div class="card-status status-live"><div class="status-dot"></div>LIVE</div></div>
+    <div class="agents-section"><div class="agents-label">Active Workflows (3)</div><div class="agents-grid"><div class="agent-node"><div class="agent-dot blue"></div>Listing Gen</div><div class="agent-node"><div class="agent-dot blue"></div>Market Research</div><div class="agent-node"><div class="agent-dot blue"></div>TikTok Planner</div></div></div>
+    <div class="stats-row"><div class="stat-box"><div class="stat-num" style="color:var(--blue)">3</div><div class="stat-lbl">Workflows Built</div></div><div class="stat-box"><div class="stat-num" style="color:var(--cyan)">1000</div><div class="stat-lbl">Free Executions</div></div></div>
+    <div class="progress-section"><div class="progress-label"><span>CAPACITY USED</span><span>2%</span></div><div class="progress-bar"><div class="progress-fill fill-cyan" style="width:2%"></div></div><div class="progress-label"><span>WORKFLOWS ACTIVE</span><span>3/10</span></div><div class="progress-bar"><div class="progress-fill fill-purple" style="width:30%"></div></div></div>
+  </div>
+  <div class="dept-card fiverr"><div class="corner tl"></div><div class="corner br"></div>
+    <div class="card-header"><div><div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;"><div class="card-icon">&#128188;</div><div><div class="card-title">FIVERR DEPT</div><div class="card-desc">Freelance Services &amp; Gigs</div></div></div></div><div class="card-status status-building"><div class="status-dot orange"></div>NEXT</div></div>
+    <div class="agents-section"><div class="agents-label">Planned Agents (2)</div><div class="agents-grid"><div class="agent-node"><div class="agent-dot orange"></div>Gig Creator</div><div class="agent-node"><div class="agent-dot orange"></div>Order Manager</div></div></div>
+    <div class="stats-row"><div class="stat-box"><div class="stat-num" style="color:var(--orange)">0</div><div class="stat-lbl">Active Gigs</div></div><div class="stat-box"><div class="stat-num" style="color:var(--orange)">$0</div><div class="stat-lbl">Revenue</div></div></div>
+    <div class="progress-section"><div class="progress-label"><span>SETUP PROGRESS</span><span>0%</span></div><div class="progress-bar"><div class="progress-fill fill-orange" style="width:0%"></div></div></div>
+  </div>
+  <div class="dept-card tiktok"><div class="corner tl"></div><div class="corner br"></div>
+    <div class="card-header"><div><div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;"><div class="card-icon">&#128241;</div><div><div class="card-title">TIKTOK DEPT</div><div class="card-desc">@shadesphysique &mdash; Fat Loss Content</div></div></div></div><div class="card-status status-building"><div class="status-dot orange"></div>NEXT</div></div>
+    <div class="agents-section"><div class="agents-label">Planned Agents (2)</div><div class="agents-grid"><div class="agent-node"><div class="agent-dot orange"></div>Content Planner</div><div class="agent-node"><div class="agent-dot orange"></div>Shop Manager</div></div></div>
+    <div class="stats-row"><div class="stat-box"><div class="stat-num" style="color:var(--pink)">0</div><div class="stat-lbl">Videos Posted</div></div><div class="stat-box"><div class="stat-num" style="color:var(--pink)">0</div><div class="stat-lbl">Shop Products</div></div></div>
+    <div class="progress-section"><div class="progress-label"><span>SETUP PROGRESS</span><span>0%</span></div><div class="progress-bar"><div class="progress-fill fill-pink" style="width:0%"></div></div></div>
+  </div>
+  <div class="dept-card research"><div class="corner tl"></div><div class="corner br"></div>
+    <div class="card-header"><div><div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;"><div class="card-icon">&#128302;</div><div><div class="card-title">RESEARCH AI</div><div class="card-desc">Market Intelligence &amp; Niche Analysis</div></div></div></div><div class="card-status status-live"><div class="status-dot"></div>LIVE</div></div>
+    <div class="agents-section"><div class="agents-label">Active Agents (1)</div><div class="agents-grid"><div class="agent-node"><div class="agent-dot purple"></div>Niche Analyzer</div></div></div>
+    <div class="stats-row"><div class="stat-box"><div class="stat-num" style="color:#a066ff">6</div><div class="stat-lbl">Niches Analyzed</div></div><div class="stat-box"><div class="stat-num" style="color:#a066ff">6</div><div class="stat-lbl">Products Built</div></div></div>
+    <div class="progress-section"><div class="progress-label"><span>BATCH 1 COMPLETE</span><span>100%</span></div><div class="progress-bar"><div class="progress-fill fill-purple" style="width:100%"></div></div><div class="progress-label"><span>BATCH 2 READY</span><span>0%</span></div><div class="progress-bar"><div class="progress-fill fill-purple" style="width:0%"></div></div></div>
+  </div>
+  <div class="dept-card wide">
+    <div class="corner tl"></div><div class="corner br"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;"><div><div class="card-title" style="font-size:13px;">&#9889; SYSTEM ACTIVITY LOG</div><div class="card-desc" style="margin-bottom:0">Real-time operations &mdash; June 20, 2026</div></div><div class="card-status status-live"><div class="status-dot"></div>LIVE FEED</div></div>
+    <div class="activity-feed">
+      <div class="activity-item"><div class="activity-time">TODAY</div><div class="activity-text">2026 Wedding Planner published &mdash; ID: 4525260754 | PDF linked (237KB) | 2 photos</div><div class="activity-badge">ETSY &#10003;</div></div>
+      <div class="activity-item"><div class="activity-time">TODAY</div><div class="activity-text">2026 Weekly Meal Planner published &mdash; ID: 4525191829 | PDF linked (183KB) | 2 photos</div><div class="activity-badge">ETSY &#10003;</div></div>
+      <div class="activity-item"><div class="activity-time">TODAY</div><div class="activity-text">2026 Daily Habit Tracker published &mdash; ID: 4525186513 | PDF linked (216KB) | 2 photos</div><div class="activity-badge">ETSY &#10003;</div></div>
+      <div class="activity-item info"><div class="activity-time">TODAY</div><div class="activity-text">Master Project File created &mdash; ShadyPrintables Master HQ Google Sheet updated</div><div class="activity-badge info">SYSTEM</div></div>
+      <div class="activity-item info"><div class="activity-time">TODAY</div><div class="activity-text">Jarvis Command Center v1.0 deployed to GitHub Pages &mdash; shadioss.github.io/command-center</div><div class="activity-badge info">SYSTEM</div></div>
+      <div class="activity-item warn"><div class="activity-time">NEXT</div><div class="activity-text">Fiverr + TikTok departments pending setup. Voice interface pending OpenAI API key.</div><div class="activity-badge warn">ACTION NEEDED</div></div>
+    </div>
+  </div>
+</div>
+<script>
+function updateClock(){const n=new Date(),h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');document.getElementById('clock').textContent=h+':'+m+':'+s}
+setInterval(updateClock,1000);updateClock();
+setTimeout(()=>{document.querySelectorAll('.progress-fill').forEach(b=>{const w=b.style.width;b.style.width='0%';setTimeout(()=>{b.style.width=w},100)})},300);
+</script>
+</body>
+</html>
