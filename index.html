@@ -2,457 +2,481 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ATLAS — Command Center</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --bg:#020c18;
-  --cyan:#00d4ff;
-  --cyan2:#0077aa;
-  --gold:#f0c040;
-  --green:#00ff9d;
-  --red:#ff3a5c;
-  --purple:#b060ff;
-  --orange:#ff7030;
-  --dim:#0d2540;
-  --dimtxt:#2e5878;
-  --txt:#8abfd8;
-  --panel:rgba(2,16,36,0.96);
-  --border:rgba(0,180,220,0.25);
-  --border2:rgba(0,180,220,0.1);
+  --cyan:#00d4ff;--cyan2:#0077aa;
+  --purple:#cc44ff;--purple2:#8800cc;
+  --gold:#f0c040;--green:#00ff9d;
+  --red:#ff3a5c;--orange:#ff7030;
+  --sapphire:#4488ff;
+  --dim:#0d2540;--dimtxt:#2e5878;--txt:#8abfd8;
+  --panel:rgba(2,16,36,0.97);
+  --border:rgba(0,180,220,0.25);--border2:rgba(0,180,220,0.1);
 }
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);}
-body{
-  font-family:'Rajdhani',sans-serif;
+body{font-family:'Rajdhani',sans-serif;
   background-image:
-    radial-gradient(ellipse 70% 70% at 50% 50%,rgba(0,50,100,0.22) 0%,transparent 70%),
-    linear-gradient(rgba(0,40,70,0.055) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,40,70,0.055) 1px,transparent 1px);
-  background-size:100% 100%,50px 50px,50px 50px;
-}
+    radial-gradient(ellipse 65% 65% at 50% 52%,rgba(0,40,90,0.25) 0%,transparent 68%),
+    linear-gradient(rgba(0,40,70,0.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,40,70,0.05) 1px,transparent 1px);
+  background-size:100% 100%,50px 50px,50px 50px;}
 
-/* ============================
-   TOP BAR — LARGE & CLEAR
-   ============================ */
+/* ======= TOP BAR ======= */
 .topbar{
-  position:fixed;top:0;left:0;right:0;height:58px;z-index:200;
-  background:rgba(2,12,24,0.98);
-  border-bottom:2px solid rgba(0,180,220,0.3);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;
+  position:fixed;top:0;left:0;right:0;height:70px;z-index:300;
+  background:rgba(2,10,22,0.99);
+  border-bottom:2px solid rgba(0,180,220,0.35);
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;padding:0 28px;gap:16px;
 }
-.brand{display:flex;align-items:center;gap:12px;}
-.brand-ring svg{width:36px;height:36px;}
-.brand-text .bname{
-  font-family:'Orbitron',sans-serif;font-size:1.25rem;font-weight:900;
-  letter-spacing:0.35em;
-  background:linear-gradient(120deg,#ffffff 0%,var(--cyan) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.brand-text .bsub{font-size:0.58rem;letter-spacing:0.25em;color:var(--dimtxt);margin-top:1px;}
+.brand{display:flex;align-items:center;gap:14px;}
+.brand svg{width:42px;height:42px;flex-shrink:0;}
+.bname{font-family:'Orbitron',sans-serif;font-size:1.7rem;font-weight:900;
+  letter-spacing:0.3em;
+  background:linear-gradient(120deg,#fff,var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.bsub{font-size:0.75rem;letter-spacing:0.22em;color:var(--dimtxt);margin-top:2px;}
 
-.wf-zone{
-  flex:1;max-width:540px;margin:0 24px;
-  height:38px;display:flex;align-items:center;justify-content:center;
-  gap:2.5px;overflow:hidden;position:relative;
+/* ATLAS FACE — top center */
+.atlas-face{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;
 }
-.wf-zone::before,.wf-zone::after{
-  content:'';position:absolute;top:0;bottom:0;width:36px;z-index:1;
+.face-wrap{
+  width:72px;height:72px;position:relative;cursor:pointer;
 }
-.wf-zone::before{left:0;background:linear-gradient(90deg,rgba(2,12,24,1),transparent);}
-.wf-zone::after{right:0;background:linear-gradient(270deg,rgba(2,12,24,1),transparent);}
-.wb{width:2.5px;border-radius:2px;background:var(--cyan);
+/* Outer ring */
+.face-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:2px solid rgba(0,212,255,0.35);
+  box-shadow:0 0 16px rgba(0,212,255,0.2),inset 0 0 16px rgba(0,212,255,0.08);
+  animation:fring 4s ease-in-out infinite;
+}
+@keyframes fring{0%,100%{box-shadow:0 0 16px rgba(0,212,255,0.2),inset 0 0 16px rgba(0,212,255,0.08);}
+  50%{box-shadow:0 0 28px rgba(0,212,255,0.45),inset 0 0 24px rgba(0,212,255,0.15);}}
+/* Face SVG */
+.face-svg{width:100%;height:100%;position:relative;z-index:2;}
+
+.topbar-right{display:flex;align-items:center;justify-content:flex-end;gap:20px;}
+.live-pill{display:flex;align-items:center;gap:7px;font-size:0.8rem;letter-spacing:0.15em;
+  color:var(--green);text-transform:uppercase;padding:6px 14px;
+  border:1px solid rgba(0,255,157,0.22);border-radius:20px;background:rgba(0,255,157,0.05);}
+.lpdot{width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 9px var(--green);animation:pd 2s infinite;}
+@keyframes pd{0%,100%{opacity:1;}50%{opacity:0.15;}}
+#clk{font-family:'Orbitron',sans-serif;font-size:1.35rem;font-weight:700;
+  color:var(--cyan);letter-spacing:0.08em;}
+
+/* Waveform in topbar — flanking the face */
+.wf-left,.wf-right{
+  flex:1;height:38px;display:flex;align-items:center;gap:2px;
+  overflow:hidden;position:relative;max-width:180px;
+}
+.wf-left{justify-content:flex-end;}
+.wf-right{justify-content:flex-start;}
+.wb{width:3px;border-radius:2px;background:var(--cyan);
   animation:wba var(--d,.5s) ease-in-out infinite alternate;
   animation-delay:var(--dl,0s);}
-@keyframes wba{from{height:2px;opacity:0.18;}to{height:var(--h,14px);opacity:0.9;}}
+@keyframes wba{from{height:2px;opacity:0.18;}to{height:var(--h,14px);opacity:0.88;}}
 
-.topbar-right{display:flex;align-items:center;gap:18px;}
-.live-pill{
-  display:flex;align-items:center;gap:6px;
-  font-size:0.65rem;letter-spacing:0.15em;color:var(--green);
-  text-transform:uppercase;padding:5px 12px;
-  border:1px solid rgba(0,255,157,0.2);border-radius:20px;
-  background:rgba(0,255,157,0.05);
-}
-.lpdot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pd 2s infinite;}
-@keyframes pd{0%,100%{opacity:1;}50%{opacity:0.2;}}
-#clk{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;color:var(--cyan);letter-spacing:0.08em;}
-
-/* ============================
-   HUD STATS BAR
-   ============================ */
+/* ======= HUD STRIP ======= */
 .hudbar{
-  position:fixed;top:58px;left:0;right:0;height:38px;z-index:200;
-  background:rgba(0,8,18,0.97);
-  border-bottom:1px solid rgba(0,180,220,0.12);
+  position:fixed;top:70px;left:0;right:0;height:44px;z-index:300;
+  background:rgba(0,7,16,0.98);
+  border-bottom:1px solid rgba(0,180,220,0.14);
   display:grid;grid-template-columns:repeat(6,1fr);
 }
-.hc{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  border-right:1px solid rgba(0,180,220,0.08);padding:0 6px;
-}
+.hc{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-right:1px solid rgba(0,180,220,0.08);}
 .hc:last-child{border-right:none;}
-.hl{font-size:0.48rem;letter-spacing:0.18em;color:var(--dimtxt);text-transform:uppercase;line-height:1;}
-.hv{font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;color:var(--cyan);line-height:1.1;}
+.hl{font-size:0.6rem;letter-spacing:0.18em;color:var(--dimtxt);text-transform:uppercase;}
+.hv{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--cyan);line-height:1.15;}
 .hv.g{color:var(--green);}.hv.go{color:var(--gold);}.hv.r{color:var(--red);}
 
-/* ============================
-   ACTIVITY TICKER
-   ============================ */
-.ticker{
-  position:fixed;bottom:0;left:0;right:0;height:32px;z-index:200;
-  background:rgba(0,8,18,0.97);
-  border-top:1px solid rgba(0,180,220,0.15);
-  display:flex;align-items:center;overflow:hidden;
-}
-.ticker-label{
-  flex-shrink:0;padding:0 14px;
-  font-family:'Orbitron',sans-serif;font-size:0.52rem;font-weight:700;
-  letter-spacing:0.2em;color:var(--cyan);text-transform:uppercase;
-  border-right:1px solid rgba(0,180,220,0.2);
-  height:100%;display:flex;align-items:center;
-  background:rgba(0,20,45,0.8);
-  white-space:nowrap;
-}
-.ticker-scroll{flex:1;overflow:hidden;height:100%;display:flex;align-items:center;}
-.ticker-inner{
-  display:flex;align-items:center;gap:0;
-  white-space:nowrap;
-  animation:scroll 40s linear infinite;
-}
-@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.tick-item{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:0 28px;font-size:0.6rem;letter-spacing:0.1em;color:var(--txt);
-  border-right:1px solid rgba(0,180,220,0.1);
-}
-.tick-tag{
-  font-size:0.5rem;letter-spacing:0.1em;padding:1px 6px;border-radius:20px;
-  text-transform:uppercase;font-weight:600;flex-shrink:0;
-}
-.t-etsy{background:rgba(0,255,157,0.08);color:var(--green);border:1px solid rgba(0,255,157,0.2);}
-.t-sys{background:rgba(0,212,255,0.08);color:var(--cyan);border:1px solid rgba(0,212,255,0.2);}
-.t-gh{background:rgba(176,96,255,0.08);color:var(--purple);border:1px solid rgba(176,96,255,0.2);}
-.t-warn{background:rgba(240,192,64,0.08);color:var(--gold);border:1px solid rgba(240,192,64,0.2);}
-
-/* ============================
-   MAIN SCENE — full bleed
-   ============================ */
+/* ======= SCENE ======= */
 .scene{
-  position:fixed;
-  top:96px;left:0;right:0;bottom:32px;
+  position:fixed;top:114px;left:0;right:0;bottom:0;
   display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
 }
-#svgConn{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;}
+#svgConn{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;}
 
-/* ============================
-   ORB — CENTER
-   ============================ */
-.orb-wrap{
-  position:absolute;
-  width:260px;height:260px;
-  z-index:20;
-  /* centered via flex of parent */
-}
-.ring-a{position:absolute;inset:-36px;border-radius:50%;border:1px dashed rgba(0,212,255,0.13);animation:rot 32s linear infinite;}
-.ring-a::after{
-  content:'';position:absolute;
-  top:8px;left:50%;transform:translateX(-50%);
-  width:6px;height:6px;border-radius:50%;
-  background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 24px rgba(0,212,255,0.5);
-}
-.ring-b{position:absolute;inset:-14px;border-radius:50%;border:1.5px solid rgba(0,212,255,0.25);}
-.ring-b::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,212,255,0.08);animation:rot 20s linear infinite reverse;}
-.ring-c{position:absolute;inset:10px;border-radius:50%;border:1px solid rgba(0,212,255,0.1);animation:rot 14s linear infinite;}
-@keyframes rot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.orb-glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(0,160,240,0.22) 0%,transparent 68%);animation:og 3.5s ease-in-out infinite;}
-@keyframes og{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.06);opacity:1;}}
-.orb{
-  position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 47% 40%,rgba(0,130,200,0.22),rgba(0,45,100,0.32) 52%,rgba(0,8,22,0.82) 78%);
-  border:2px solid rgba(0,200,240,0.42);
-  box-shadow:
-    0 0 60px rgba(0,130,200,0.24),
-    0 0 120px rgba(0,60,180,0.1),
-    inset 0 0 50px rgba(0,90,190,0.12);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;
-}
-.o-arc{opacity:0.5;margin-bottom:4px;}
-.o-lbl{font-size:0.44rem;letter-spacing:0.24em;color:var(--dimtxt);text-transform:uppercase;}
-.o-rev{font-family:'Orbitron',sans-serif;font-size:1.7rem;font-weight:900;color:#fff;line-height:1;text-shadow:0 0 18px rgba(0,200,255,0.9),0 0 50px rgba(0,100,220,0.45);}
-.o-orders{font-size:0.52rem;letter-spacing:0.14em;color:var(--txt);margin-top:2px;}
-.o-orders span{color:var(--gold);font-family:'Orbitron',sans-serif;font-weight:700;}
-.o-ph{font-size:0.48rem;letter-spacing:0.15em;color:var(--cyan);margin-top:5px;text-transform:uppercase;}
-.o-trk{width:100px;height:3px;background:rgba(0,60,100,0.5);border-radius:2px;margin:4px auto 2px;overflow:hidden;}
-.o-fill{height:100%;width:35%;background:linear-gradient(90deg,var(--cyan2),var(--cyan));box-shadow:0 0 6px var(--cyan);border-radius:2px;}
-.o-pct{font-family:'Orbitron',sans-serif;font-size:0.6rem;color:var(--cyan);}
-.o-stat{margin-top:4px;display:flex;align-items:center;justify-content:center;gap:5px;}
-.sdt{width:6px;height:6px;border-radius:50%;}
-.s-warn{background:var(--gold);box-shadow:0 0 7px var(--gold);animation:pd 1s infinite;}
-.s-ok{background:var(--green);box-shadow:0 0 7px var(--green);}
-.o-stxt{font-size:0.46rem;letter-spacing:0.1em;text-transform:uppercase;}
-.o-alerts{margin-top:3px;width:100%;}
-.oal{
-  font-size:0.44rem;padding:2px 5px;border-radius:2px;margin-top:2px;
-  animation:alp 1.5s ease-in-out infinite;
-  color:var(--gold);background:rgba(240,192,64,0.07);border:1px solid rgba(240,192,64,0.18);
-}
-@keyframes alp{0%,100%{opacity:1;}50%{opacity:0.4;}}
-
-/* ============================
-   SHIELD PANELS
-   Using clip-path to create
-   armor-plate shapes around orb
-   ============================ */
-
-/* Each shield is ABSOLUTELY positioned relative to scene,
-   fills from screen edge toward the orb */
-
+/* ======= SHIELD PANELS ======= */
 .shield{
   position:absolute;z-index:10;
   background:var(--panel);
   border:1px solid var(--border);
-  overflow:hidden;
-  transition:box-shadow 0.3s;
+  overflow:hidden;transition:box-shadow 0.3s;
 }
-.shield:hover{box-shadow:0 0 25px rgba(0,180,220,0.22);}
+.shield:hover{box-shadow:0 0 30px rgba(0,180,220,0.2);}
+.shield::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.55;z-index:1;}
 
-/* Top glow line */
-.shield::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  opacity:0.6;z-index:1;
-}
-
-/* Shield inner layout */
-.sh-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:7px 14px;
-  background:rgba(0,20,44,0.9);
-  border-bottom:1px solid var(--border2);
-}
-.sh-title{display:flex;align-items:center;gap:7px;
-  font-family:'Orbitron',sans-serif;font-size:0.58rem;font-weight:700;
+/* SHIELD HEADERS */
+.sh-hd{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px;background:rgba(0,18,40,0.95);border-bottom:1px solid var(--border2);}
+.sh-title{display:flex;align-items:center;gap:8px;
+  font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;
   letter-spacing:0.2em;color:var(--cyan);text-transform:uppercase;}
-.sh-ico{font-size:0.95rem;}
-.bdg{font-size:0.5rem;letter-spacing:0.1em;padding:2px 8px;border-radius:20px;text-transform:uppercase;font-weight:600;}
-.blive{background:rgba(0,255,157,0.08);color:var(--green);border:1px solid rgba(0,255,157,0.25);}
-.bnext{background:rgba(240,192,64,0.08);color:var(--gold);border:1px solid rgba(240,192,64,0.22);}
+.sh-ico{font-size:1.3rem;}
+.bdg{font-size:0.65rem;letter-spacing:0.12em;padding:3px 10px;
+  border-radius:20px;text-transform:uppercase;font-weight:700;}
+.blive{background:rgba(0,255,157,0.08);color:var(--green);border:1px solid rgba(0,255,157,0.28);}
+.bnext{background:rgba(240,192,64,0.08);color:var(--gold);border:1px solid rgba(240,192,64,0.25);}
 
-.sh-body{padding:10px 14px;}
+/* SHIELD BODY */
+.sh-bd{padding:12px 18px;}
 .srow{display:flex;align-items:center;justify-content:space-between;
-  padding:3px 0;border-bottom:1px solid var(--border2);font-size:0.66rem;}
+  padding:5px 0;border-bottom:1px solid var(--border2);font-size:0.95rem;}
 .srow:last-child{border-bottom:none;}
-.sl{color:var(--dimtxt);}
-.sv{font-family:'Orbitron',sans-serif;font-size:0.64rem;font-weight:700;color:var(--cyan);}
-.sv.g{color:var(--green);}.sv.go{color:var(--gold);}.sv.d{color:var(--dimtxt);}
+.sl{color:var(--dimtxt);font-size:0.85rem;letter-spacing:0.08em;}
+.sv{font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:var(--cyan);}
+.sv.g{color:var(--green);}.sv.go{color:var(--gold);}.sv.d{color:var(--dimtxt);}.sv.s{color:var(--sapphire);}
 
-/* Agent zone */
-.az{
-  height:54px;margin:6px 0 4px;
-  background:rgba(0,10,22,0.7);
-  border:1px solid var(--border2);border-radius:3px;
-  position:relative;overflow:hidden;
-}
-.az::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,40,80,0.18) 0%,transparent 100%);}
-.az-lbl{position:absolute;bottom:2px;right:5px;font-size:0.44rem;letter-spacing:0.08em;color:var(--dimtxt);}
+/* AGENT ZONE */
+.az{height:60px;margin:8px 0 5px;
+  background:rgba(0,8,20,0.75);border:1px solid var(--border2);border-radius:3px;
+  position:relative;overflow:hidden;}
+.az::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,40,80,0.15) 0%,transparent 100%);}
+.az-lbl{position:absolute;bottom:3px;right:6px;
+  font-size:0.58rem;letter-spacing:0.08em;color:var(--dimtxt);}
 
-/* ALIEN */
-.alien{position:absolute;bottom:4px;width:16px;height:24px;display:flex;flex-direction:column;align-items:center;}
-.al-ant{position:relative;height:5px;width:12px;flex-shrink:0;}
-.al-ant::before,.al-ant::after{content:'';position:absolute;bottom:0;width:1px;height:5px;background:currentColor;border-radius:1px;}
+/* ======= ALIENS ======= */
+.alien{position:absolute;bottom:5px;width:18px;height:28px;
+  display:flex;flex-direction:column;align-items:center;}
+.al-ant{position:relative;height:6px;width:14px;flex-shrink:0;}
+.al-ant::before,.al-ant::after{content:'';position:absolute;bottom:0;
+  width:1.5px;height:6px;background:currentColor;border-radius:1px;}
 .al-ant::before{left:3px;transform:rotate(-15deg);}
 .al-ant::after{right:3px;transform:rotate(15deg);}
-.al-hd{width:12px;height:9px;border-radius:50% 50% 40% 40%;border:1px solid currentColor;background:rgba(0,0,0,0.45);position:relative;flex-shrink:0;}
-.al-hd::before,.al-hd::after{content:'';position:absolute;width:3px;height:3px;border-radius:50%;background:currentColor;top:2.5px;}
+.al-hd{width:13px;height:10px;border-radius:50% 50% 40% 40%;
+  border:1.5px solid currentColor;background:rgba(0,0,0,0.5);
+  position:relative;flex-shrink:0;}
+.al-hd::before,.al-hd::after{content:'';position:absolute;
+  width:3.5px;height:3.5px;border-radius:50%;background:currentColor;top:2.5px;}
 .al-hd::before{left:1.5px;}.al-hd::after{right:1.5px;}
-.al-bd{width:13px;height:8px;border:1px solid currentColor;background:rgba(0,0,0,0.35);border-radius:3px;margin-top:1px;flex-shrink:0;}
+.al-bd{width:14px;height:9px;border:1.5px solid currentColor;
+  background:rgba(0,0,0,0.35);border-radius:3px;margin-top:1px;flex-shrink:0;}
 .al-lg{display:flex;gap:4px;margin-top:1px;}
-.al-l{width:1.5px;height:6px;background:currentColor;border-radius:1px;}
-
+.al-l{width:2px;height:7px;background:currentColor;border-radius:1px;}
 .alien.active{animation:awk var(--ws,1.8s) ease-in-out infinite;animation-delay:var(--wdl,0s);}
 @keyframes awk{
-  0%{transform:translateX(0) scaleX(1);}
-  23%{transform:translateX(10px) scaleX(1);}
-  24%{transform:translateX(10px) scaleX(-1);}
-  47%{transform:translateX(-10px) scaleX(-1);}
-  48%{transform:translateX(-10px) scaleX(1);}
-  72%{transform:translateX(5px) scaleX(1);}
-  100%{transform:translateX(0) scaleX(1);}
-}
+  0%{transform:translateX(0) scaleX(1);}23%{transform:translateX(12px) scaleX(1);}
+  24%{transform:translateX(12px) scaleX(-1);}47%{transform:translateX(-12px) scaleX(-1);}
+  48%{transform:translateX(-12px) scaleX(1);}72%{transform:translateX(6px) scaleX(1);}
+  100%{transform:translateX(0) scaleX(1);}}
 .alien.active .al-l:first-child{animation:la .38s ease-in-out infinite alternate;}
 .alien.active .al-l:last-child{animation:la .38s ease-in-out infinite alternate-reverse;}
-@keyframes la{from{transform:rotate(-22deg);}to{transform:rotate(22deg);}}
+@keyframes la{from{transform:rotate(-24deg);}to{transform:rotate(24deg);}}
 .alien.active .al-ant{animation:aa .6s ease-in-out infinite alternate;}
-@keyframes aa{from{transform:translateY(0);}to{transform:translateY(-1.5px);}}
+@keyframes aa{from{transform:translateY(0);}to{transform:translateY(-2px);}}
 .alien.idle{animation:aid 3.2s ease-in-out infinite;animation-delay:var(--wdl,0s);}
-@keyframes aid{0%,100%{transform:translateY(0);}50%{transform:translateY(1.5px);}}
-
-/* Shield dept colors */
+@keyframes aid{0%,100%{transform:translateY(0);}50%{transform:translateY(2px);}}
 .sh-etsy .alien{color:var(--green);}
 .sh-n8n .alien{color:var(--cyan);}
 .sh-tiktok .alien{color:var(--purple);}
 .sh-fiverr .alien{color:var(--gold);}
 .sh-research .alien{color:var(--orange);}
+.sh-sapphire .alien{color:var(--sapphire);}
 
-/* ============================
-   SHIELD POSITIONS & SHAPES
-   The orb center is at 50%,50% of scene
-   Orb diameter = 260px, outer ring = 332px
-   
-   Layout: 5 shields like a clock:
-   - TOP-LEFT  (Etsy)    — 10 o'clock position
-   - TOP-RIGHT (TikTok)  — 2 o'clock position  
-   - LEFT      (n8n)     — 9 o'clock position
-   - RIGHT     (Fiverr)  — 3 o'clock position
-   - BOTTOM    (Research)— 6 o'clock position
-   
-   Each shield is clipped to look like an armor plate
-   pointing toward the orb
-   ============================ */
-
-/* LEFT SHIELD — n8n (points right toward orb) */
-.sh-n8n{
-  left:0;
-  top:50%;transform:translateY(-50%);
-  width:calc(50% - 180px);
-  clip-path:polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+/* ======= SHIELD POSITIONS ======= */
+/* LEFT — n8n */
+.sh-n8n{left:0;top:0;bottom:0;width:calc(50% - 195px);
+  clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% calc(100% - 28px),calc(100% - 28px) 100%,0 100%);}
+/* RIGHT — Activity Log */
+.act-panel{
+  position:absolute;right:0;top:0;bottom:0;width:260px;z-index:10;
+  background:rgba(2,14,30,0.97);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
 }
-/* RIGHT SHIELD — Fiverr (points left toward orb) */
-.sh-fiverr{
-  right:0;
-  top:50%;transform:translateY(-50%);
-  width:calc(50% - 180px);
-  clip-path:polygon(20px 0, 100% 0, 100% 100%, 20px 100%, 0% 50%);
-}
-/* TOP-LEFT SHIELD — Etsy */
-.sh-etsy{
+.act-panel::before{content:'';position:absolute;top:0;left:0;bottom:0;width:1.5px;
+  background:linear-gradient(180deg,transparent,var(--cyan),transparent);opacity:0.4;}
+/* TOP-LEFT — Etsy */
+.sh-etsy{left:calc(50% - 195px - var(--lw,calc(50% - 195px)));top:0;
   left:0;top:0;
-  width:calc(50% - 80px);
-  height:calc(50% - 120px);
-  clip-path:polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
+  /* left edge = end of n8n, right edge = left of orb ring */
+  left:calc(50% - 195px - (50% - 195px));/* = 0 - handled by width calc */
+  width:calc(50% - 195px);
+  height:calc(50% - 130px);
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 32px),calc(100% - 32px) 100%,0 100%);
 }
-/* TOP-RIGHT SHIELD — TikTok */
+/* TOP-RIGHT — TikTok */
 .sh-tiktok{
-  right:0;top:0;
-  width:calc(50% - 80px);
-  height:calc(50% - 120px);
-  clip-path:polygon(0 0, 100% 0, 100% 100%, 30px 100%, 0 calc(100% - 30px));
+  left:calc(50% + 195px);top:0;
+  right:260px;
+  width:calc(50% - 195px - 260px);
+  height:calc(50% - 130px);
+  clip-path:polygon(0 0,100% 0,100% 100%,32px 100%,0 calc(100% - 32px));
 }
-/* BOTTOM SHIELD — Research AI (full width centered bottom) */
+/* BOTTOM-LEFT — Research AI */
 .sh-research{
-  left:0;right:0;bottom:0;
-  height:calc(50% - 118px);
-  clip-path:polygon(0 30px, 30px 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 0 100%);
+  left:0;bottom:0;
+  width:calc(50% - 195px);
+  height:calc(50% - 130px);
+  clip-path:polygon(0 0,calc(100% - 32px) 0,100% 32px,100% 100%,0 100%);
 }
+/* BOTTOM-RIGHT — Sapphire */
+.sh-sapphire{
+  left:calc(50% + 195px);bottom:0;
+  right:260px;
+  width:calc(50% - 195px - 260px);
+  height:calc(50% - 130px);
+  clip-path:polygon(0 0,100% 32px,100% 100%,0 100%);
+}
+/* FIVERR — small panel top of activity log area, above act-panel */
+/* We'll embed fiverr inside the right activity panel header */
+
+/* ======= NEON ORB (purple arc reactor style) ======= */
+.orb-wrap{
+  position:absolute;width:300px;height:300px;z-index:20;
+  /* centered via scene flex */
+}
+/* Outer armor ring segments */
+.orb-outer{
+  position:absolute;inset:-10px;border-radius:50%;
+  border:4px solid rgba(180,40,255,0.15);
+  box-shadow:0 0 0 2px rgba(180,40,255,0.08),0 0 40px rgba(180,40,255,0.12);
+}
+/* Segment notches - top/bottom/left/right */
+.orb-seg{position:absolute;inset:-18px;border-radius:50%;
+  border:2px dashed transparent;
+  background:
+    conic-gradient(from 0deg,
+      rgba(180,40,255,0.55) 0deg 8deg,transparent 8deg 82deg,
+      rgba(180,40,255,0.55) 82deg 98deg,transparent 98deg 172deg,
+      rgba(180,40,255,0.55) 172deg 188deg,transparent 188deg 262deg,
+      rgba(180,40,255,0.55) 262deg 278deg,transparent 278deg 352deg,
+      rgba(180,40,255,0.55) 352deg 360deg
+    );
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 4px));
+  mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 4px));
+  animation:rot 20s linear infinite;
+}
+@keyframes rot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+/* Inner neon ring */
+.orb-neon{
+  position:absolute;inset:8px;border-radius:50%;
+  border:3px solid rgba(0,212,255,0.0);
+  box-shadow:
+    0 0 0 3px rgba(180,40,255,0.6),
+    0 0 20px rgba(180,40,255,0.4),
+    0 0 50px rgba(180,40,255,0.15),
+    inset 0 0 20px rgba(180,40,255,0.08);
+  animation:neonPulse 3s ease-in-out infinite;
+}
+@keyframes neonPulse{
+  0%,100%{box-shadow:0 0 0 3px rgba(180,40,255,0.6),0 0 20px rgba(180,40,255,0.4),0 0 50px rgba(180,40,255,0.15),inset 0 0 20px rgba(180,40,255,0.08);}
+  50%{box-shadow:0 0 0 4px rgba(200,80,255,0.8),0 0 35px rgba(200,80,255,0.6),0 0 80px rgba(180,40,255,0.25),inset 0 0 35px rgba(180,40,255,0.15);}
+}
+/* Tech details ring */
+.orb-tech{
+  position:absolute;inset:22px;border-radius:50%;
+  background:
+    conic-gradient(from 0deg,
+      rgba(0,180,220,0.2) 0deg 3deg,transparent 3deg 27deg,
+      rgba(0,180,220,0.2) 27deg 30deg,transparent 30deg 57deg,
+      rgba(0,180,220,0.2) 57deg 60deg,transparent 60deg 87deg,
+      rgba(0,180,220,0.2) 87deg 90deg,transparent 90deg 117deg,
+      rgba(0,180,220,0.2) 117deg 120deg,transparent 120deg 147deg,
+      rgba(0,180,220,0.2) 147deg 150deg,transparent 150deg 177deg,
+      rgba(0,180,220,0.2) 177deg 180deg,transparent 180deg 207deg,
+      rgba(0,180,220,0.2) 207deg 210deg,transparent 210deg 237deg,
+      rgba(0,180,220,0.2) 237deg 240deg,transparent 240deg 267deg,
+      rgba(0,180,220,0.2) 267deg 270deg,transparent 270deg 297deg,
+      rgba(0,180,220,0.2) 297deg 300deg,transparent 300deg 327deg,
+      rgba(0,180,220,0.2) 327deg 330deg,transparent 330deg 360deg
+    );
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 6px));
+  mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 6px));
+  animation:rot 40s linear infinite reverse;
+}
+/* Core glow */
+.orb-glow{
+  position:absolute;inset:38px;border-radius:50%;
+  background:radial-gradient(circle,rgba(120,20,200,0.25) 0%,rgba(0,60,120,0.3) 50%,rgba(0,5,18,0.85) 80%);
+  box-shadow:inset 0 0 50px rgba(80,0,150,0.2);
+}
+/* Orb content */
+.orb{
+  position:absolute;inset:42px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:10px;
+}
+.o-lbl{font-size:0.58rem;letter-spacing:0.25em;color:var(--dimtxt);text-transform:uppercase;}
+.o-rev{font-family:'Orbitron',sans-serif;font-size:1.9rem;font-weight:900;color:#fff;line-height:1;
+  text-shadow:0 0 20px rgba(200,80,255,0.9),0 0 50px rgba(180,40,255,0.5);}
+.o-orders{font-size:0.65rem;letter-spacing:0.14em;color:var(--txt);margin-top:3px;}
+.o-orders span{color:var(--gold);font-family:'Orbitron',sans-serif;font-weight:700;}
+.o-ph{font-size:0.58rem;letter-spacing:0.15em;color:var(--purple);margin-top:5px;text-transform:uppercase;}
+.o-trk{width:110px;height:4px;background:rgba(80,0,120,0.5);border-radius:2px;margin:5px auto 2px;overflow:hidden;}
+.o-fill{height:100%;width:35%;background:linear-gradient(90deg,var(--purple2),var(--purple));
+  box-shadow:0 0 8px var(--purple);border-radius:2px;}
+.o-pct{font-family:'Orbitron',sans-serif;font-size:0.7rem;color:var(--purple);}
+.o-stat{margin-top:5px;display:flex;align-items:center;justify-content:center;gap:5px;}
+.sdt{width:7px;height:7px;border-radius:50%;}
+.s-warn{background:var(--gold);box-shadow:0 0 8px var(--gold);animation:pd 1s infinite;}
+.s-ok{background:var(--green);box-shadow:0 0 8px var(--green);}
+.o-stxt{font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;}
+.o-alerts{margin-top:4px;width:100%;}
+.oal{font-size:0.48rem;padding:2px 5px;border-radius:2px;margin-top:2px;
+  animation:alp 1.5s ease-in-out infinite;color:var(--gold);
+  background:rgba(240,192,64,0.07);border:1px solid rgba(240,192,64,0.18);}
+@keyframes alp{0%,100%{opacity:1;}50%{opacity:0.35;}}
+
+/* ======= ACTIVITY LOG PANEL (right) ======= */
+.act-hd{
+  padding:12px 16px;background:rgba(0,18,40,0.95);
+  border-bottom:1px solid var(--border2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.act-title{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;
+  letter-spacing:0.2em;color:var(--cyan);text-transform:uppercase;}
+/* Fiverr mini-panel inside activity column */
+.fiverr-mini{
+  flex-shrink:0;padding:10px 16px;
+  border-bottom:2px solid var(--border);
+  background:rgba(0,14,32,0.97);
+}
+.fiverr-mini .sh-title{font-family:'Orbitron',sans-serif;font-size:0.78rem;font-weight:700;
+  letter-spacing:0.18em;color:var(--cyan);text-transform:uppercase;
+  display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+.fiverr-mini .srow{display:flex;align-items:center;justify-content:space-between;
+  padding:3px 0;border-bottom:1px solid var(--border2);font-size:0.82rem;}
+.fiverr-mini .srow:last-child{border-bottom:none;}
+.fiverr-mini .az{height:46px;margin:6px 0 0;}
+.sh-fiverr-mini .alien{color:var(--gold);}
+
+.act-scroll{flex:1;overflow:hidden;position:relative;}
+.act-inner{
+  position:absolute;left:0;right:0;
+  display:flex;flex-direction:column;gap:0;
+  animation:scrollUp 30s linear infinite;
+}
+@keyframes scrollUp{from{transform:translateY(0);}to{transform:translateY(-50%);}}
+.act-item{
+  padding:9px 14px;border-bottom:1px solid rgba(0,180,220,0.07);
+  display:flex;flex-direction:column;gap:3px;flex-shrink:0;
+}
+.act-tag{display:inline-flex;font-size:0.52rem;letter-spacing:0.1em;
+  padding:1px 7px;border-radius:20px;text-transform:uppercase;font-weight:600;
+  width:fit-content;margin-bottom:1px;}
+.t-etsy{background:rgba(0,255,157,0.08);color:var(--green);border:1px solid rgba(0,255,157,0.22);}
+.t-sys{background:rgba(0,212,255,0.08);color:var(--cyan);border:1px solid rgba(0,212,255,0.22);}
+.t-gh{background:rgba(180,60,255,0.08);color:var(--purple);border:1px solid rgba(180,60,255,0.22);}
+.t-warn{background:rgba(240,192,64,0.08);color:var(--gold);border:1px solid rgba(240,192,64,0.22);}
+.t-sap{background:rgba(68,136,255,0.08);color:var(--sapphire);border:1px solid rgba(68,136,255,0.22);}
+.act-msg{font-size:0.72rem;color:var(--txt);letter-spacing:0.04em;line-height:1.3;}
 </style>
 </head>
 <body>
 <!-- ===== TOP BAR ===== -->
 <div class="topbar">
   <div class="brand">
-    <div class="brand-ring">
-      <svg viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="18" r="16" stroke="rgba(0,200,240,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
-        <circle cx="18" cy="18" r="10.5" stroke="rgba(0,200,240,0.55)" stroke-width="1.2"/>
-        <circle cx="18" cy="18" r="4.5" fill="rgba(0,180,240,0.2)" stroke="#00d4ff" stroke-width="1.8"/>
-        <line x1="3" y1="18" x2="33" y2="18" stroke="rgba(0,200,240,0.2)" stroke-width="0.8"/>
-        <line x1="18" y1="3" x2="18" y2="33" stroke="rgba(0,200,240,0.2)" stroke-width="0.8"/>
-        <circle cx="18" cy="3" r="1.4" fill="#00d4ff"/>
-        <circle cx="33" cy="18" r="1.2" fill="#00d4ff" opacity="0.6"/>
-        <circle cx="18" cy="33" r="1" fill="#00d4ff" opacity="0.4"/>
-      </svg>
-    </div>
-    <div class="brand-text">
-      <div class="bname">ATLAS</div>
-      <div class="bsub">ShadyPrintables Command Center &nbsp;/&nbsp; Phase 1 Revenue System</div>
-    </div>
+    <svg viewBox="0 0 42 42" fill="none">
+      <circle cx="21" cy="21" r="19" stroke="rgba(0,200,240,0.3)" stroke-width="1.2" stroke-dasharray="4 2"/>
+      <circle cx="21" cy="21" r="13" stroke="rgba(0,200,240,0.55)" stroke-width="1.4"/>
+      <circle cx="21" cy="21" r="6" fill="rgba(0,180,240,0.2)" stroke="#00d4ff" stroke-width="2"/>
+      <line x1="3" y1="21" x2="39" y2="21" stroke="rgba(0,200,240,0.18)" stroke-width="1"/>
+      <line x1="21" y1="3" x2="21" y2="39" stroke="rgba(0,200,240,0.18)" stroke-width="1"/>
+      <circle cx="21" cy="3" r="1.6" fill="#00d4ff"/>
+      <circle cx="39" cy="21" r="1.4" fill="#00d4ff" opacity="0.6"/>
+      <circle cx="3" cy="21" r="1.4" fill="#00d4ff" opacity="0.4"/>
+      <circle cx="21" cy="39" r="1.2" fill="#00d4ff" opacity="0.3"/>
+    </svg>
+    <div><div class="bname">ATLAS</div><div class="bsub">ShadyPrintables Command Center &nbsp;/&nbsp; Phase 1</div></div>
   </div>
-  <div class="wf-zone" id="waveform"></div>
+
+  <!-- ATLAS FACE CENTER -->
+  <div class="atlas-face">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="wf-left" id="wfL"></div>
+      <div class="face-wrap" id="faceWrap">
+        <div class="face-ring"></div>
+        <svg class="face-svg" viewBox="0 0 72 72" fill="none" id="faceSvg">
+          <!-- Outer tech ring -->
+          <circle cx="36" cy="36" r="33" stroke="rgba(0,200,240,0.3)" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <!-- Head shape -->
+          <path d="M22 24 Q22 16 36 16 Q50 16 50 24 L52 46 Q52 54 44 56 L36 58 L28 56 Q20 54 20 46 Z"
+            fill="rgba(0,30,55,0.9)" stroke="rgba(0,200,240,0.6)" stroke-width="1.5"/>
+          <!-- Visor / eyes band -->
+          <rect x="23" y="28" width="26" height="10" rx="3"
+            fill="rgba(0,180,240,0.15)" stroke="rgba(0,200,240,0.4)" stroke-width="1"/>
+          <!-- Left eye -->
+          <ellipse cx="29" cy="33" rx="4" ry="3" fill="rgba(0,220,255,0.9)"/>
+          <ellipse cx="29" cy="33" rx="2" ry="1.5" fill="white" opacity="0.9"/>
+          <!-- Right eye -->
+          <ellipse cx="43" cy="33" rx="4" ry="3" fill="rgba(0,220,255,0.9)"/>
+          <ellipse cx="43" cy="33" rx="2" ry="1.5" fill="white" opacity="0.9"/>
+          <!-- Nose detail -->
+          <rect x="34" y="38" width="4" height="3" rx="1" fill="rgba(0,160,200,0.4)"/>
+          <!-- MOUTH — animated -->
+          <g id="mouthGroup">
+            <rect id="mouthBar" x="28" y="45" width="16" height="3" rx="1.5"
+              fill="rgba(0,200,255,0.7)" stroke="rgba(0,220,255,0.5)" stroke-width="0.8"/>
+          </g>
+          <!-- Ear / headset details -->
+          <rect x="18" y="30" width="4" height="8" rx="2" fill="rgba(0,140,200,0.5)" stroke="rgba(0,200,240,0.4)" stroke-width="1"/>
+          <rect x="50" y="30" width="4" height="8" rx="2" fill="rgba(0,140,200,0.5)" stroke="rgba(0,200,240,0.4)" stroke-width="1"/>
+          <!-- Chin line -->
+          <path d="M28 56 Q36 60 44 56" stroke="rgba(0,200,240,0.4)" stroke-width="1" fill="none"/>
+          <!-- Inner glow overlay -->
+          <ellipse cx="36" cy="36" rx="30" ry="30" fill="none"
+            stroke="rgba(0,200,240,0.1)" stroke-width="8"/>
+        </svg>
+      </div>
+      <div class="wf-right" id="wfR"></div>
+    </div>
+    <div style="font-size:0.52rem;letter-spacing:0.25em;color:var(--dimtxt);text-transform:uppercase;margin-top:3px;text-align:center;">ATLAS AI</div>
+  </div>
+
   <div class="topbar-right">
     <div class="live-pill"><div class="lpdot"></div>All Systems Live</div>
     <div id="clk">--:--:--</div>
   </div>
 </div>
 
-<!-- ===== HUD STATS ===== -->
+<!-- ===== HUD ===== -->
 <div class="hudbar">
-  <div class="hc"><div class="hl">Active Depts</div><div class="hv g">2 / 5</div></div>
-  <div class="hc"><div class="hl">Total Agents</div><div class="hv">6</div></div>
-  <div class="hc"><div class="hl">Active Agents</div><div class="hv g">3</div></div>
+  <div class="hc"><div class="hl">Active Depts</div><div class="hv g">3 / 6</div></div>
+  <div class="hc"><div class="hl">Total Agents</div><div class="hv">9</div></div>
+  <div class="hc"><div class="hl">Active Agents</div><div class="hv g">4</div></div>
   <div class="hc"><div class="hl">Potential Revenue</div><div class="hv go">$42.94</div></div>
   <div class="hc"><div class="hl">Total Orders</div><div class="hv">0</div></div>
   <div class="hc"><div class="hl">Phase Progress</div><div class="hv">35%</div></div>
-</div>
-
-<!-- ===== ACTIVITY TICKER ===== -->
-<div class="ticker">
-  <div class="ticker-label">⚡ Activity Log</div>
-  <div class="ticker-scroll">
-    <div class="ticker-inner" id="tickerInner">
-      <span class="tick-item"><span class="tick-tag t-sys">ATLAS</span>Command Center v4 deployed — Arc Reactor HQ design live</span>
-      <span class="tick-item"><span class="tick-tag t-gh">GITHUB</span>shadioss/command-center — Pages live at shadioss.github.io/command-center</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Wedding Planner — ID 4525260754 — $12.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Weekly Meal Planner — ID 4525191829 — $6.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Daily Habit Tracker — ID 4525186513 — $3.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Mental Health Journal — ID 4524967015 — $9.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>Kids Activity Sheets — ID 4524946002 — $3.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Monthly Budget Planner — ID 4524884287 — $5.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-sys">N8N</span>3 workflows active — Market Research · Content Generator · Publisher</span>
-      <span class="tick-item"><span class="tick-tag t-warn">ATLAS</span>TikTok dept needs setup — 3 agents idle</span>
-      <span class="tick-item"><span class="tick-tag t-warn">ATLAS</span>Fiverr dept needs setup — 2 agents idle</span>
-      <span class="tick-item"><span class="tick-tag t-sys">SYSTEM</span>ShadyPrintables Master HQ — Google Sheet updated Jun 20 2026</span>
-      <!-- duplicate for seamless loop -->
-      <span class="tick-item"><span class="tick-tag t-sys">ATLAS</span>Command Center v4 deployed — Arc Reactor HQ design live</span>
-      <span class="tick-item"><span class="tick-tag t-gh">GITHUB</span>shadioss/command-center — Pages live at shadioss.github.io/command-center</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Wedding Planner — ID 4525260754 — $12.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Weekly Meal Planner — ID 4525191829 — $6.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Daily Habit Tracker — ID 4525186513 — $3.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Mental Health Journal — ID 4524967015 — $9.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>Kids Activity Sheets — ID 4524946002 — $3.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-etsy">ETSY</span>2026 Monthly Budget Planner — ID 4524884287 — $5.99 — ACTIVE</span>
-      <span class="tick-item"><span class="tick-tag t-sys">N8N</span>3 workflows active — Market Research · Content Generator · Publisher</span>
-      <span class="tick-item"><span class="tick-tag t-warn">ATLAS</span>TikTok dept needs setup — 3 agents idle</span>
-      <span class="tick-item"><span class="tick-tag t-warn">ATLAS</span>Fiverr dept needs setup — 2 agents idle</span>
-      <span class="tick-item"><span class="tick-tag t-sys">SYSTEM</span>ShadyPrintables Master HQ — Google Sheet updated Jun 20 2026</span>
-    </div>
-  </div>
 </div>
 
 <!-- ===== SCENE ===== -->
 <div class="scene">
   <svg id="svgConn"></svg>
 
-  <!-- N8N SHIELD — LEFT -->
+  <!-- N8N — LEFT FULL HEIGHT -->
   <div class="shield sh-n8n" id="sh-n8n">
-    <div class="sh-head"><div class="sh-title"><span class="sh-ico">⚡</span>n8n</div><span class="bdg blive">Live</span></div>
-    <div class="sh-body">
+    <div class="sh-hd">
+      <div class="sh-title"><span class="sh-ico">⚡</span>n8n Automation</div>
+      <span class="bdg blive">Live</span>
+    </div>
+    <div class="sh-bd">
       <div class="srow"><span class="sl">Workflows</span><span class="sv g">3 Active</span></div>
       <div class="srow"><span class="sl">Executions</span><span class="sv">1,000 Free</span></div>
       <div class="srow"><span class="sl">Capacity</span><span class="sv">2% Used</span></div>
-      <div class="az" id="az-n8n"><div class="az-lbl" id="ac-n8n">3 Active · 0 Idle</div></div>
       <div class="srow"><span class="sl">Status</span><span class="sv g">Running</span></div>
+      <div class="az" id="az-n8n"><div class="az-lbl" id="ac-n8n">3 Active · 0 Idle</div></div>
     </div>
   </div>
 
-  <!-- FIVERR SHIELD — RIGHT -->
-  <div class="shield sh-fiverr" id="sh-fiverr">
-    <div class="sh-head"><div class="sh-title"><span class="sh-ico">💼</span>Fiverr</div><span class="bdg bnext">Next</span></div>
-    <div class="sh-body">
-      <div class="srow"><span class="sl">Revenue</span><span class="sv d">$0.00</span></div>
-      <div class="srow"><span class="sl">Gigs Live</span><span class="sv d">0</span></div>
-      <div class="srow"><span class="sl">Orders</span><span class="sv d">0</span></div>
-      <div class="az" id="az-fiverr"><div class="az-lbl" id="ac-fiverr">0 Active · 2 Idle</div></div>
-      <div class="srow"><span class="sl">Status</span><span class="sv go">Setup Next</span></div>
-    </div>
-  </div>
-
-  <!-- ETSY SHIELD — TOP LEFT -->
+  <!-- ETSY — TOP LEFT -->
   <div class="shield sh-etsy" id="sh-etsy">
-    <div class="sh-head"><div class="sh-title"><span class="sh-ico">🛍</span>Etsy</div><span class="bdg blive">Live</span></div>
-    <div class="sh-body">
+    <div class="sh-hd">
+      <div class="sh-title"><span class="sh-ico">🛍</span>Etsy</div>
+      <span class="bdg blive">Live</span>
+    </div>
+    <div class="sh-bd">
       <div class="srow"><span class="sl">Revenue</span><span class="sv g">$0.00</span></div>
       <div class="srow"><span class="sl">Listings</span><span class="sv">6 Active</span></div>
       <div class="srow"><span class="sl">Orders</span><span class="sv">0</span></div>
@@ -460,10 +484,13 @@ body{
     </div>
   </div>
 
-  <!-- TIKTOK SHIELD — TOP RIGHT -->
+  <!-- TIKTOK — TOP RIGHT -->
   <div class="shield sh-tiktok" id="sh-tiktok">
-    <div class="sh-head"><div class="sh-title"><span class="sh-ico">📱</span>TikTok</div><span class="bdg bnext">Next</span></div>
-    <div class="sh-body">
+    <div class="sh-hd">
+      <div class="sh-title"><span class="sh-ico">📱</span>TikTok</div>
+      <span class="bdg bnext">Next</span>
+    </div>
+    <div class="sh-bd">
       <div class="srow"><span class="sl">Revenue</span><span class="sv d">$0.00</span></div>
       <div class="srow"><span class="sl">Account</span><span class="sv go">@shadesphysique</span></div>
       <div class="srow"><span class="sl">Niche</span><span class="sv">Fat Loss / 3-3-3</span></div>
@@ -471,34 +498,93 @@ body{
     </div>
   </div>
 
-  <!-- RESEARCH SHIELD — BOTTOM -->
+  <!-- RESEARCH — BOTTOM LEFT -->
   <div class="shield sh-research" id="sh-research">
-    <div class="sh-head"><div class="sh-title"><span class="sh-ico">🔬</span>Research AI</div><span class="bdg blive">Live</span></div>
-    <div class="sh-body" style="display:flex;gap:20px;align-items:flex-start;">
-      <div style="flex:1;">
-        <div class="srow"><span class="sl">Mode</span><span class="sv g">Active</span></div>
-        <div class="srow"><span class="sl">Products Found</span><span class="sv">6</span></div>
-        <div class="srow"><span class="sl">Batch 2</span><span class="sv go">Queued</span></div>
-      </div>
-      <div class="az" style="width:80px;flex-shrink:0;height:54px;" id="az-research">
-        <div class="az-lbl" id="ac-research">1A · 0I</div>
+    <div class="sh-hd">
+      <div class="sh-title"><span class="sh-ico">🔬</span>Research AI</div>
+      <span class="bdg blive">Live</span>
+    </div>
+    <div class="sh-bd">
+      <div class="srow"><span class="sl">Mode</span><span class="sv g">Active</span></div>
+      <div class="srow"><span class="sl">Products Found</span><span class="sv">6</span></div>
+      <div class="srow"><span class="sl">Batch 2</span><span class="sv go">Queued</span></div>
+      <div class="az" id="az-research"><div class="az-lbl" id="ac-research">1 Active · 0 Idle</div></div>
+    </div>
+  </div>
+
+  <!-- SAPPHIRE — BOTTOM RIGHT -->
+  <div class="shield sh-sapphire" id="sh-sapphire">
+    <div class="sh-hd">
+      <div class="sh-title"><span class="sh-ico">💎</span>Sapphire</div>
+      <span class="bdg bnext">Next</span>
+    </div>
+    <div class="sh-bd">
+      <div class="srow"><span class="sl">Revenue</span><span class="sv s">$0.00</span></div>
+      <div class="srow"><span class="sl">Orders</span><span class="sv d">0</span></div>
+      <div class="srow"><span class="sl">Products</span><span class="sv d">Peptides</span></div>
+      <div class="az" id="az-sapphire"><div class="az-lbl" id="ac-sapphire">0 Active · 2 Idle</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT — Activity Log + Fiverr -->
+  <div class="act-panel" id="actPanel">
+    <!-- Fiverr mini at top -->
+    <div class="fiverr-mini sh-fiverr-mini">
+      <div class="sh-title"><span class="sh-ico">💼</span>Fiverr <span class="bdg bnext" style="margin-left:8px;">Next</span></div>
+      <div class="srow"><span class="sl">Revenue</span><span class="sv d" style="font-size:0.82rem;">$0.00</span></div>
+      <div class="srow"><span class="sl">Gigs</span><span class="sv d" style="font-size:0.82rem;">0 Live</span></div>
+      <div class="srow"><span class="sl">Status</span><span class="sv go" style="font-size:0.82rem;">Setup Next</span></div>
+      <div class="az fiverr-mini" id="az-fiverr"><div class="az-lbl" id="ac-fiverr">0 Active · 2 Idle</div></div>
+    </div>
+    <!-- Activity log header -->
+    <div class="act-hd">
+      <div class="act-title">⚡ Activity Log</div>
+      <div class="lpdot"></div>
+    </div>
+    <!-- Scrolling entries -->
+    <div class="act-scroll">
+      <div class="act-inner" id="actInner">
+        <div class="act-item"><span class="act-tag t-sys">ATLAS</span><span class="act-msg">Command Center v5 deployed — Shield HQ design live</span></div>
+        <div class="act-item"><span class="act-tag t-gh">GITHUB</span><span class="act-msg">shadioss/command-center — Pages deployed</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Wedding Planner — #4525260754 — $12.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Weekly Meal Planner — #4525191829 — $6.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Daily Habit Tracker — #4525186513 — $3.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Mental Health Journal — #4524967015 — $9.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Kids Activity Sheets — #4524946002 — $3.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Budget Planner — #4524884287 — $5.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-sys">N8N</span><span class="act-msg">3 workflows active — Research · Content · Publisher</span></div>
+        <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">TikTok dept needs setup — 3 agents idle</span></div>
+        <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">Fiverr dept needs setup — 2 agents idle</span></div>
+        <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">Sapphire website needs setup — 2 agents idle</span></div>
+        <div class="act-item"><span class="act-tag t-sap">SAPPHIRE</span><span class="act-msg">Peptides store added to Atlas — tracking ready</span></div>
+        <div class="act-item"><span class="act-tag t-sys">SYSTEM</span><span class="act-msg">Master HQ sheet updated — Jun 20 2026</span></div>
+        <!-- duplicate for loop -->
+        <div class="act-item"><span class="act-tag t-sys">ATLAS</span><span class="act-msg">Command Center v5 deployed — Shield HQ design live</span></div>
+        <div class="act-item"><span class="act-tag t-gh">GITHUB</span><span class="act-msg">shadioss/command-center — Pages deployed</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Wedding Planner — #4525260754 — $12.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Weekly Meal Planner — #4525191829 — $6.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Daily Habit Tracker — #4525186513 — $3.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Mental Health Journal — #4524967015 — $9.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Kids Activity Sheets — #4524946002 — $3.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Budget Planner — #4524884287 — $5.99 ACTIVE</span></div>
+        <div class="act-item"><span class="act-tag t-sys">N8N</span><span class="act-msg">3 workflows active — Research · Content · Publisher</span></div>
+        <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">TikTok dept needs setup — 3 agents idle</span></div>
+        <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">Fiverr dept needs setup — 2 agents idle</span></div>
+        <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">Sapphire website needs setup — 2 agents idle</span></div>
+        <div class="act-item"><span class="act-tag t-sap">SAPPHIRE</span><span class="act-msg">Peptides store added to Atlas — tracking ready</span></div>
+        <div class="act-item"><span class="act-tag t-sys">SYSTEM</span><span class="act-msg">Master HQ sheet updated — Jun 20 2026</span></div>
       </div>
     </div>
   </div>
 
   <!-- CENTER ORB -->
   <div class="orb-wrap" id="orbWrap">
-    <div class="ring-a"></div>
-    <div class="ring-b"></div>
-    <div class="ring-c"></div>
+    <div class="orb-outer"></div>
+    <div class="orb-seg"></div>
+    <div class="orb-tech"></div>
+    <div class="orb-neon"></div>
     <div class="orb-glow"></div>
     <div class="orb">
-      <svg class="o-arc" width="62" height="54" viewBox="0 0 62 54" fill="none">
-        <polygon points="31,4 57,50 5,50" fill="none" stroke="rgba(0,212,255,0.48)" stroke-width="1.5"/>
-        <polygon points="31,15 48,46 14,46" fill="rgba(0,90,160,0.12)" stroke="rgba(0,212,255,0.28)" stroke-width="1"/>
-        <circle cx="31" cy="33" r="8" fill="rgba(0,140,210,0.18)" stroke="rgba(0,212,255,0.55)" stroke-width="1.5"/>
-        <circle cx="31" cy="33" r="2.5" fill="rgba(0,210,255,0.9)"/>
-      </svg>
       <div class="o-lbl">Total Revenue</div>
       <div class="o-rev">$0.00</div>
       <div class="o-orders">Orders: <span>0</span></div>
@@ -506,140 +592,148 @@ body{
       <div class="o-trk"><div class="o-fill"></div></div>
       <div class="o-pct">35%</div>
       <div class="o-stat">
-        <div class="sdt s-warn" id="sysDot"></div>
-        <span class="o-stxt" id="sysTxt" style="color:var(--gold);">2 Alerts</span>
+        <div class="sdt s-warn"></div>
+        <span class="o-stxt" style="color:var(--gold);">3 Alerts</span>
       </div>
       <div class="o-alerts">
         <div class="oal">⚠ TikTok needs setup</div>
         <div class="oal">⚠ Fiverr needs setup</div>
+        <div class="oal">⚠ Sapphire needs setup</div>
       </div>
     </div>
   </div>
 </div>
 <script>
 // CLOCK
-function tick(){
-  const n=new Date(),p=v=>String(v).padStart(2,'0');
-  document.getElementById('clk').textContent=p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());
-}
+function tick(){const n=new Date(),p=v=>String(v).padStart(2,'0');
+  document.getElementById('clk').textContent=p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());}
 tick();setInterval(tick,1000);
 
 // WAVEFORM
 (()=>{
-  const wf=document.getElementById('waveform');
-  for(let i=0;i<58;i++){
-    const b=document.createElement('div');b.className='wb';
-    const h=Math.random()*22+3;
-    const d=(Math.random()*0.4+0.22).toFixed(2);
-    const dl=((i/58)*0.7+Math.random()*0.14).toFixed(2);
-    b.style.cssText='--h:'+h+'px;--d:'+d+'s;--dl:'+dl+'s;animation-delay:'+dl+'s;';
-    wf.appendChild(b);
-  }
+  ['wfL','wfR'].forEach((id,side)=>{
+    const wf=document.getElementById(id);
+    for(let i=0;i<22;i++){
+      const b=document.createElement('div');b.className='wb';
+      const h=Math.random()*22+3;
+      const d=(Math.random()*0.4+0.22).toFixed(2);
+      const dl=(Math.random()*0.7).toFixed(2);
+      b.style.cssText='--h:'+h+'px;--d:'+d+'s;--dl:'+dl+'s;animation-delay:'+dl+'s;';
+      wf.appendChild(b);
+    }
+  });
 })();
 
+// MOUTH ANIMATION — idle breathe, active talk
+let talking = false;
+function startTalking(){
+  talking=true;
+  const mouth=document.getElementById('mouthBar');
+  if(!mouth)return;
+  let t=0;
+  const interval=setInterval(()=>{
+    if(!talking){clearInterval(interval);mouth.setAttribute('height','3');return;}
+    const h=2+Math.abs(Math.sin(t*0.8))*8;
+    const y=47-((h-3)/2);
+    mouth.setAttribute('height',h.toFixed(1));
+    mouth.setAttribute('y',y.toFixed(1));
+    t+=0.3;
+  },60);
+}
+function stopTalking(){
+  talking=false;
+  const mouth=document.getElementById('mouthBar');
+  if(mouth){mouth.setAttribute('height','3');mouth.setAttribute('y','45');}
+}
+// Idle breathing on face
+setInterval(()=>{
+  if(talking)return;
+  const face=document.getElementById('faceSvg');
+  if(face){face.style.transform='';}
+},3000);
+
 // ALIEN FACTORY
-function mkAlien(active, delay){
+function mkAlien(active,delay){
   const el=document.createElement('div');
   el.className='alien '+(active?'active':'idle');
   el.style.setProperty('--wdl',(delay||0)+'s');
-  if(active) el.style.setProperty('--ws',(1.2+Math.random()*1.0)+'s');
+  if(active)el.style.setProperty('--ws',(1.2+Math.random()*1.0)+'s');
   el.innerHTML='<div class="al-ant"></div><div class="al-hd"></div><div class="al-bd"></div><div class="al-lg"><div class="al-l"></div><div class="al-l"></div></div>';
   return el;
 }
 
-// [zoneId, labelId, activeCount, idleCount]
-const DEPS = [
-  ['az-n8n',     'ac-n8n',      3, 0],
-  ['az-etsy',    'ac-etsy',     3, 0],
-  ['az-tiktok',  'ac-tiktok',   0, 3],
-  ['az-fiverr',  'ac-fiverr',   0, 2],
-  ['az-research','ac-research', 1, 0],
+const DEPS=[
+  ['az-n8n',      'ac-n8n',      3,0,'sh-n8n'],
+  ['az-etsy',     'ac-etsy',     3,0,'sh-etsy'],
+  ['az-tiktok',   'ac-tiktok',   0,3,'sh-tiktok'],
+  ['az-research', 'ac-research', 1,0,'sh-research'],
+  ['az-sapphire', 'ac-sapphire', 0,2,'sh-sapphire'],
+  ['az-fiverr',   'ac-fiverr',   0,2,'sh-fiverr-mini'],
 ];
 
 function spawnAliens(){
-  DEPS.forEach(([zid,cid,a,idle])=>{
-    const z=document.getElementById(zid);
-    if(!z) return;
+  DEPS.forEach(([zid,cid,a,idle,cls])=>{
+    const z=document.getElementById(zid);if(!z)return;
     z.querySelectorAll('.alien').forEach(e=>e.remove());
-    const total=a+idle;
-    if(total===0) return;
-    const zw=Math.max(z.offsetWidth-10,60);
-    const sp=Math.min(28,Math.floor(zw/(total+0.5)));
-    let x=5;
+    const total=a+idle;if(total===0)return;
+    const zw=Math.max(z.offsetWidth-12,60);
+    const sp=Math.min(32,Math.floor(zw/(total+0.5)));
+    let x=6;
     for(let i=0;i<a;i++){
       const al=mkAlien(true,i*0.32);
-      al.style.left=x+'px';
-      z.appendChild(al);
-      x+=sp;
+      al.classList.add(cls.replace('sh-','sh-')+'__alien');
+      // Apply color via parent class
+      z.closest('.shield')||z.closest('.fiverr-mini');
+      al.style.left=x+'px';z.appendChild(al);x+=sp;
     }
     for(let i=0;i<idle;i++){
       const al=mkAlien(false,i*0.5);
-      al.style.left=x+'px';
-      al.style.opacity='0.38';
-      z.appendChild(al);
-      x+=sp;
+      al.style.left=x+'px';al.style.opacity='0.35';z.appendChild(al);x+=sp;
     }
   });
 }
 
-// SVG CONNECTOR LINES — from orb to each shield center
+// SVG CONNECTORS
 function drawLines(){
   const svg=document.getElementById('svgConn');
   const scene=document.querySelector('.scene');
   const orb=document.getElementById('orbWrap');
-  if(!svg||!scene||!orb) return;
+  if(!svg||!scene||!orb)return;
   const sr=scene.getBoundingClientRect();
   const or=orb.getBoundingClientRect();
   const cx=or.left-sr.left+or.width/2;
   const cy=or.top-sr.top+or.height/2;
-  const er=or.width/2+16;
+  const er=or.width/2+20;
   svg.innerHTML='';
-
-  const shields=['sh-n8n','sh-fiverr','sh-etsy','sh-tiktok','sh-research'];
-  shields.forEach((id,i)=>{
-    const sh=document.getElementById(id);
-    if(!sh) return;
+  ['sh-n8n','sh-etsy','sh-tiktok','sh-research','sh-sapphire'].forEach((id,i)=>{
+    const sh=document.getElementById(id);if(!sh)return;
     const pr=sh.getBoundingClientRect();
     const px=pr.left-sr.left+pr.width/2;
     const py=pr.top-sr.top+pr.height/2;
-    const dx=px-cx,dy=py-cy;
-    const len=Math.sqrt(dx*dx+dy*dy);
-    if(len<1) return;
-    const sx=cx+dx/len*er, sy=cy+dy/len*er;
-    const ex=px-dx/len*12, ey=py-dy/len*12;
-
+    const dx=px-cx,dy=py-cy,len=Math.sqrt(dx*dx+dy*dy);if(len<1)return;
+    const sx=cx+dx/len*er,sy=cy+dy/len*er;
+    const ex=px-dx/len*14,ey=py-dy/len*14;
     const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
     ln.setAttribute('x1',sx);ln.setAttribute('y1',sy);
     ln.setAttribute('x2',ex);ln.setAttribute('y2',ey);
-    ln.setAttribute('stroke','rgba(0,180,220,0.2)');
-    ln.setAttribute('stroke-width','1.5');
-    ln.setAttribute('stroke-dasharray','5 6');
+    ln.setAttribute('stroke','rgba(180,40,255,0.18)');
+    ln.setAttribute('stroke-width','1.5');ln.setAttribute('stroke-dasharray','5 6');
     svg.appendChild(ln);
-
-    // Animated pulse dot
-    const pid='pth'+i;
+    const pid='p'+i;
     const pt=document.createElementNS('http://www.w3.org/2000/svg','path');
-    pt.setAttribute('id',pid);
-    pt.setAttribute('d','M'+sx+','+sy+' L'+ex+','+ey);
-    pt.setAttribute('fill','none');pt.setAttribute('stroke','none');
-    svg.appendChild(pt);
-
+    pt.setAttribute('id',pid);pt.setAttribute('d','M'+sx+','+sy+' L'+ex+','+ey);
+    pt.setAttribute('fill','none');pt.setAttribute('stroke','none');svg.appendChild(pt);
     const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('r','2.5');
-    dot.setAttribute('fill','rgba(0,212,255,0.7)');
+    dot.setAttribute('r','3');dot.setAttribute('fill','rgba(180,40,255,0.75)');
     const am=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
-    am.setAttribute('dur',(1.8+i*0.35).toFixed(1)+'s');
-    am.setAttribute('repeatCount','indefinite');
-    am.setAttribute('begin',(i*0.4).toFixed(1)+'s');
+    am.setAttribute('dur',(1.8+i*0.38).toFixed(1)+'s');
+    am.setAttribute('repeatCount','indefinite');am.setAttribute('begin',(i*0.45).toFixed(1)+'s');
     const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');
     mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+pid);
-    am.appendChild(mp);
-    dot.appendChild(am);
-    svg.appendChild(dot);
+    am.appendChild(mp);dot.appendChild(am);svg.appendChild(dot);
   });
 }
 
-// INIT
 setTimeout(()=>{spawnAliens();drawLines();},300);
 window.addEventListener('resize',()=>setTimeout(()=>{drawLines();spawnAliens();},100));
 </script>
