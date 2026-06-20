@@ -8,258 +8,455 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#030e1c;--cyan:#00d4ff;--cyan2:#0099cc;
-  --gold:#f0c040;--green:#00ff9d;
-  --dimtext:#3a6080;--text:#b0cce0;
-  --panel:rgba(3,14,30,0.94);--border:rgba(0,180,220,0.22);--border2:rgba(0,180,220,0.09);
+  --bg:#020b16;--cyan:#00d4ff;--cyan2:#0088bb;
+  --gold:#f0c040;--green:#00ff9d;--red:#ff3a5c;--purple:#a855f7;
+  --dimtext:#2a5070;--text:#90c0d8;
+  --panel:rgba(2,18,38,0.95);--border:rgba(0,180,220,0.2);--border2:rgba(0,180,220,0.08);
 }
-html,body{width:100%;height:100%;overflow:hidden;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);}
 body{
   font-family:'Rajdhani',sans-serif;
-  background:var(--bg);
   background-image:
-    radial-gradient(ellipse 75% 75% at 50% 52%,rgba(0,50,100,0.2) 0%,transparent 65%),
-    linear-gradient(rgba(0,40,70,0.05) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,40,70,0.05) 1px,transparent 1px);
-  background-size:100% 100%,40px 40px,40px 40px;
+    radial-gradient(ellipse 80% 80% at 50% 50%,rgba(0,40,80,0.25) 0%,transparent 65%),
+    linear-gradient(rgba(0,35,60,0.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,35,60,0.06) 1px,transparent 1px);
+  background-size:100% 100%,44px 44px,44px 44px;
 }
 
-/* TOP BAR */
-.topbar{position:fixed;top:0;left:0;right:0;height:46px;z-index:200;background:rgba(3,14,28,0.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand svg{width:28px;height:28px;}
-.bname{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;letter-spacing:0.3em;background:linear-gradient(120deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.bsub{font-size:0.5rem;letter-spacing:0.2em;color:var(--dimtext);}
-.waveform{flex:1;max-width:500px;margin:0 20px;height:30px;display:flex;align-items:center;justify-content:center;gap:2px;overflow:hidden;}
-.wb{width:2.5px;border-radius:2px;background:var(--cyan);opacity:0.7;animation:wba var(--d,0.5s) ease-in-out infinite alternate;animation-delay:var(--delay,0s);}
-@keyframes wba{from{height:2px;opacity:0.2;}to{height:var(--h,14px);opacity:0.9;}}
-.topright{display:flex;align-items:center;gap:14px;}
-.spill{display:flex;align-items:center;gap:5px;font-size:0.56rem;letter-spacing:0.12em;color:var(--green);text-transform:uppercase;padding:3px 8px;border:1px solid rgba(0,255,157,0.18);border-radius:20px;background:rgba(0,255,157,0.04);}
+/* ============ TOP BAR 1: BRAND + WAVE + CLOCK ============ */
+.bar1{
+  position:fixed;top:0;left:0;right:0;height:44px;z-index:300;
+  background:rgba(2,11,22,0.98);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;
+}
+.brand{display:flex;align-items:center;gap:9px;}
+.brand-svg{width:26px;height:26px;}
+.bname{font-family:'Orbitron',sans-serif;font-size:0.95rem;font-weight:900;letter-spacing:0.3em;
+  background:linear-gradient(120deg,#ffffff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.bsub{font-size:0.48rem;letter-spacing:0.2em;color:var(--dimtext);margin-top:-2px;}
+.wf-wrap{flex:1;max-width:480px;margin:0 16px;height:28px;display:flex;align-items:center;justify-content:center;gap:2px;overflow:hidden;position:relative;}
+.wf-wrap::before,.wf-wrap::after{content:'';position:absolute;top:0;bottom:0;width:28px;z-index:1;}
+.wf-wrap::before{left:0;background:linear-gradient(90deg,rgba(2,11,22,1),transparent);}
+.wf-wrap::after{right:0;background:linear-gradient(270deg,rgba(2,11,22,1),transparent);}
+.wb{width:2px;border-radius:2px;background:var(--cyan);animation:wba var(--d,.5s) ease-in-out infinite alternate;animation-delay:var(--dl,0s);}
+@keyframes wba{from{height:2px;opacity:0.2;}to{height:var(--h,12px);opacity:0.85;}}
+.bar1-right{display:flex;align-items:center;gap:14px;}
+.spill{display:flex;align-items:center;gap:5px;font-size:0.54rem;letter-spacing:0.12em;color:var(--green);text-transform:uppercase;padding:3px 8px;border:1px solid rgba(0,255,157,0.18);border-radius:20px;background:rgba(0,255,157,0.04);}
 .sdot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:sda 2s infinite;}
 @keyframes sda{0%,100%{opacity:1;}50%{opacity:0.2;}}
-#clk{font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:var(--cyan);letter-spacing:0.06em;}
+#clk{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:var(--cyan);letter-spacing:0.06em;}
 
-/* MAIN AREA — everything inside this */
-.scene{position:fixed;top:46px;left:0;right:0;bottom:30px;}
-
-/* SVG LAYER */
-#svgLayer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
-
-/* CENTER ORB — absolute centered */
-.orb-wrap{
-  position:absolute;
-  left:50%;top:50%;
-  transform:translate(-50%,-50%);
-  width:250px;height:250px;
-  z-index:10;
+/* ============ TOP BAR 2: HUD STATS ============ */
+.bar2{
+  position:fixed;top:44px;left:0;right:0;height:36px;z-index:300;
+  background:rgba(0,8,18,0.96);
+  border-bottom:1px solid rgba(0,180,220,0.12);
+  display:grid;grid-template-columns:repeat(6,1fr);
+  gap:1px;
 }
-.ring-a{position:absolute;inset:-26px;border-radius:50%;border:1px dashed rgba(0,212,255,0.14);animation:rotA 28s linear infinite;}
-.ring-b{position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(0,212,255,0.25);}
-.ring-tick{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:rotA 28s linear infinite;}
-/* counter tick so it stays at top */
-.ring-tick{transform-origin:calc(50%) calc(135px);animation:rotB 28s linear infinite;}
-@keyframes rotA{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-@keyframes rotB{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
-.ring-c{position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(0,212,255,0.1);animation:rotA 18s linear infinite reverse;}
-.orb-glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(0,170,240,0.18) 0%,transparent 65%);animation:orbB 3.5s ease-in-out infinite;}
-@keyframes orbB{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+.hud-cell{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-right:1px solid rgba(0,180,220,0.08);
+  padding:0 8px;
+}
+.hud-cell:last-child{border-right:none;}
+.hud-label{font-size:0.44rem;letter-spacing:0.18em;color:var(--dimtext);text-transform:uppercase;}
+.hud-val{font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;color:var(--cyan);letter-spacing:0.05em;line-height:1;}
+.hud-val.green{color:var(--green);}
+.hud-val.gold{color:var(--gold);}
+.hud-val.red{color:var(--red);}
+
+/* ============ MAIN SCENE ============ */
+.scene{
+  position:fixed;top:80px;left:0;right:0;bottom:28px;
+  display:flex;align-items:center;justify-content:center;
+}
+#svgLayer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+
+/* ============ CENTER ORB ============ */
+.orb-wrap{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:230px;height:230px;z-index:20;
+}
+.r-outer{position:absolute;inset:-32px;border-radius:50%;border:1px dashed rgba(0,212,255,0.13);animation:rot 35s linear infinite;}
+.r-outer::after{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 20px rgba(0,212,255,0.5);}
+.r-mid{position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(0,212,255,0.22);}
+.r-mid::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,212,255,0.08);animation:rot 18s linear infinite reverse;}
+.r-inner{position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(0,212,255,0.1);animation:rot 12s linear infinite;}
+@keyframes rot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.orb-glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(0,160,240,0.2) 0%,transparent 70%);animation:oglow 3.5s ease-in-out infinite;}
+@keyframes oglow{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.06);opacity:1;}}
 .orb{
   position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 47% 40%,rgba(0,140,210,0.2),rgba(0,50,110,0.3) 50%,rgba(0,10,30,0.75) 80%);
-  border:1.5px solid rgba(0,200,240,0.4);
-  box-shadow:0 0 45px rgba(0,140,210,0.22),0 0 90px rgba(0,70,180,0.1),inset 0 0 35px rgba(0,90,190,0.1);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:16px;
+  background:radial-gradient(circle at 47% 40%,rgba(0,130,200,0.22),rgba(0,45,100,0.32) 50%,rgba(0,8,22,0.8) 80%);
+  border:2px solid rgba(0,200,240,0.38);
+  box-shadow:0 0 50px rgba(0,130,200,0.22),0 0 100px rgba(0,60,180,0.1),inset 0 0 40px rgba(0,90,190,0.1);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;
 }
-.arc-svg{opacity:0.5;margin-bottom:3px;}
-.orb-lbl{font-size:0.48rem;letter-spacing:0.25em;color:var(--dimtext);text-transform:uppercase;margin-bottom:1px;}
-.orb-rev{font-family:'Orbitron',sans-serif;font-size:1.7rem;font-weight:900;color:#fff;line-height:1;text-shadow:0 0 18px rgba(0,200,255,0.75),0 0 45px rgba(0,100,220,0.35);}
-.orb-ph{font-size:0.54rem;letter-spacing:0.16em;color:var(--cyan);margin-top:3px;text-transform:uppercase;}
-.orb-det{font-size:0.5rem;letter-spacing:0.1em;color:var(--dimtext);margin-top:7px;text-transform:uppercase;}
-.orb-trk{width:100px;height:3px;background:rgba(0,70,110,0.5);border-radius:2px;margin:5px auto 0;}
+.orb-arc{opacity:0.5;margin-bottom:3px;}
+.orb-lbl{font-size:0.42rem;letter-spacing:0.22em;color:var(--dimtext);text-transform:uppercase;}
+.orb-rev{font-family:'Orbitron',sans-serif;font-size:1.55rem;font-weight:900;color:#fff;line-height:1;text-shadow:0 0 16px rgba(0,200,255,0.8),0 0 40px rgba(0,100,220,0.4);}
+.orb-orders{font-size:0.52rem;letter-spacing:0.15em;color:var(--text);margin-top:2px;}
+.orb-orders span{color:var(--gold);font-family:'Orbitron',sans-serif;font-weight:700;}
+.orb-phase{font-size:0.5rem;letter-spacing:0.15em;color:var(--cyan);margin-top:5px;text-transform:uppercase;}
+.orb-trk{width:100px;height:3px;background:rgba(0,60,100,0.5);border-radius:2px;margin:4px auto 2px;overflow:hidden;}
 .orb-fill{height:100%;width:35%;background:linear-gradient(90deg,var(--cyan2),var(--cyan));box-shadow:0 0 5px var(--cyan);border-radius:2px;}
-.orb-pct{font-family:'Orbitron',sans-serif;font-size:0.65rem;color:var(--cyan);margin-top:2px;}
+.orb-pct{font-family:'Orbitron',sans-serif;font-size:0.58rem;color:var(--cyan);}
+.orb-status{margin-top:5px;display:flex;align-items:center;gap:5px;font-size:0.48rem;letter-spacing:0.12em;text-transform:uppercase;}
+.status-dot{width:5px;height:5px;border-radius:50%;}
+.st-ok{background:var(--green);box-shadow:0 0 6px var(--green);}
+.st-warn{background:var(--gold);box-shadow:0 0 6px var(--gold);animation:sda 1s infinite;}
+.st-alert{background:var(--red);box-shadow:0 0 6px var(--red);animation:sda .5s infinite;}
 
-/* PODS */
-.pod{
-  position:absolute;width:190px;
-  background:var(--panel);
-  border:1px solid var(--border);border-radius:5px;
-  backdrop-filter:blur(12px);
-  transition:box-shadow 0.3s;
-  z-index:5;
+/* ALERT SECTION IN ORB */
+.orb-alerts{margin-top:6px;width:100%;}
+.alert-item{
+  font-size:0.44rem;letter-spacing:0.08em;color:var(--red);
+  background:rgba(255,58,92,0.08);border:1px solid rgba(255,58,92,0.2);
+  border-radius:3px;padding:2px 5px;margin-top:2px;
+  animation:alertPulse 1.5s ease-in-out infinite;
 }
-.pod:hover{box-shadow:0 0 16px rgba(0,180,220,0.18);}
-.pod::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.4;}
+@keyframes alertPulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
 
-/* === FIXED POSITIONS === */
-/* top-left */
-#pod-etsy{left:2%;top:2%;}
-/* bottom-left */
-#pod-n8n{left:2%;bottom:3%;}
-/* top-right */
-#pod-tiktok{right:2%;top:2%;}
-/* bottom-right */
-#pod-fiverr{right:2%;bottom:3%;}
-/* bottom-center */
-#pod-research{left:50%;bottom:1%;transform:translateX(-50%);width:230px;}
+/* ============ HEX PODS ============ */
+.pod{
+  position:absolute;z-index:15;
+  width:175px;
+}
+.hex-shell{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--border);
+  clip-path:polygon(12px 0%, calc(100% - 12px) 0%, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0% calc(100% - 12px), 0% 12px);
+  overflow:hidden;
+  transition:box-shadow 0.3s;
+}
+.pod:hover .hex-shell{box-shadow:0 0 20px rgba(0,180,220,0.25);}
+.hex-shell::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.5;}
+.hex-shell::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.2;}
 
-.ph{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;background:rgba(0,22,45,0.8);border-bottom:1px solid var(--border2);}
-.ph-l{display:flex;align-items:center;gap:6px;font-family:'Orbitron',sans-serif;font-size:0.52rem;font-weight:700;letter-spacing:0.18em;color:var(--cyan);text-transform:uppercase;}
-.ph-ico{font-size:0.85rem;}
-.badge{font-size:0.46rem;letter-spacing:0.1em;padding:2px 7px;border-radius:20px;text-transform:uppercase;font-weight:600;}
-.blive{background:rgba(0,255,157,0.07);color:var(--green);border:1px solid rgba(0,255,157,0.2);}
-.bnext{background:rgba(240,192,64,0.07);color:var(--gold);border:1px solid rgba(240,192,64,0.18);}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:rgba(0,20,42,0.9);border-bottom:1px solid var(--border2);}
+.ph-left{display:flex;align-items:center;gap:5px;font-family:'Orbitron',sans-serif;font-size:0.5rem;font-weight:700;letter-spacing:0.18em;color:var(--cyan);text-transform:uppercase;}
+.ph-ico{font-size:0.8rem;}
+.bdg{font-size:0.44rem;letter-spacing:0.1em;padding:1px 6px;border-radius:20px;text-transform:uppercase;font-weight:600;}
+.blive{background:rgba(0,255,157,0.08);color:var(--green);border:1px solid rgba(0,255,157,0.22);}
+.bnext{background:rgba(240,192,64,0.08);color:var(--gold);border:1px solid rgba(240,192,64,0.2);}
 
-.pb{padding:8px 11px;}
-.sr{display:flex;align-items:center;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border2);font-size:0.66rem;}
+.pb{padding:7px 10px;}
+.sr{display:flex;align-items:center;justify-content:space-between;padding:2px 0;border-bottom:1px solid var(--border2);font-size:0.6rem;}
 .sr:last-child{border-bottom:none;}
 .sl{color:var(--dimtext);}
-.sv{font-family:'Orbitron',sans-serif;font-size:0.64rem;font-weight:700;color:var(--cyan);}
+.sv{font-family:'Orbitron',sans-serif;font-size:0.58rem;font-weight:700;color:var(--cyan);}
 .sv.g{color:var(--green);}
 .sv.go{color:var(--gold);}
 .sv.d{color:var(--dimtext);}
+.sv.r{color:var(--red);}
 
-.listings{margin-top:5px;}
-.li{display:flex;align-items:center;gap:5px;padding:2.5px 0;border-bottom:1px solid var(--border2);font-size:0.59rem;color:var(--text);}
-.li:last-child{border-bottom:none;}
-.ldot{width:4px;height:4px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);flex-shrink:0;}
-.lname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.lprice{font-family:'Orbitron',sans-serif;font-size:0.57rem;color:var(--green);font-weight:700;}
+/* AGENT ZONE */
+.agent-zone{
+  height:52px;margin:5px 0 3px;
+  background:rgba(0,10,22,0.6);
+  border:1px solid var(--border2);
+  border-radius:3px;
+  position:relative;overflow:hidden;
+}
+.agent-zone::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,40,80,0.2) 0%,transparent 100%);
+}
+.agent-count{position:absolute;bottom:2px;right:5px;font-size:0.44rem;letter-spacing:0.1em;color:var(--dimtext);}
 
-.pills{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px;}
-.ap{font-size:0.47rem;letter-spacing:0.07em;padding:2px 6px;border-radius:20px;background:rgba(0,55,95,0.5);border:1px solid var(--border2);color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;gap:3px;}
-.ap::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--cyan);box-shadow:0 0 3px var(--cyan);}
-.dim2{opacity:0.32;color:var(--dimtext)!important;}
-.dim2::before{background:var(--dimtext)!important;box-shadow:none!important;}
+/* ============ ALIEN AGENTS (CSS drawn) ============ */
+.alien{
+  position:absolute;bottom:4px;
+  width:16px;height:22px;
+  display:flex;flex-direction:column;align-items:center;
+}
+/* Head */
+.alien-head{
+  width:11px;height:9px;border-radius:50% 50% 40% 40%;
+  border:1px solid currentColor;
+  background:rgba(0,0,0,0.4);
+  position:relative;
+  flex-shrink:0;
+}
+/* Eyes */
+.alien-head::before,.alien-head::after{
+  content:'';position:absolute;
+  width:3px;height:3px;border-radius:50%;
+  background:currentColor;
+  top:3px;
+}
+.alien-head::before{left:1.5px;}
+.alien-head::after{right:1.5px;}
+/* Antennae */
+.alien-ant{position:relative;height:5px;width:11px;}
+.alien-ant::before,.alien-ant::after{
+  content:'';position:absolute;bottom:0;
+  width:1px;height:5px;background:currentColor;border-radius:1px;
+}
+.alien-ant::before{left:3px;transform:rotate(-12deg);}
+.alien-ant::after{right:3px;transform:rotate(12deg);}
+/* Body */
+.alien-body{
+  width:12px;height:8px;
+  border:1px solid currentColor;
+  background:rgba(0,0,0,0.3);
+  border-radius:3px;
+  margin-top:1px;
+  flex-shrink:0;
+}
+/* Legs - 2 visible lines */
+.alien-legs{display:flex;gap:3px;margin-top:1px;}
+.alien-leg{width:1px;height:5px;background:currentColor;border-radius:1px;}
 
-/* BOTTOM BAR */
-.botbar{position:fixed;bottom:0;left:0;right:0;height:30px;background:rgba(3,14,28,0.96);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:0.52rem;letter-spacing:0.12em;color:var(--dimtext);text-transform:uppercase;z-index:200;}
-.bsep{color:rgba(0,90,140,0.5);margin:0 7px;}
+/* Active alien: walking animation */
+.alien.active{animation:alienWalk var(--wspd, 1.8s) ease-in-out infinite;}
+@keyframes alienWalk{
+  0%{transform:translateX(0) scaleX(1);}
+  20%{transform:translateX(6px) scaleX(1);}
+  21%{transform:translateX(6px) scaleX(-1);}
+  45%{transform:translateX(-6px) scaleX(-1);}
+  46%{transform:translateX(-6px) scaleX(1);}
+  70%{transform:translateX(3px) scaleX(1);}
+  100%{transform:translateX(0) scaleX(1);}
+}
+/* Active alien legs animate */
+.alien.active .alien-leg:first-child{animation:legA .4s ease-in-out infinite alternate;}
+.alien.active .alien-leg:last-child{animation:legA .4s ease-in-out infinite alternate-reverse;}
+@keyframes legA{from{transform:rotate(-20deg);}to{transform:rotate(20deg);}}
+/* Active alien antennae bob */
+.alien.active .alien-ant{animation:antBob .6s ease-in-out infinite alternate;}
+@keyframes antBob{from{transform:translateY(0);}to{transform:translateY(-1px);}}
+
+/* Idle alien: subtle breathing */
+.alien.idle{animation:alienIdle 3s ease-in-out infinite;}
+@keyframes alienIdle{0%,100%{transform:scaleY(1);}50%{transform:scaleY(0.95);}}
+
+/* Colors per department */
+.pod-etsy .alien{color:var(--green);}
+.pod-n8n .alien{color:var(--cyan);}
+.pod-tiktok .alien{color:var(--purple);}
+.pod-fiverr .alien{color:var(--gold);}
+.pod-research .alien{color:#ff8040;}
+
+/* ============ POD POSITIONS (around orb) ============ */
+/* Orb center is at 50%, 50% of scene. 
+   Scene height = viewport - 80px - 28px 
+   We use % positions. Orb is 230px wide.
+   Pods are 175px wide. */
+.pod-etsy{left:calc(50% - 262px);top:calc(50% - 200px);}
+.pod-tiktok{left:calc(50% + 88px);top:calc(50% - 200px);}
+.pod-n8n{left:calc(50% - 310px);top:calc(50% - 30px);}
+.pod-fiverr{left:calc(50% + 136px);top:calc(50% - 30px);}
+.pod-research{left:calc(50% - 87px);top:calc(50% + 128px);}
+
+/* ============ BOTTOM BAR ============ */
+.botbar{
+  position:fixed;bottom:0;left:0;right:0;height:28px;z-index:300;
+  background:rgba(2,11,22,0.97);border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;font-size:0.5rem;letter-spacing:0.12em;color:var(--dimtext);text-transform:uppercase;
+}
+.bsep{color:rgba(0,80,120,0.5);margin:0 6px;}
+
+/* ============ CONNECTOR LINES ============ */
+.conn-line{stroke:rgba(0,180,220,0.14);stroke-width:1;stroke-dasharray:5 5;}
+.conn-dot{fill:rgba(0,212,255,0.65);}
 </style>
 </head>
 <body>
-
-<!-- TOP BAR -->
-<div class="topbar">
+<!-- ===== BAR 1: BRAND + WAVEFORM + CLOCK ===== -->
+<div class="bar1">
   <div class="brand">
-    <svg viewBox="0 0 28 28" fill="none">
-      <circle cx="14" cy="14" r="12.5" stroke="rgba(0,200,240,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
-      <circle cx="14" cy="14" r="8" stroke="rgba(0,200,240,0.55)" stroke-width="1"/>
-      <circle cx="14" cy="14" r="3.5" fill="rgba(0,180,240,0.25)" stroke="#00d4ff" stroke-width="1.5"/>
-      <line x1="2" y1="14" x2="26" y2="14" stroke="rgba(0,200,240,0.18)" stroke-width="0.8"/>
-      <line x1="14" y1="2" x2="14" y2="26" stroke="rgba(0,200,240,0.18)" stroke-width="0.8"/>
-      <circle cx="14" cy="2.2" r="1.1" fill="#00d4ff"/>
-      <circle cx="25.8" cy="14" r="0.9" fill="#00d4ff" opacity="0.6"/>
+    <svg class="brand-svg" viewBox="0 0 26 26" fill="none">
+      <circle cx="13" cy="13" r="11.5" stroke="rgba(0,200,240,0.3)" stroke-width="1" stroke-dasharray="3 2"/>
+      <circle cx="13" cy="13" r="7.5" stroke="rgba(0,200,240,0.55)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="3" fill="rgba(0,180,240,0.25)" stroke="#00d4ff" stroke-width="1.5"/>
+      <line x1="2" y1="13" x2="24" y2="13" stroke="rgba(0,200,240,0.18)" stroke-width="0.8"/>
+      <line x1="13" y1="2" x2="13" y2="24" stroke="rgba(0,200,240,0.18)" stroke-width="0.8"/>
+      <circle cx="13" cy="2" r="1.1" fill="#00d4ff"/>
+      <circle cx="24" cy="13" r="0.9" fill="#00d4ff" opacity="0.6"/>
     </svg>
     <div><div class="bname">ATLAS</div><div class="bsub">ShadyPrintables Command Center</div></div>
   </div>
-
-  <div class="waveform" id="waveform"></div>
-
-  <div class="topright">
+  <div class="wf-wrap" id="waveform"></div>
+  <div class="bar1-right">
     <div class="spill"><div class="sdot"></div>All Systems Live</div>
     <div id="clk">--:--:--</div>
   </div>
 </div>
 
-<!-- SCENE -->
+<!-- ===== BAR 2: HUD STATS ===== -->
+<div class="bar2">
+  <div class="hud-cell">
+    <div class="hud-label">Active Depts</div>
+    <div class="hud-val green">2 / 5</div>
+  </div>
+  <div class="hud-cell">
+    <div class="hud-label">Total Agents</div>
+    <div class="hud-val">6</div>
+  </div>
+  <div class="hud-cell">
+    <div class="hud-label">Active Agents</div>
+    <div class="hud-val green">3</div>
+  </div>
+  <div class="hud-cell">
+    <div class="hud-label">Potential Revenue</div>
+    <div class="hud-val gold">$42.94</div>
+  </div>
+  <div class="hud-cell">
+    <div class="hud-label">Total Orders</div>
+    <div class="hud-val">0</div>
+  </div>
+  <div class="hud-cell">
+    <div class="hud-label">Phase Progress</div>
+    <div class="hud-val">35%</div>
+  </div>
+</div>
+
+<!-- ===== MAIN SCENE ===== -->
 <div class="scene">
   <svg id="svgLayer"></svg>
 
-  <!-- PODS -->
-  <div class="pod" id="pod-etsy">
-    <div class="ph"><div class="ph-l"><span class="ph-ico">🛍</span>Etsy</div><span class="badge blive">Live</span></div>
-    <div class="pb">
-      <div class="sr"><span class="sl">Revenue</span><span class="sv g">$0.00</span></div>
-      <div class="sr"><span class="sl">Listings</span><span class="sv">6 Active</span></div>
-      <div class="sr"><span class="sl">Agents</span><span class="sv">3</span></div>
-      <div class="pills"><span class="ap">Listing Builder</span><span class="ap">PDF Gen</span><span class="ap">Researcher</span></div>
-      <div class="listings">
-        <div class="li"><div class="ldot"></div><span class="lname">Budget Planner</span><span class="lprice">$5.99</span></div>
-        <div class="li"><div class="ldot"></div><span class="lname">Kids Activity</span><span class="lprice">$3.99</span></div>
-        <div class="li"><div class="ldot"></div><span class="lname">Mental Health</span><span class="lprice">$9.99</span></div>
-        <div class="li"><div class="ldot"></div><span class="lname">Habit Tracker</span><span class="lprice">$3.99</span></div>
-        <div class="li"><div class="ldot"></div><span class="lname">Meal Planner</span><span class="lprice">$6.99</span></div>
-        <div class="li"><div class="ldot"></div><span class="lname">Wedding Planner</span><span class="lprice">$12.99</span></div>
+  <!-- === POD: ETSY === -->
+  <div class="pod pod-etsy" id="pod-etsy">
+    <div class="hex-shell">
+      <div class="ph">
+        <div class="ph-left"><span class="ph-ico">🛍</span>Etsy</div>
+        <span class="bdg blive">Live</span>
+      </div>
+      <div class="pb">
+        <div class="sr"><span class="sl">Revenue</span><span class="sv g">$0.00</span></div>
+        <div class="sr"><span class="sl">Listings</span><span class="sv">6 Active</span></div>
+        <div class="sr"><span class="sl">Orders</span><span class="sv">0</span></div>
+        <!-- AGENT ZONE -->
+        <div class="agent-zone" id="az-etsy">
+          <!-- aliens injected by JS -->
+          <div class="agent-count" id="ac-etsy">3 Active · 0 Idle</div>
+        </div>
+        <div class="sr" style="margin-top:3px;"><span class="sl">Shop ID</span><span class="sv d">66600718</span></div>
       </div>
     </div>
   </div>
 
-  <div class="pod" id="pod-n8n">
-    <div class="ph"><div class="ph-l"><span class="ph-ico">⚡</span>n8n Automation</div><span class="badge blive">Live</span></div>
-    <div class="pb">
-      <div class="sr"><span class="sl">Workflows</span><span class="sv g">3 Active</span></div>
-      <div class="sr"><span class="sl">Executions</span><span class="sv">1,000 Free</span></div>
-      <div class="sr"><span class="sl">Capacity Used</span><span class="sv">2%</span></div>
-      <div class="sr"><span class="sl">Status</span><span class="sv g">Running</span></div>
-      <div class="pills"><span class="ap">Market Research</span><span class="ap">Content Gen</span><span class="ap">Publisher</span></div>
+  <!-- === POD: N8N === -->
+  <div class="pod pod-n8n" id="pod-n8n">
+    <div class="hex-shell">
+      <div class="ph">
+        <div class="ph-left"><span class="ph-ico">⚡</span>n8n</div>
+        <span class="bdg blive">Live</span>
+      </div>
+      <div class="pb">
+        <div class="sr"><span class="sl">Workflows</span><span class="sv g">3 Active</span></div>
+        <div class="sr"><span class="sl">Executions</span><span class="sv">1,000 Free</span></div>
+        <div class="sr"><span class="sl">Capacity</span><span class="sv">2% Used</span></div>
+        <div class="agent-zone" id="az-n8n">
+          <div class="agent-count" id="ac-n8n">3 Active · 0 Idle</div>
+        </div>
+        <div class="sr" style="margin-top:3px;"><span class="sl">Status</span><span class="sv g">Running</span></div>
+      </div>
     </div>
   </div>
 
-  <div class="pod" id="pod-tiktok">
-    <div class="ph"><div class="ph-l"><span class="ph-ico">📱</span>TikTok</div><span class="badge bnext">Next</span></div>
-    <div class="pb">
-      <div class="sr"><span class="sl">Revenue</span><span class="sv d">$0.00</span></div>
-      <div class="sr"><span class="sl">Account</span><span class="sv go">@shadesphysique</span></div>
-      <div class="sr"><span class="sl">Niche</span><span class="sv">Fat Loss / 3-3-3</span></div>
-      <div class="sr"><span class="sl">Agents</span><span class="sv d">0 — setup next</span></div>
-      <div class="pills"><span class="ap dim2">Script Writer</span><span class="ap dim2">Scheduler</span><span class="ap dim2">Hook Gen</span></div>
+  <!-- === POD: TIKTOK === -->
+  <div class="pod pod-tiktok" id="pod-tiktok">
+    <div class="hex-shell">
+      <div class="ph">
+        <div class="ph-left"><span class="ph-ico">📱</span>TikTok</div>
+        <span class="bdg bnext">Next</span>
+      </div>
+      <div class="pb">
+        <div class="sr"><span class="sl">Revenue</span><span class="sv d">$0.00</span></div>
+        <div class="sr"><span class="sl">Account</span><span class="sv go">@shadesphysique</span></div>
+        <div class="sr"><span class="sl">Niche</span><span class="sv">Fat Loss / 3-3-3</span></div>
+        <div class="agent-zone" id="az-tiktok">
+          <div class="agent-count" id="ac-tiktok">0 Active · 3 Idle</div>
+        </div>
+        <div class="sr" style="margin-top:3px;"><span class="sl">Status</span><span class="sv go">Setup Next</span></div>
+      </div>
     </div>
   </div>
 
-  <div class="pod" id="pod-fiverr">
-    <div class="ph"><div class="ph-l"><span class="ph-ico">💼</span>Fiverr</div><span class="badge bnext">Next</span></div>
-    <div class="pb">
-      <div class="sr"><span class="sl">Revenue</span><span class="sv d">$0.00</span></div>
-      <div class="sr"><span class="sl">Gigs Live</span><span class="sv d">0</span></div>
-      <div class="sr"><span class="sl">Orders</span><span class="sv d">0</span></div>
-      <div class="sr"><span class="sl">Status</span><span class="sv go">Setup Next</span></div>
-      <div class="pills"><span class="ap dim2">Gig Creator</span><span class="ap dim2">Optimizer</span></div>
+  <!-- === POD: FIVERR === -->
+  <div class="pod pod-fiverr" id="pod-fiverr">
+    <div class="hex-shell">
+      <div class="ph">
+        <div class="ph-left"><span class="ph-ico">💼</span>Fiverr</div>
+        <span class="bdg bnext">Next</span>
+      </div>
+      <div class="pb">
+        <div class="sr"><span class="sl">Revenue</span><span class="sv d">$0.00</span></div>
+        <div class="sr"><span class="sl">Gigs Live</span><span class="sv d">0</span></div>
+        <div class="sr"><span class="sl">Orders</span><span class="sv d">0</span></div>
+        <div class="agent-zone" id="az-fiverr">
+          <div class="agent-count" id="ac-fiverr">0 Active · 2 Idle</div>
+        </div>
+        <div class="sr" style="margin-top:3px;"><span class="sl">Status</span><span class="sv go">Setup Next</span></div>
+      </div>
     </div>
   </div>
 
-  <div class="pod" id="pod-research">
-    <div class="ph"><div class="ph-l"><span class="ph-ico">🔬</span>Research AI</div><span class="badge blive">Live</span></div>
-    <div class="pb" style="display:flex;gap:14px;">
-      <div style="flex:1;"><div class="sr"><span class="sl">Mode</span><span class="sv g">Active</span></div><div class="sr"><span class="sl">Last Scan</span><span class="sv">Today</span></div></div>
-      <div style="flex:1;"><div class="sr"><span class="sl">Found</span><span class="sv">6 Products</span></div><div class="sr"><span class="sl">Batch 2</span><span class="sv go">Queued</span></div></div>
+  <!-- === POD: RESEARCH AI === -->
+  <div class="pod pod-research" id="pod-research">
+    <div class="hex-shell">
+      <div class="ph">
+        <div class="ph-left"><span class="ph-ico">🔬</span>Research AI</div>
+        <span class="bdg blive">Live</span>
+      </div>
+      <div class="pb" style="display:flex;gap:0;">
+        <div style="flex:1;">
+          <div class="sr"><span class="sl">Mode</span><span class="sv g">Active</span></div>
+          <div class="sr"><span class="sl">Found</span><span class="sv">6 Products</span></div>
+          <div class="sr"><span class="sl">Batch 2</span><span class="sv go">Queued</span></div>
+        </div>
+        <div class="agent-zone" style="width:52px;height:auto;margin:0 0 0 7px;flex-shrink:0;" id="az-research">
+          <div class="agent-count" id="ac-research">1A·0I</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- CENTER ORB -->
+  <!-- ===== CENTER ORB ===== -->
   <div class="orb-wrap">
-    <div class="ring-a"></div>
-    <div class="ring-b"></div>
-    <div class="ring-c"></div>
+    <div class="r-outer"></div>
+    <div class="r-mid"></div>
+    <div class="r-inner"></div>
     <div class="orb-glow"></div>
-    <div class="orb">
-      <svg class="arc-svg" width="65" height="56" viewBox="0 0 65 56" fill="none">
-        <polygon points="32,5 59,51 5,51" fill="none" stroke="rgba(0,212,255,0.45)" stroke-width="1.5"/>
-        <polygon points="32,16 50,47 14,47" fill="rgba(0,90,170,0.12)" stroke="rgba(0,212,255,0.26)" stroke-width="1"/>
-        <circle cx="32" cy="34" r="8" fill="rgba(0,140,210,0.18)" stroke="rgba(0,212,255,0.5)" stroke-width="1.5"/>
-        <circle cx="32" cy="34" r="2.5" fill="rgba(0,200,255,0.7)"/>
+    <div class="orb" id="mainOrb">
+      <svg class="orb-arc" width="58" height="50" viewBox="0 0 58 50" fill="none">
+        <polygon points="29,4 53,46 5,46" fill="none" stroke="rgba(0,212,255,0.45)" stroke-width="1.5"/>
+        <polygon points="29,14 45,42 13,42" fill="rgba(0,90,160,0.12)" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+        <circle cx="29" cy="31" r="7" fill="rgba(0,140,210,0.18)" stroke="rgba(0,212,255,0.5)" stroke-width="1.5"/>
+        <circle cx="29" cy="31" r="2.2" fill="rgba(0,200,255,0.8)"/>
       </svg>
       <div class="orb-lbl">Total Revenue</div>
       <div class="orb-rev">$0.00</div>
-      <div class="orb-ph">Phase 1 Active</div>
-      <div class="orb-det">6 Products · 2 Platforms · 3 Agents</div>
+      <div class="orb-orders">Orders: <span>0</span></div>
+      <div class="orb-phase">Phase 1 Active</div>
       <div class="orb-trk"><div class="orb-fill"></div></div>
       <div class="orb-pct">35%</div>
+      <div class="orb-status">
+        <div class="status-dot st-ok" id="sysStat"></div>
+        <span id="sysStatTxt" style="color:var(--green);font-size:0.44rem;letter-spacing:0.12em;">All Systems OK</span>
+      </div>
+      <div class="orb-alerts" id="orbAlerts"></div>
     </div>
   </div>
 
 </div>
 
-<!-- BOTTOM BAR -->
+<!-- ===== BOTTOM BAR ===== -->
 <div class="botbar">
-  <span>Atlas v1.0<span class="bsep">|</span>Shop: 66600718<span class="bsep">|</span>GitHub: shadioss/command-center</span>
+  <span>Atlas v1.0<span class="bsep">|</span>Shop: 66600718<span class="bsep">|</span>github: shadioss/command-center</span>
   <span id="dateD">—</span>
-  <span>Etsy: 6 Active<span class="bsep">|</span>n8n: 3 Workflows<span class="bsep">|</span>Voice: Ready</span>
+  <span>Etsy: 6 Listings<span class="bsep">|</span>n8n: 3 Workflows<span class="bsep">|</span>Voice: Ready</span>
 </div>
-
 <script>
-// Clock
+// ===== CLOCK =====
 function tick(){
   const n=new Date(),p=v=>String(v).padStart(2,'0');
   document.getElementById('clk').textContent=p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());
@@ -268,20 +465,118 @@ function tick(){
 }
 tick();setInterval(tick,1000);
 
-// Waveform
+// ===== WAVEFORM =====
 (()=>{
   const wf=document.getElementById('waveform');
-  for(let i=0;i<54;i++){
+  for(let i=0;i<52;i++){
     const b=document.createElement('div');b.className='wb';
-    const h=Math.random()*20+2;
-    const d=(Math.random()*0.4+0.25).toFixed(2);
-    const delay=((i/54)*0.7+Math.random()*0.15).toFixed(2);
-    b.style.cssText='--h:'+h+'px;--d:'+d+'s;--delay:'+delay+'s;animation-delay:'+delay+'s;';
+    const h=Math.random()*18+2;
+    const d=(Math.random()*0.38+0.22).toFixed(2);
+    const dl=((i/52)*0.65+Math.random()*0.12).toFixed(2);
+    b.style.cssText='--h:'+h+'px;--d:'+d+'s;--dl:'+dl+'s;animation-delay:'+dl+'s;';
     wf.appendChild(b);
   }
 })();
 
-// SVG connector lines — run after paint
+// ===== ALIEN BUILDER =====
+function makeAlien(active, speedMult){
+  const el=document.createElement('div');
+  el.className='alien '+(active?'active':'idle');
+  if(active) el.style.setProperty('--wspd',(1.4+Math.random()*1.2)+'s');
+  el.innerHTML=
+    '<div class="alien-ant"></div>'+
+    '<div class="alien-head"></div>'+
+    '<div class="alien-body"></div>'+
+    '<div class="alien-legs"><div class="alien-leg"></div><div class="alien-leg"></div><div class="alien-leg"></div></div>';
+  return el;
+}
+
+// Config: [zoneId, countId, activeCount, idleCount]
+const deptConfig=[
+  ['az-etsy',    'ac-etsy',     3, 0],
+  ['az-n8n',     'ac-n8n',      3, 0],
+  ['az-tiktok',  'ac-tiktok',   0, 3],
+  ['az-fiverr',  'ac-fiverr',   0, 2],
+  ['az-research','ac-research', 1, 0],
+];
+
+function populateAliens(){
+  deptConfig.forEach(([zoneId,countId,active,idle])=>{
+    const zone=document.getElementById(zoneId);
+    const lbl=document.getElementById(countId);
+    const total=active+idle;
+    if(!zone)return;
+    
+    // Remove existing aliens
+    zone.querySelectorAll('.alien').forEach(a=>a.remove());
+    
+    // Count label
+    if(lbl){
+      if(zoneId==='az-research'){
+        lbl.textContent=active+'A·'+idle+'I';
+      } else {
+        lbl.textContent=active+' Active · '+idle+' Idle';
+      }
+    }
+    
+    if(total===0)return;
+    
+    // Spread aliens across zone width
+    const zw=zone.offsetWidth||160;
+    const spacing=Math.min(28, (zw-20)/Math.max(total,1));
+    const startX=10;
+    
+    // Active aliens first, then idle
+    let pos=startX;
+    for(let i=0;i<active;i++){
+      const a=makeAlien(true);
+      a.style.left=pos+'px';
+      a.style.animationDelay=(i*0.4)+'s';
+      zone.appendChild(a);
+      pos+=spacing;
+    }
+    for(let i=0;i<idle;i++){
+      const a=makeAlien(false);
+      a.style.left=pos+'px';
+      a.style.opacity='0.45';
+      zone.appendChild(a);
+      pos+=spacing;
+    }
+  });
+}
+
+// ===== ALERTS IN ORB =====
+const alerts=[
+  {msg:'TikTok dept needs setup',lvl:'warn'},
+  {msg:'Fiverr dept needs setup',lvl:'warn'},
+];
+function renderAlerts(){
+  const container=document.getElementById('orbAlerts');
+  const statDot=document.getElementById('sysStat');
+  const statTxt=document.getElementById('sysStatTxt');
+  container.innerHTML='';
+  if(alerts.length===0){
+    statDot.className='status-dot st-ok';
+    statTxt.textContent='All Systems OK';
+    statTxt.style.color='var(--green)';
+    return;
+  }
+  const hasRed=alerts.some(a=>a.lvl==='alert');
+  statDot.className='status-dot '+(hasRed?'st-alert':'st-warn');
+  statTxt.textContent=alerts.length+' Alert'+(alerts.length>1?'s':'');
+  statTxt.style.color=hasRed?'var(--red)':'var(--gold)';
+  alerts.forEach(a=>{
+    const div=document.createElement('div');
+    div.className='alert-item';
+    div.style.color=a.lvl==='alert'?'var(--red)':'var(--gold)';
+    div.style.borderColor=a.lvl==='alert'?'rgba(255,58,92,0.2)':'rgba(240,192,64,0.2)';
+    div.style.background=a.lvl==='alert'?'rgba(255,58,92,0.06)':'rgba(240,192,64,0.06)';
+    div.textContent='⚠ '+a.msg;
+    container.appendChild(div);
+  });
+}
+
+// ===== SVG CONNECTORS =====
 function drawLines(){
   const svg=document.getElementById('svgLayer');
   const scene=document.querySelector('.scene');
@@ -290,12 +585,12 @@ function drawLines(){
   const or=orb.getBoundingClientRect();
   const cx=or.left-sr.left+or.width/2;
   const cy=or.top-sr.top+or.height/2;
-  const orbEdge=or.width/2+14;
-  
+  const orbEdge=or.width/2+16;
   svg.innerHTML='';
   const pods=['pod-etsy','pod-n8n','pod-tiktok','pod-fiverr','pod-research'];
   pods.forEach((id,i)=>{
     const pod=document.getElementById(id);
+    if(!pod)return;
     const pr=pod.getBoundingClientRect();
     const px=pr.left-sr.left+pr.width/2;
     const py=pr.top-sr.top+pr.height/2;
@@ -303,31 +598,27 @@ function drawLines(){
     const len=Math.sqrt(dx*dx+dy*dy);
     if(len<1)return;
     const sx=cx+dx/len*orbEdge,sy=cy+dy/len*orbEdge;
-    const ex=px-dx/len*8,ey=py-dy/len*8;
-    
+    const ex=px-dx/len*10,ey=py-dy/len*10;
     const line=document.createElementNS('http://www.w3.org/2000/svg','line');
     line.setAttribute('x1',sx);line.setAttribute('y1',sy);
     line.setAttribute('x2',ex);line.setAttribute('y2',ey);
-    line.setAttribute('stroke','rgba(0,180,220,0.16)');
+    line.setAttribute('stroke','rgba(0,180,220,0.15)');
     line.setAttribute('stroke-width','1');
-    line.setAttribute('stroke-dasharray','5 5');
+    line.setAttribute('stroke-dasharray','4 5');
     svg.appendChild(line);
-    
-    // Animated dot
-    const pid='p'+i;
+    const pid='pt'+i;
     const path=document.createElementNS('http://www.w3.org/2000/svg','path');
     path.setAttribute('id',pid);
     path.setAttribute('d','M'+sx+','+sy+' L'+ex+','+ey);
     path.setAttribute('fill','none');path.setAttribute('stroke','none');
     svg.appendChild(path);
-    
     const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
     dot.setAttribute('r','2');
     dot.setAttribute('fill','rgba(0,212,255,0.6)');
     const am=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
-    am.setAttribute('dur',(2.2+i*0.4).toFixed(1)+'s');
+    am.setAttribute('dur',(2.0+i*0.45).toFixed(1)+'s');
     am.setAttribute('repeatCount','indefinite');
-    am.setAttribute('begin',(i*0.5).toFixed(1)+'s');
+    am.setAttribute('begin',(i*0.55).toFixed(1)+'s');
     const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');
     mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+pid);
     am.appendChild(mp);
@@ -336,9 +627,13 @@ function drawLines(){
   });
 }
 
-// Run after layout settles
-setTimeout(drawLines,300);
-window.addEventListener('resize',()=>setTimeout(drawLines,100));
+// ===== INIT =====
+setTimeout(()=>{
+  populateAliens();
+  renderAlerts();
+  drawLines();
+},200);
+window.addEventListener('resize',()=>setTimeout(()=>{drawLines();},80));
 </script>
 </body>
 </html>
