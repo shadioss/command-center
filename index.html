@@ -6,7 +6,7 @@
 <title>ATLAS Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Audiowide&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden;background:#060c18;color:#e2e8f0}
@@ -42,7 +42,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .nav-orb{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(0,229,255,.45);display:flex;align-items:center;justify-content:center;animation:navSpin 10s linear infinite;position:relative;flex-shrink:0}
 .nav-orb::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(0,229,255,.12);animation:navSpin 15s linear infinite reverse}
 .nav-orb svg{width:14px;height:14px}
-.brand-name{font-family:'Orbitron',monospace;font-size:21px;font-weight:900;letter-spacing:4px;color:#00e5ff;animation:brandGlow 3s ease-in-out infinite}
+.brand-name{font-family:'Audiowide',monospace;font-size:21px;font-weight:400;letter-spacing:4px;color:#00e5ff;animation:brandGlow 3s ease-in-out infinite}
 .brand-sub{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:3px;color:rgba(0,229,255,.38);font-weight:600;margin-top:-1px}
 .nav-right{display:flex;align-items:center;gap:16px}
 .sys-badge{display:flex;align-items:center;gap:6px;padding:5px 13px;border:1px solid rgba(0,255,136,.28);border-radius:20px;background:rgba(0,255,136,.05)}
@@ -187,6 +187,9 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .orb-alert-inner{display:flex;flex-direction:column;animation:alertScroll 6s linear infinite}
 .orb-alert-line{font-family:'Rajdhani',sans-serif;font-size:8px;color:#fbbf24;letter-spacing:.5px;font-weight:700;padding:1px 0;white-space:nowrap;text-align:center}
 @keyframes alertScroll{0%{transform:translateY(0)}45%{transform:translateY(0)}50%{transform:translateY(-50%)}95%{transform:translateY(-50%)}100%{transform:translateY(0)}}
+
+.nav-wave{display:flex;align-items:center;justify-content:center;width:220px;height:32px;position:absolute;left:50%;transform:translateX(-50%)}
+.nav-wave canvas{display:block}
 /* ========== CARVED CARDS ========== */
 .card.n8n,.card.research{overflow:visible}
 .card-accent{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;z-index:3;pointer-events:none;background-size:100% 200%;animation:borderFlow 3s linear infinite}
@@ -203,6 +206,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <div class="nav-orb"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#00e5ff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.5" fill="#00e5ff"/></svg></div>
     <div><div class="brand-name">ATLAS</div><div class="brand-sub">COMMAND CENTER V1.0</div></div>
   </div>
+  <div class="nav-wave"><canvas id="voiceWave" width="220" height="32"></canvas></div>
   <div class="nav-right">
     <div class="sys-badge"><div class="sys-dot"></div><span class="sys-txt">ALL SYSTEMS ONLINE</span></div>
     <div class="nav-clock" id="clock">--:--:--</div>
@@ -508,6 +512,45 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   window.addEventListener('load',run);
   window.addEventListener('resize',carve);
 })();
-</script>
+
+
+  // === VOICE WAVE BAR ===
+  (function(){
+    var canvas = document.getElementById('voiceWave');
+    if(!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width, H = canvas.height;
+    var t = 0;
+    var active = false;
+    window.setVoiceActive = function(v){ active = v; };
+
+    function drawWave(){
+      ctx.clearRect(0,0,W,H);
+      var cy = H/2;
+      var amp = active ? 10 : 4 + 3 * Math.sin(t * 1.2);
+      var freq = active ? 0.08 : 0.06;
+      var phase = t * 2.5;
+
+      ctx.shadowColor = '#00e5ff';
+      ctx.shadowBlur = active ? 12 : 6;
+      ctx.strokeStyle = '#00e5ff';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+
+      for(var x=0; x<=W; x++){
+        var distFromCenter = Math.abs(x - W/2) / (W/2);
+        var envelope = Math.cos(distFromCenter * Math.PI / 2);
+        var phaseOffset = distFromCenter * Math.PI * 3;
+        var y = cy + amp * envelope * Math.sin(freq * x * Math.PI * 2 + phase + phaseOffset);
+        if(x===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      t += 0.018;
+      requestAnimationFrame(drawWave);
+    }
+    drawWave();
+  })();</script>
 </body>
 </html>
