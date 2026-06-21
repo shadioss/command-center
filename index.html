@@ -449,7 +449,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 </div><!-- /app -->
 <script>
 (function(){
-  // Clock
   function pad(n){return n<10?'0'+n:''+n}
   function tick(){
     var d=new Date(),cl=document.getElementById('clock');
@@ -457,109 +456,81 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   }
   tick(); setInterval(tick,1000);
 
-  // Arc gauge helper
-  function setArc(id, startDeg, spanDeg, pct){
-    var el=document.getElementById(id);
-    if(!el) return;
-    var r=107, circ=2*Math.PI*r;
+  function setArc(id,startDeg,spanDeg,pct){
+    var el=document.getElementById(id); if(!el) return;
+    var r=107,circ=2*Math.PI*r;
     var arcLen=(spanDeg/360)*circ;
     var filled=arcLen*(pct<0?0:pct>1?1:pct);
-    var offsetAngle=startDeg-90;
-    var offsetLen=(offsetAngle/360)*circ;
-    el.setAttribute('stroke-dasharray', filled+' '+(circ-filled));
-    el.setAttribute('stroke-dashoffset', -offsetLen);
+    var off=((startDeg-90)/360)*circ;
+    el.setAttribute('stroke-dasharray',filled+' '+(circ-filled));
+    el.setAttribute('stroke-dashoffset',-off);
     if(pct<=0) el.setAttribute('stroke','transparent');
   }
-  setArc('arcPhase',   -27.5, 55, 0.35);
-  setArc('arcDepts',    44,   55, 0.50);
-  setArc('arcAgents',  116,   55, 0.67);
-  setArc('arcListings',188,   55, 1.0);
-  setArc('arcRevenue', 260,   55, 0.0);
+  setArc('arcPhase',   -27.5,55,0.35);
+  setArc('arcDepts',    44,  55,0.50);
+  setArc('arcAgents',  116,  55,0.67);
+  setArc('arcListings',188,  55,1.0);
+  setArc('arcRevenue', 260,  55,0.0);
 
-  function sizeOrbAndNotches(){
+  function layout(){
     var grid=document.getElementById('deptGrid');
     var orb=document.getElementById('orbWrap');
     var n8n=document.querySelector('.card.n8n');
     var res=document.querySelector('.card.research');
     if(!grid||!orb||!n8n||!res) return;
 
-    var gR=grid.getBoundingClientRect();
     var nR=n8n.getBoundingClientRect();
     var rR=res.getBoundingClientRect();
+    if(!nR.width) return; // layout not ready yet
 
-    // Orb diameter = min(85% of middle col width, 85% of card height, 300px)
-    var midColW=nR.width;
-    var cardH=nR.height;
-    var orbDiam=Math.min(Math.floor(midColW*0.82), Math.floor(cardH*1.1), 300);
-    orbDiam=Math.max(orbDiam, 160); // minimum 160px
-    var orbR=orbDiam/2;
+    // Dynamic orb size
+    var orbDiam=Math.min(Math.floor(nR.width*0.82),Math.floor(nR.height*1.1),300);
+    orbDiam=Math.max(orbDiam,180);
+    var nd=orbDiam+24;
 
-    // Apply orb size
     orb.style.width=orbDiam+'px';
     orb.style.height=orbDiam+'px';
 
-    // Scale SVG viewbox content proportionally (original designed for 300px = r150)
     var svgEl=orb.querySelector('svg');
-    if(svgEl){
-      svgEl.setAttribute('width', orbDiam);
-      svgEl.setAttribute('height', orbDiam);
-      svgEl.setAttribute('viewBox', '0 0 300 300');
-    }
+    if(svgEl){ svgEl.setAttribute('width',orbDiam); svgEl.setAttribute('height',orbDiam); }
 
-    // Scale orb-core-bg inset proportionally
-    var coreBg=orb.querySelector('.orb-core-bg');
-    if(coreBg){
-      var inset=Math.round(orbR*0.12);
-      coreBg.style.inset=inset+'px';
-    }
-    var orbContent=orb.querySelector('.orb-content');
-    if(orbContent){
-      var inset=Math.round(orbR*0.12);
-      orbContent.style.inset=inset+'px';
-    }
+    var inset=Math.max(16,Math.round(orbDiam*0.065));
+    var core=orb.querySelector('.orb-core-bg');
+    var cont=orb.querySelector('.orb-content');
+    if(core) core.style.inset=inset+'px';
+    if(cont) cont.style.inset=inset+'px';
 
-    // Clockface labels - scale font size
-    var fs=Math.max(6, Math.round(orbDiam/37));
-    orb.querySelectorAll('.clock-stat-val').forEach(function(el){ el.style.fontSize=fs+'px'; });
-    orb.querySelectorAll('.clock-stat-lbl').forEach(function(el){ el.style.fontSize=Math.max(5,fs-1)+'px'; });
-    var revVal=orb.querySelector('.orb-rev-val');
-    if(revVal) revVal.style.fontSize=Math.round(orbDiam/13)+'px';
+    // Scale text in orb
+    var fs=Math.max(6,Math.round(orbDiam/38));
+    orb.querySelectorAll('.clock-stat-val').forEach(function(e){e.style.fontSize=fs+'px';});
+    orb.querySelectorAll('.clock-stat-lbl').forEach(function(e){e.style.fontSize=Math.max(5,fs-1)+'px';});
+    var rv=orb.querySelector('.orb-rev-val'); if(rv) rv.style.fontSize=Math.round(orbDiam/13)+'px';
+    var rl=orb.querySelector('.orb-rev-label'); if(rl) rl.style.fontSize=Math.max(6,Math.round(orbDiam/42))+'px';
 
-    // Notch size = orb diameter + 24px gap
-    var nd=orbDiam+24;
-
-    // Orb center relative to n8n card
-    var orbCX=nR.left+nR.width/2;
-    var cxInN8n=orbCX-nR.left;
-    var cxInRes=orbCX-rR.left;
+    // Notch masks - center x = center of N8N card
+    var cxN8n=nR.width/2;
+    var cxRes=rR.width/2;
 
     [n8n,res].forEach(function(card,i){
-      var cx=i===0?cxInN8n:cxInRes;
+      var cx=i===0?cxN8n:cxRes;
       var isTop=i===1;
-      var mask=card.querySelector('.notch-mask');
-      var ring=card.querySelector('.notch-ring');
-      if(!mask||!ring) return;
-      [mask,ring].forEach(function(el){
-        el.style.width=nd+'px';
-        el.style.height=nd+'px';
-        el.style.left=cx+'px';
-        el.style.transform='translateX(-50%)';
-        if(isTop){
-          el.style.top=(-nd/2)+'px';
-          el.style.bottom='';
-        } else {
-          el.style.bottom=(-nd/2)+'px';
-          el.style.top='';
-        }
+      [card.querySelector('.notch-mask'),card.querySelector('.notch-ring')].forEach(function(el){
+        if(!el) return;
+        el.style.width=nd+'px'; el.style.height=nd+'px';
+        el.style.left=cx+'px'; el.style.transform='translateX(-50%)';
+        if(isTop){el.style.top=(-nd/2)+'px';el.style.bottom='';}
+        else{el.style.bottom=(-nd/2)+'px';el.style.top='';}
       });
     });
   }
 
-  window.addEventListener('load',function(){
-    setTimeout(sizeOrbAndNotches, 80);
-    setTimeout(sizeOrbAndNotches, 400);
-  });
-  window.addEventListener('resize', sizeOrbAndNotches);
+  // Run at multiple points to ensure layout is ready
+  function run(){ requestAnimationFrame(function(){ layout(); setTimeout(layout,200); setTimeout(layout,600); }); }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', run);
+  } else { run(); }
+  window.addEventListener('load', run);
+  window.addEventListener('resize', layout);
 })();
 </script>
 </body>
