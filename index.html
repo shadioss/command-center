@@ -11,8 +11,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden;background:#080d18;color:#e2e8f0}
 body{font-family:'Inter',sans-serif}
-.orb{font-family:'Orbitron',monospace}
-.raj{font-family:'Rajdhani',sans-serif}
 
 /* SCANLINES */
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,255,.010) 2px,rgba(0,229,255,.010) 4px);pointer-events:none;z-index:9999;animation:scanMove 10s linear infinite}
@@ -22,16 +20,20 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
 @keyframes pulseGlow{0%,100%{text-shadow:0 0 8px currentColor,0 0 20px currentColor}50%{text-shadow:0 0 20px currentColor,0 0 50px currentColor,0 0 80px currentColor}}
 @keyframes borderFlow{0%{background-position:0% 0%}100%{background-position:0% 200%}}
-@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes orbPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.4),0 0 12px rgba(0,229,255,.3)}50%{box-shadow:0 0 0 8px rgba(0,229,255,0),0 0 25px rgba(0,229,255,.6)}}
 @keyframes orbSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes orbSpinR{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
 @keyframes rowSlide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
 @keyframes dotPing{0%{transform:scale(1);opacity:1}70%{transform:scale(2.5);opacity:0}100%{transform:scale(1);opacity:0}}
 @keyframes statCount{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
-@keyframes progressFill{from{width:0}to{width:var(--w)}}
+@keyframes coreGlow{0%,100%{box-shadow:0 0 15px #00e5ff,0 0 35px rgba(0,229,255,.5),0 0 70px rgba(0,229,255,.2),inset 0 0 20px rgba(0,229,255,.12)}50%{box-shadow:0 0 30px #00e5ff,0 0 70px rgba(0,229,255,.8),0 0 110px rgba(0,229,255,.4),inset 0 0 35px rgba(0,229,255,.28)}}
+@keyframes arcPulse{0%,100%{filter:brightness(1) drop-shadow(0 0 6px #00e5ff)}50%{filter:brightness(1.4) drop-shadow(0 0 22px #00e5ff)}}
+@keyframes revPulse{0%,100%{text-shadow:0 0 15px #00e5ff,0 0 30px rgba(0,229,255,.5)}50%{text-shadow:0 0 25px #00e5ff,0 0 60px rgba(0,229,255,.8),0 0 90px rgba(0,229,255,.3)}}
+@keyframes orbIn{from{opacity:0;transform:translate(-50%,-50%) scale(.5)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 
 /* LAYOUT */
 .app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
@@ -54,105 +56,95 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 /* STATS BAR */
 .statsbar{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid rgba(0,229,255,.08);flex-shrink:0;animation:slideUp .5s ease .1s both}
-.stat-cell{padding:12px 22px;border-right:1px solid rgba(0,229,255,.08)}
+.stat-cell{padding:11px 22px;border-right:1px solid rgba(0,229,255,.08)}
 .stat-cell:last-child{border-right:none}
-.stat-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:2.5px;color:rgba(255,255,255,.3);margin-bottom:4px;text-transform:uppercase;font-weight:600}
-.stat-val{font-family:'Orbitron',monospace;font-size:24px;font-weight:700;line-height:1;animation:statCount .7s ease both}
-.stat-sub{font-family:'Rajdhani',sans-serif;font-size:10px;color:rgba(255,255,255,.25);margin-top:3px;font-weight:500}
+.stat-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:2.5px;color:rgba(255,255,255,.3);margin-bottom:3px;text-transform:uppercase;font-weight:600}
+.stat-val{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;line-height:1;animation:statCount .7s ease both}
+.stat-sub{font-family:'Rajdhani',sans-serif;font-size:10px;color:rgba(255,255,255,.25);margin-top:2px;font-weight:500}
 .val-green{color:#00ff88}
 .val-cyan{color:#00e5ff}
 .val-purple{color:#c084fc;animation:pulseGlow 4s ease-in-out infinite}
 .val-white{color:#f1f5f9}
 
-/* DEPT GRID — 3 columns x 2 rows, all equal */
-.dept-grid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:14px;padding:14px;overflow:hidden;min-height:0}
+/* MAIN DEPT GRID
+   3 cols: left=1fr, middle=1.35fr (wider for orb), right=1fr
+   2 rows equal */
+.dept-grid{flex:1;display:grid;grid-template-columns:1fr 1.35fr 1fr;grid-template-rows:1fr 1fr;gap:13px;padding:13px;overflow:hidden;min-height:0;position:relative}
+
+/* ORB CONTAINER — absolutely positioned in center of middle column gap */
+.orb-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:20;animation:orbIn .8s cubic-bezier(.34,1.56,.64,1) .4s both}
 
 /* CARDS */
 .card{background:linear-gradient(145deg,#0f1629 0%,#0a1020 100%);border:1px solid rgba(255,255,255,.07);border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column;min-height:0}
 .card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
 .card.etsy{animation:cardIn .6s ease .15s both}
 .card.etsy::before{background:linear-gradient(180deg,#f97316,#ea580c,#f97316);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.n8n{animation:cardIn .6s ease .25s both}
+.card.n8n{animation:cardIn .6s ease .25s both;overflow:visible;position:relative}
 .card.n8n::before{background:linear-gradient(180deg,#ef4444,#f97316,#ef4444);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 .card.tiktok{animation:cardIn .6s ease .35s both}
 .card.tiktok::before{background:linear-gradient(180deg,#a855f7,#7c3aed,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 .card.fiverr{animation:cardIn .6s ease .45s both}
 .card.fiverr::before{background:linear-gradient(180deg,#22c55e,#16a34a,#22c55e);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.research{animation:cardIn .6s ease .55s both}
+.card.research{animation:cardIn .6s ease .55s both;overflow:visible;position:relative}
 .card.research::before{background:linear-gradient(180deg,#a855f7,#ec4899,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 .card.sapphire{animation:cardIn .6s ease .65s both}
 .card.sapphire::before{background:linear-gradient(180deg,#3b82f6,#06b6d4,#3b82f6);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 
-.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 8px 20px;flex-shrink:0}
+/* N8N notch — curved cutout from bottom center */
+.card.n8n .notch-mask{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:130px;height:68px;background:#080d18;border-radius:65px 65px 0 0;z-index:5;pointer-events:none}
+/* Border arc on notch to match card border */
+.card.n8n .notch-border{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:134px;height:70px;border:1px solid rgba(255,255,255,.07);border-bottom:none;border-radius:67px 67px 0 0;z-index:4;pointer-events:none}
+
+/* Research notch — curved cutout from top center */
+.card.research .notch-mask{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:130px;height:68px;background:#080d18;border-radius:0 0 65px 65px;z-index:5;pointer-events:none}
+.card.research .notch-border{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:134px;height:70px;border:1px solid rgba(255,255,255,.07);border-top:none;border-radius:0 0 67px 67px;z-index:4;pointer-events:none}
+
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:13px 16px 7px 20px;flex-shrink:0}
 .card-title-row{display:flex;align-items:center;gap:10px}
-.card-icon{font-size:22px;line-height:1;filter:drop-shadow(0 0 5px rgba(255,255,255,.25))}
-.card-title{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:2px;color:#f1f5f9}
-.card-subtitle{font-family:'Rajdhani',sans-serif;font-size:10px;color:rgba(255,255,255,.28);letter-spacing:.5px;margin-top:2px;font-weight:500}
+.card-icon{font-size:20px;line-height:1;filter:drop-shadow(0 0 5px rgba(255,255,255,.25))}
+.card-title{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;color:#f1f5f9}
+.card-subtitle{font-family:'Rajdhani',sans-serif;font-size:10px;color:rgba(255,255,255,.28);letter-spacing:.5px;margin-top:1px;font-weight:500}
 .card-badge{padding:3px 10px;border-radius:20px;font-family:'Rajdhani',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;display:flex;align-items:center;gap:5px;flex-shrink:0}
 .badge-live{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);color:#00ff88}
 .badge-next{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.3);color:#facc15}
-.badge-ai{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.3);color:#c084fc}
 .badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.5s infinite;flex-shrink:0}
 
-.card-body{padding:0 16px 12px 20px;flex:1;display:flex;flex-direction:column;gap:8px;overflow:hidden;min-height:0}
-
-/* AGENTS */
+.card-body{padding:0 16px 12px 20px;flex:1;display:flex;flex-direction:column;gap:7px;overflow:hidden;min-height:0}
 .agents-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex-shrink:0}
 .agents-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.25);margin-right:2px;font-weight:600;text-transform:uppercase}
-.agent-chip{padding:2px 9px;border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:4px;font-weight:500;transition:all .2s}
-.agent-chip:hover{border-color:rgba(0,229,255,.4);color:#00e5ff}
-.agent-chip.dim{opacity:.35}
+.agent-chip{padding:2px 8px;border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:4px;font-weight:500}
 .agent-chip::before{content:'';width:4px;height:4px;border-radius:50%;background:#00ff88;box-shadow:0 0 4px #00ff88;flex-shrink:0}
+.agent-chip.dim{opacity:.35}
 .agent-chip.dim::before{background:rgba(255,255,255,.2);box-shadow:none}
-
-/* STATS ROW */
 .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex-shrink:0}
-.stat-box{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 12px;transition:all .2s}
-.stat-box:hover{border-color:rgba(0,229,255,.2);background:rgba(0,229,255,.03)}
-.sbox-val{font-family:'Orbitron',monospace;font-size:20px;font-weight:700}
+.stat-box{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:7px 12px}
+.sbox-val{font-family:'Orbitron',monospace;font-size:19px;font-weight:700}
 .sbox-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.25);margin-top:1px;font-weight:500}
-
-/* LISTINGS */
 .listings{flex:1;display:flex;flex-direction:column;gap:0;overflow:hidden;min-height:0}
-.listing-row{display:flex;align-items:center;justify-content:space-between;padding:4px 2px;border-bottom:1px solid rgba(255,255,255,.04);animation:rowSlide .5s ease both;transition:background .15s;flex-shrink:0}
-.listing-row:hover{background:rgba(255,255,255,.025);border-radius:3px}
+.listing-row{display:flex;align-items:center;justify-content:space-between;padding:4px 2px;border-bottom:1px solid rgba(255,255,255,.04);animation:rowSlide .5s ease both;flex-shrink:0}
 .listing-row:last-child{border-bottom:none}
 .listing-num{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.2);width:20px;flex-shrink:0;font-weight:600}
 .listing-name{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,.6);flex:1;font-weight:400}
 .listing-price{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);margin-right:8px;letter-spacing:.5px}
 .listing-dot{width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 5px #00ff88;flex-shrink:0;animation:blink 2s ease-in-out infinite}
-
-/* PROGRESS */
-.prog-section{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.prog-section{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
 .prog-row{display:flex;justify-content:space-between;font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.3);margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
 .prog-track{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;border-radius:2px;animation:progressFill 1.5s ease both}
-
-/* MINI STATS */
-.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex-shrink:0}
-.mini-stat{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 12px;transition:all .2s}
-.mini-stat:hover{border-color:rgba(0,229,255,.2)}
-.mini-val{font-family:'Orbitron',monospace;font-size:18px;font-weight:700}
+.prog-fill{height:100%;border-radius:2px}
+.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0}
+.mini-stat{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:7px 11px}
+.mini-val{font-family:'Orbitron',monospace;font-size:17px;font-weight:700}
 .mini-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.25);margin-top:1px;font-weight:500}
-
-/* TICKER */
 .ticker-wrap{flex-shrink:0;overflow:hidden;padding-top:5px;border-top:1px solid rgba(0,229,255,.08)}
 .ticker{font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(0,229,255,.4);letter-spacing:1px;white-space:nowrap;display:inline-block}
 </style>
 </head>
-<body>
-<div class="app">
-
+<body><div class="app">
 <!-- TOP NAV -->
 <div class="topnav">
   <div class="brand">
-    <div class="brand-orb">
-      <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#00e5ff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.5" fill="#00e5ff"/></svg>
-    </div>
-    <div>
-      <div class="brand-name">ATLAS</div>
-      <div class="brand-sub">COMMAND CENTER V1.0</div>
-    </div>
+    <div class="brand-orb"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#00e5ff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.5" fill="#00e5ff"/></svg></div>
+    <div><div class="brand-name">ATLAS</div><div class="brand-sub">COMMAND CENTER V1.0</div></div>
   </div>
   <div class="nav-right">
     <div class="sys-badge"><div class="sys-dot"></div><span class="sys-txt">ALL SYSTEMS ONLINE</span></div>
@@ -169,9 +161,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <div class="stat-cell"><div class="stat-lbl">Phase 1 Progress</div><div class="stat-val val-white" style="animation-delay:.5s">35%</div><div class="stat-sub">Etsy complete</div></div>
 </div>
 
-<!-- 3x2 DEPT GRID -->
-<div class="dept-grid">
-
+<!-- DEPT GRID -->
+<div class="dept-grid" id="deptGrid">
   <!-- ETSY -->
   <div class="card etsy">
     <div class="card-header">
@@ -185,18 +176,19 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         <div class="stat-box"><div class="sbox-val val-cyan">999</div><div class="sbox-lbl">Stock Per Listing</div></div>
       </div>
       <div class="listings">
-        <div class="listing-row" style="animation-delay:.1s"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row" style="animation-delay:.18s"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row" style="animation-delay:.26s"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row" style="animation-delay:.34s"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row" style="animation-delay:.42s"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row" style="animation-delay:.50s"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
       </div>
     </div>
   </div>
-
-  <!-- N8N -->
+  <!-- N8N with bottom notch -->
   <div class="card n8n">
+    <div class="notch-border"></div>
+    <div class="notch-mask"></div>
     <div class="card-header">
       <div class="card-title-row"><div class="card-icon">⚙️</div><div><div class="card-title">N8N AUTOMATION</div><div class="card-subtitle">Workflow Engine &amp; AI Orchestration</div></div></div>
       <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
@@ -208,14 +200,12 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         <div class="stat-box"><div class="sbox-val val-green">1000</div><div class="sbox-lbl">Free Executions</div></div>
       </div>
       <div class="prog-section">
-        <div><div class="prog-row"><span>Capacity Used</span><span>2%</span></div><div class="prog-track"><div class="prog-fill" style="--w:2%;width:2%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div></div>
-        <div><div class="prog-row"><span>Workflows Active</span><span>3/10</span></div><div class="prog-track"><div class="prog-fill" style="--w:30%;width:30%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
-        <div><div class="prog-row"><span>Execution Budget</span><span>97%</span></div><div class="prog-track"><div class="prog-fill" style="--w:97%;width:97%;background:linear-gradient(90deg,#00e5ff,#00ff88)"></div></div></div>
+        <div><div class="prog-row"><span>Capacity Used</span><span>2%</span></div><div class="prog-track"><div class="prog-fill" style="width:2%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div></div>
+        <div><div class="prog-row"><span>Workflows Active</span><span>3/10</span></div><div class="prog-track"><div class="prog-fill" style="width:30%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
       </div>
-      <div class="ticker-wrap"><div class="ticker" id="ticker">● ATLAS NOMINAL &nbsp;&nbsp; ● N8N HEARTBEAT OK &nbsp;&nbsp; ● ETSY SYNC ACTIVE &nbsp;&nbsp; ● AGENTS ONLINE &nbsp;&nbsp; ● PHASE 1 — 35% COMPLETE &nbsp;&nbsp; ● SHADYPRINTABLES — 6 LISTINGS LIVE &nbsp;&nbsp;</div></div>
+      <div class="ticker-wrap"><div class="ticker" id="ticker">● ATLAS NOMINAL &nbsp;&nbsp; ● N8N HEARTBEAT OK &nbsp;&nbsp; ● ETSY SYNC ACTIVE &nbsp;&nbsp; ● AGENTS ONLINE &nbsp;&nbsp; ● PHASE 1 — 35% COMPLETE &nbsp;&nbsp; ● 6 LISTINGS LIVE &nbsp;&nbsp;</div></div>
     </div>
   </div>
-
   <!-- TIKTOK -->
   <div class="card tiktok">
     <div class="card-header">
@@ -231,8 +221,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Views</div></div>
       </div>
       <div class="prog-section">
-        <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="--w:0%;width:0%;background:#a855f7"></div></div></div>
-        <div><div class="prog-row"><span>Content Pipeline</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="--w:0%;width:0%;background:#7c3aed"></div></div></div>
+        <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#a855f7"></div></div></div>
+        <div><div class="prog-row"><span>Content Pipeline</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#7c3aed"></div></div></div>
       </div>
     </div>
   </div>
@@ -252,14 +242,15 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Rating</div></div>
       </div>
       <div class="prog-section">
-        <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="--w:0%;width:0%;background:#22c55e"></div></div></div>
-        <div><div class="prog-row"><span>Gig Readiness</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="--w:0%;width:0%;background:#16a34a"></div></div></div>
+        <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#22c55e"></div></div></div>
+        <div><div class="prog-row"><span>Gig Readiness</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#16a34a"></div></div></div>
       </div>
     </div>
   </div>
-
-  <!-- RESEARCH AI -->
+  <!-- RESEARCH AI with top notch -->
   <div class="card research">
+    <div class="notch-border"></div>
+    <div class="notch-mask"></div>
     <div class="card-header">
       <div class="card-title-row"><div class="card-icon">🔬</div><div><div class="card-title">RESEARCH AI</div><div class="card-subtitle">Market Intelligence &amp; Niche Analysis</div></div></div>
       <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
@@ -268,22 +259,23 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
       <div class="agents-row"><span class="agents-lbl">Agents (2)</span><div class="agent-chip">Niche Finder</div><div class="agent-chip">Trend Analyzer</div></div>
       <div class="mini-stats">
         <div class="mini-stat"><div class="mini-val" style="color:#c084fc">12</div><div class="mini-lbl">Niches Found</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:#00e5ff;font-size:13px;padding-top:2px">Batch 2</div><div class="mini-lbl">Next Run</div></div>
+        <div class="mini-stat"><div class="mini-val" style="color:#00e5ff;font-size:12px;padding-top:3px">Batch 2</div><div class="mini-lbl">Next Run</div></div>
         <div class="mini-stat"><div class="mini-val" style="color:#f97316">6</div><div class="mini-lbl">Products Found</div></div>
         <div class="mini-stat"><div class="mini-val" style="color:#00ff88">High</div><div class="mini-lbl">Demand Signal</div></div>
       </div>
       <div class="prog-section">
-        <div><div class="prog-row"><span>Research Depth</span><span>60%</span></div><div class="prog-track"><div class="prog-fill" style="--w:60%;width:60%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
-        <div><div class="prog-row"><span>Data Coverage</span><span>45%</span></div><div class="prog-track"><div class="prog-fill" style="--w:45%;width:45%;background:linear-gradient(90deg,#ec4899,#a855f7)"></div></div></div>
+        <div><div class="prog-row"><span>Research Depth</span><span>60%</span></div><div class="prog-track"><div class="prog-fill" style="width:60%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
+        <div><div class="prog-row"><span>Data Coverage</span><span>45%</span></div><div class="prog-track"><div class="prog-fill" style="width:45%;background:linear-gradient(90deg,#ec4899,#a855f7)"></div></div></div>
       </div>
     </div>
   </div>
 
   <!-- SAPPHIRE -->
-  <div class="card sapphire">
+  <div class="card sapphire" style="animation:cardIn .6s ease .7s both">
+    <div style="position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px;background:linear-gradient(180deg,#3b82f6,#06b6d4,#3b82f6);background-size:100% 200%;animation:borderFlow 3s linear infinite"></div>
     <div class="card-header">
       <div class="card-title-row"><div class="card-icon">💎</div><div><div class="card-title">SAPPHIRE</div><div class="card-subtitle">Peptides &amp; Supplements Store</div></div></div>
-      <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>SETUP</div>
+      <div class="card-badge" style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);color:#60a5fa;font-family:'Rajdhani',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:5px"><div class="badge-dot" style="animation:none;opacity:.8"></div>SETUP</div>
     </div>
     <div class="card-body">
       <div class="agents-row"><span class="agents-lbl">Planned (3)</span><div class="agent-chip dim">Store Builder</div><div class="agent-chip dim">SEO Agent</div><div class="agent-chip dim">Ad Manager</div></div>
@@ -294,16 +286,64 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
         <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Visitors</div></div>
       </div>
       <div class="prog-section">
-        <div><div class="prog-row"><span>Store Setup</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="--w:0%;width:0%;background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div></div>
-        <div><div class="prog-row"><span>Product Catalog</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="--w:0%;width:0%;background:linear-gradient(90deg,#06b6d4,#3b82f6)"></div></div></div>
+        <div><div class="prog-row"><span>Store Setup</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div></div>
+        <div><div class="prog-row"><span>Product Catalog</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,#06b6d4,#3b82f6)"></div></div></div>
+      </div>
+    </div>
+  </div>
+  <!-- ORB: absolutely centered between N8N and Research AI -->
+  <div class="orb-wrap" id="orbWrap">
+    <style>
+    .orb-outer{position:relative;display:flex;align-items:center;justify-content:center}
+    /* Outermost thin spinning ring */
+    .orb-spin-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(0,229,255,.5);border-top-color:#00e5ff;border-right-color:rgba(0,229,255,.2)}
+    .orb-spin-ring.r1{width:168px;height:168px;animation:orbSpin 6s linear infinite}
+    .orb-spin-ring.r2{width:156px;height:156px;animation:orbSpinR 10s linear infinite;border-color:rgba(0,229,255,.25);border-top-color:rgba(0,229,255,.6)}
+    .orb-spin-ring.r3{width:144px;height:144px;animation:orbSpin 16s linear infinite;border-style:dashed;border-color:rgba(0,229,255,.2)}
+    /* Dot on outermost ring */
+    .orb-spin-ring.r1::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#00e5ff;box-shadow:0 0 10px #00e5ff,0 0 20px #00e5ff}
+    /* Core */
+    .orb-core{width:120px;height:120px;border-radius:50%;border:2px solid rgba(0,229,255,.85);background:radial-gradient(circle,rgba(0,30,60,.98) 0%,rgba(0,10,25,1) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;animation:coreGlow 2.5s ease-in-out infinite;position:relative;z-index:2;gap:3px}
+    .orb-core::before{content:'';position:absolute;width:130px;height:130px;border-radius:50%;border:1px solid rgba(0,229,255,.15);top:-7px;left:-7px}
+    .orb-rev-lbl{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:3px;color:rgba(0,229,255,.5);font-weight:600;text-transform:uppercase}
+    .orb-rev{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:#00e5ff;letter-spacing:1px;animation:revPulse 3s ease-in-out infinite;line-height:1}
+    .orb-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.4),transparent);margin:3px 0}
+    .orb-stats{display:flex;gap:10px;align-items:center}
+    .orb-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
+    .orb-stat-val{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;line-height:1}
+    .orb-stat-lbl{font-family:'Rajdhani',sans-serif;font-size:6px;letter-spacing:1.5px;color:rgba(0,229,255,.4);text-transform:uppercase}
+    .orb-sep{width:1px;height:22px;background:rgba(0,229,255,.2)}
+    .orb-phase{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:3px;width:80px}
+    .orb-phase-lbl{font-family:'Rajdhani',sans-serif;font-size:6px;letter-spacing:2px;color:rgba(0,229,255,.4);text-transform:uppercase}
+    .orb-phase-track{width:72px;height:3px;background:rgba(0,229,255,.1);border-radius:2px;overflow:hidden}
+    .orb-phase-fill{height:100%;width:35%;background:linear-gradient(90deg,#00e5ff,#00ff88);border-radius:2px;box-shadow:0 0 6px #00e5ff}
+    /* Alert dot */
+    .orb-alert{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:#f97316;box-shadow:0 0 8px #f97316;animation:blink 1.2s ease-in-out infinite}
+    </style>
+    <div class="orb-outer">
+      <div class="orb-spin-ring r1"></div>
+      <div class="orb-spin-ring r2"></div>
+      <div class="orb-spin-ring r3"></div>
+      <div class="orb-core">
+        <div class="orb-alert"></div>
+        <div class="orb-rev-lbl">TOTAL REVENUE</div>
+        <div class="orb-rev" id="orbRev">$0.00</div>
+        <div class="orb-divider"></div>
+        <div class="orb-stats">
+          <div class="orb-stat"><div class="orb-stat-val" style="color:#00ff88">8</div><div class="orb-stat-lbl">ACTIVE</div></div>
+          <div class="orb-sep"></div>
+          <div class="orb-stat"><div class="orb-stat-val" style="color:rgba(0,229,255,.4)">4</div><div class="orb-stat-lbl">IDLE</div></div>
+        </div>
+        <div class="orb-phase">
+          <div class="orb-phase-lbl">PHASE 1 — 35%</div>
+          <div class="orb-phase-track"><div class="orb-phase-fill"></div></div>
+        </div>
       </div>
     </div>
   </div>
 
-</div>
-</div>
-
-<script>
+</div><!-- end dept-grid -->
+</div><!-- end app --><script>
 (function(){
   function pad(n){return n<10?'0'+n:''+n}
   function tick(){
@@ -313,7 +353,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   }
   setInterval(tick,1000); tick();
 
-  // Ticker scroll
+  // Ticker
   var ticker=document.getElementById('ticker');
   if(ticker){
     var pos=0;
@@ -324,10 +364,29 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     },25);
   }
 
-  // Listing stagger
-  var rows=document.querySelectorAll('.listing-row');
-  rows.forEach(function(r,i){r.style.animationDelay=(0.1+i*0.07)+'s';});
+  // Position the orb exactly in the center of the middle column, spanning the gap between rows
+  function positionOrb(){
+    var grid=document.getElementById('deptGrid');
+    var n8n=document.querySelector('.card.n8n');
+    var research=document.querySelector('.card.research');
+    var orb=document.getElementById('orbWrap');
+    if(!grid||!n8n||!research||!orb) return;
+
+    var gRect=grid.getBoundingClientRect();
+    var n8nRect=n8n.getBoundingClientRect();
+    var resRect=research.getBoundingClientRect();
+
+    // Orb center X = center of the middle column cards
+    var orbX = (n8nRect.left + n8nRect.right)/2 - gRect.left;
+    // Orb center Y = midpoint of the gap between N8N bottom and Research top
+    var orbY = ((n8nRect.bottom + resRect.top)/2) - gRect.top;
+
+    orb.style.left = orbX + 'px';
+    orb.style.top  = orbY + 'px';
+  }
+
+  // Wait for fonts + layout then position
+  setTimeout(positionOrb, 300);
+  window.addEventListener('resize', positionOrb);
 })();
-</script>
-</body>
-</html>
+</script></body></html>
