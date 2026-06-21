@@ -175,16 +175,18 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   z-index:5;gap:1px;
 }
-.orb-rev-label{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(0,229,255,.45);font-weight:700;text-transform:uppercase}
-.orb-rev-val{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:#00e5ff;animation:revPulse 3s ease-in-out infinite;letter-spacing:1px;line-height:1}
-.orb-rev-sub{font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(0,229,255,.3);letter-spacing:1px;font-weight:600}
-.orb-divider{width:55px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.28),transparent);margin:3px 0}
-.orb-alert{font-family:'Rajdhani',sans-serif;font-size:9px;color:#fbbf24;letter-spacing:1px;font-weight:700;animation:alertPing 2s ease infinite}
-.clock-stat{position:absolute;display:flex;flex-direction:column;align-items:center;gap:1px;z-index:6}
-.clock-stat-val{font-family:'Orbitron',monospace;font-size:8px;font-weight:700;line-height:1}
-.clock-stat-lbl{font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(255,255,255,.35);letter-spacing:.5px;font-weight:600;text-transform:uppercase;white-space:nowrap;text-align:center}
-
-
+.orb-rev-val{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:#00e5ff;animation:revPulse 3s ease-in-out infinite;letter-spacing:1px;line-height:1;margin-bottom:4px}
+.orb-divider{width:55px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.28),transparent);margin:4px 0}
+.orb-stats-block{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%}
+.orb-stat-phase{font-family:'Rajdhani',sans-serif;font-size:11px;color:#00e5ff;font-weight:700;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
+.orb-stat-phase span{color:rgba(0,229,255,.7);font-size:10px}
+.orb-stat-row{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(0,229,255,.75);font-weight:600;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
+.orb-stat-row span{color:rgba(255,255,255,.55);font-size:8px}
+.orb-alert-scroll{width:80%;max-height:36px;overflow:hidden;position:relative;margin-top:2px}
+.orb-alert-scroll:hover .orb-alert-inner{animation-play-state:paused}
+.orb-alert-inner{display:flex;flex-direction:column;animation:alertScroll 6s linear infinite}
+.orb-alert-line{font-family:'Rajdhani',sans-serif;font-size:8px;color:#fbbf24;letter-spacing:.5px;font-weight:700;padding:1px 0;white-space:nowrap;text-align:center}
+@keyframes alertScroll{0%{transform:translateY(0)}45%{transform:translateY(0)}50%{transform:translateY(-50%)}95%{transform:translateY(-50%)}100%{transform:translateY(0)}}
 /* ========== CARVED CARDS ========== */
 .card.n8n,.card.research{overflow:visible}
 .card-accent{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;z-index:3;pointer-events:none;background-size:100% 200%;animation:borderFlow 3s linear infinite}
@@ -227,30 +229,26 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <g style="transform-origin:150px 150px;animation:ringCW 16s linear infinite">
       <circle cx="150" cy="150" r="121" stroke="rgba(0,229,255,.1)" stroke-width="1.5" fill="none" stroke-dasharray="3 9"/>
     </g>
-    <!-- Arc gauge tracks (background) at r=107 -->
-    <circle cx="150" cy="150" r="107" stroke="rgba(255,255,255,.05)" stroke-width="7" fill="none"/>
-    <!-- Arc gauge fills -->
-    <circle id="arcPhase"    cx="150" cy="150" r="107" stroke="#00e5ff"  stroke-width="7" fill="none" stroke-linecap="round"/>
-    <circle id="arcDepts"    cx="150" cy="150" r="107" stroke="#00ff88"  stroke-width="7" fill="none" stroke-linecap="round"/>
-    <circle id="arcAgents"   cx="150" cy="150" r="107" stroke="#00e5ff"  stroke-width="7" fill="none" stroke-linecap="round"/>
-    <circle id="arcListings" cx="150" cy="150" r="107" stroke="#f97316"  stroke-width="7" fill="none" stroke-linecap="round"/>
-    <circle id="arcRevenue"  cx="150" cy="150" r="107" stroke="#a855f7"  stroke-width="7" fill="none" stroke-linecap="round"/>
-  </svg>
+    </svg>
   <div class="orb-core-bg"></div>
   <div class="orb-content">
-    <div class="orb-rev-label">COLLECTED REVENUE</div>
     <div class="orb-rev-val">$0.00</div>
-    <div class="orb-rev-sub">across all depts</div>
     <div class="orb-divider"></div>
-    <div class="orb-alert">&#9888; 2 ALERTS</div>
-  </div>
-  <!-- Clockface stat labels -->
-  <div class="clock-stat" style="top:30px;left:50%;transform:translateX(-50%)"><div class="clock-stat-val" style="color:#00e5ff">35%</div><div class="clock-stat-lbl">PHASE</div></div>
-  <div class="clock-stat" style="top:58px;right:26px"><div class="clock-stat-val" style="color:#00ff88">3/6</div><div class="clock-stat-lbl">DEPTS</div></div>
-  <div class="clock-stat" style="bottom:58px;right:26px"><div class="clock-stat-val" style="color:#00e5ff">8/12</div><div class="clock-stat-lbl">AGENTS</div></div>
-  <div class="clock-stat" style="bottom:58px;left:26px"><div class="clock-stat-val" style="color:#f97316">6/6</div><div class="clock-stat-lbl">LISTINGS</div></div>
-  <div class="clock-stat" style="top:58px;left:26px"><div class="clock-stat-val" style="color:#a855f7">$0</div><div class="clock-stat-lbl">REVENUE</div></div>
-</div>
+    <div class="orb-stats-block">
+      <div class="orb-stat-phase">PHASE PROGRESS <span>&#xB7; 35%</span></div>
+      <div class="orb-stat-row">ACTIVE DEPTS <span>&#xB7; 3/6</span></div>
+      <div class="orb-stat-row">AGENTS <span>&#xB7; 8/12</span></div>
+    </div>
+    <div class="orb-divider"></div>
+    <div class="orb-alert-scroll">
+      <div class="orb-alert-inner" id="alertInner">
+        <div class="orb-alert-line">&#x26A0; Fiverr dept not active</div>
+        <div class="orb-alert-line">&#x26A0; TikTok dept not active</div>
+        <div class="orb-alert-line">&#x26A0; Fiverr dept not active</div>
+        <div class="orb-alert-line">&#x26A0; TikTok dept not active</div>
+      </div>
+    </div>
+  </div></div>
 <!-- ETSY col1 row1 -->
 <div class="card etsy" style="grid-column:1;grid-row:1">
   <div class="card-header">
