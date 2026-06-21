@@ -17,16 +17,14 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 @keyframes coreGlow{0%,100%{box-shadow:0 0 20px #00e5ff,0 0 40px rgba(0,229,255,.6),0 0 80px rgba(0,229,255,.2),inset 0 0 25px rgba(0,229,255,.15)}50%{box-shadow:0 0 35px #00e5ff,0 0 80px rgba(0,229,255,.9),0 0 120px rgba(0,229,255,.5),inset 0 0 40px rgba(0,229,255,.35)}}
 @keyframes arcPulse{0%,100%{filter:brightness(1) drop-shadow(0 0 8px #00e5ff)}50%{filter:brightness(1.4) drop-shadow(0 0 30px #00e5ff) drop-shadow(0 0 60px rgba(0,229,255,.5))}}
 @keyframes fadeSlide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
-@keyframes nodePop{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-@keyframes orbitGlow{0%,100%{filter:drop-shadow(0 0 4px currentColor)}50%{filter:drop-shadow(0 0 12px currentColor) drop-shadow(0 0 20px currentColor)}}
+@keyframes nodePop{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes faceFloat{0%,100%{transform:translateY(0px)}50%{transform:translateY(-4px)}}
 @keyframes faceGlow{0%,100%{filter:drop-shadow(0 0 6px #00e5ff) drop-shadow(0 0 15px rgba(0,229,255,.4))}50%{filter:drop-shadow(0 0 15px #00e5ff) drop-shadow(0 0 35px rgba(0,229,255,.8)) drop-shadow(0 0 60px rgba(0,229,255,.3))}}
+@keyframes nodeRing{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 .hud{display:grid;grid-template-columns:200px 1fr 230px;grid-template-rows:50px 1fr 36px;width:100vw;height:100vh}
 </style>
 </head>
-<body><div class="hud">
-<!-- TOP BAR -->
-<style>
+<body><div class="hud"><style>
 .topbar{grid-column:1/-1;grid-row:1;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid rgba(0,229,255,.25);background:rgba(0,8,18,.92);backdrop-filter:blur(10px)}
 .tl{display:flex;align-items:center;gap:12px}
 .logo-icon{width:32px;height:32px;border:2px solid #00e5ff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#00e5ff;text-shadow:0 0 10px #00e5ff;box-shadow:0 0 10px rgba(0,229,255,.3),inset 0 0 8px rgba(0,229,255,.1)}
@@ -56,8 +54,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
     <div class="live-badge"><div class="live-dot"></div>SYSTEM ONLINE</div>
     <div class="clock" id="clock">--:--:--</div>
   </div>
-</div>
-<style>
+</div><style>
 .left{grid-column:1;grid-row:2;padding:12px 10px;display:flex;flex-direction:column;gap:6px;border-right:1px solid rgba(0,229,255,.15);overflow:hidden}
 .shdr{font-size:7px;letter-spacing:3px;color:rgba(0,229,255,.45);border-bottom:1px solid rgba(0,229,255,.12);padding-bottom:4px;margin-bottom:3px}
 .gauge{background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.14);border-radius:3px;padding:7px 9px;display:flex;align-items:center;gap:8px}
@@ -68,7 +65,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .rev-section{background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.14);border-radius:3px;padding:8px 10px}
 .rev-lbl{font-size:6px;letter-spacing:3px;color:rgba(0,229,255,.4);margin-bottom:3px}
 .rev-val{font-size:26px;font-weight:900;color:#00e5ff;text-shadow:0 0 15px #00e5ff,0 0 30px rgba(0,229,255,.4);animation:pulse 3s ease-in-out infinite;letter-spacing:1px}
-.rev-meta{display:flex;gap:10px;margin-top:5px}
+.rev-meta{display:flex;gap:8px;margin-top:5px}
 .rm{flex:1;text-align:center;border:1px solid rgba(0,229,255,.1);border-radius:2px;padding:3px}
 .rm-v{font-size:11px;font-weight:700;color:rgba(0,229,255,.9)}
 .rm-l{font-size:6px;letter-spacing:1px;color:rgba(0,229,255,.35)}
@@ -111,10 +108,9 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
     </svg>
     <div style="flex:1"><div class="gauge-lbl">NETWORK</div><div class="gauge-val" style="color:#00ff88;text-shadow:0 0 8px #00ff88">24%</div><div class="gauge-bar"><div class="gauge-fill" style="width:24%;background:linear-gradient(90deg,#00ff88,#00e5a0)"></div></div></div>
   </div>
-</div>
-<style>
+</div><style>
 .center{grid-column:2;grid-row:2;position:relative;display:flex;flex-direction:column;align-items:center;overflow:hidden}
-.face-wrap{flex-shrink:0;display:flex;justify-content:center;align-items:center;padding-top:8px;animation:faceFloat 4s ease-in-out infinite}
+.face-wrap{flex-shrink:0;display:flex;justify-content:center;align-items:center;padding-top:6px;animation:faceFloat 4s ease-in-out infinite}
 .face-svg{animation:faceGlow 3s ease-in-out infinite}
 .arc-wrap{position:relative;flex:1;width:100%;display:flex;align-items:center;justify-content:center;min-height:0}
 .rings-svg{position:absolute;top:0;left:0;pointer-events:none}
@@ -125,80 +121,42 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
 .core-inner{width:50px;height:50px;background:radial-gradient(circle,rgba(0,229,255,1) 0%,rgba(0,160,230,.85) 30%,rgba(0,60,120,.4) 70%,transparent 100%);border-radius:50%;animation:arcPulse 2s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 0 10px #fff,0 0 20px #00e5ff}
 </style>
 <div class="center">
-  <!-- 3D ROBOT FACE -->
   <div class="face-wrap">
     <svg class="face-svg" width="120" height="90" viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <radialGradient id="faceGrad" cx="50%" cy="40%" r="55%">
-          <stop offset="0%" stop-color="#1a4060"/>
-          <stop offset="40%" stop-color="#0d2840"/>
-          <stop offset="100%" stop-color="#040e1a"/>
-        </radialGradient>
-        <radialGradient id="eyeGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#ffffff"/>
-          <stop offset="30%" stop-color="#00e5ff"/>
-          <stop offset="70%" stop-color="#0099cc"/>
-          <stop offset="100%" stop-color="#003355"/>
-        </radialGradient>
-        <radialGradient id="eyeGrad2" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#ffffff"/>
-          <stop offset="30%" stop-color="#00e5ff"/>
-          <stop offset="70%" stop-color="#0099cc"/>
-          <stop offset="100%" stop-color="#003355"/>
-        </radialGradient>
+        <radialGradient id="faceGrad" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1a4060"/><stop offset="40%" stop-color="#0d2840"/><stop offset="100%" stop-color="#040e1a"/></radialGradient>
+        <radialGradient id="eyeGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffffff"/><stop offset="30%" stop-color="#00e5ff"/><stop offset="70%" stop-color="#0099cc"/><stop offset="100%" stop-color="#003355"/></radialGradient>
         <filter id="ff"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         <filter id="eyeBlur"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <linearGradient id="hlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="rgba(0,229,255,.5)"/>
-          <stop offset="100%" stop-color="rgba(0,229,255,0)"/>
-        </linearGradient>
-        <linearGradient id="sideGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#020b18"/>
-          <stop offset="100%" stop-color="#0d2840"/>
-        </linearGradient>
-        <linearGradient id="sideGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#0d2840"/>
-          <stop offset="100%" stop-color="#020b18"/>
-        </linearGradient>
+        <linearGradient id="hlGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(0,229,255,.5)"/><stop offset="100%" stop-color="rgba(0,229,255,0)"/></linearGradient>
+        <linearGradient id="sideL" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#020b18"/><stop offset="100%" stop-color="#0d2840"/></linearGradient>
+        <linearGradient id="sideR" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0d2840"/><stop offset="100%" stop-color="#020b18"/></linearGradient>
       </defs>
-      <!-- HEAD SHAPE - 3D with sides -->
-      <!-- Left side shadow -->
-      <path d="M18 15 L6 22 L6 72 L18 78 Z" fill="url(#sideGrad)" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
-      <!-- Right side shadow -->
-      <path d="M102 15 L114 22 L114 72 L102 78 Z" fill="url(#sideGrad2)" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
-      <!-- Main face -->
+      <path d="M18 15 L6 22 L6 72 L18 78 Z" fill="url(#sideL)" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
+      <path d="M102 15 L114 22 L114 72 L102 78 Z" fill="url(#sideR)" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
       <path d="M18 10 Q60 6 102 10 L104 75 Q60 82 16 75 Z" fill="url(#faceGrad)" stroke="rgba(0,229,255,.6)" stroke-width="1.2" filter="url(#ff)"/>
-      <!-- Face highlight -->
       <path d="M28 14 Q60 10 92 14 L88 40 Q60 36 32 40 Z" fill="url(#hlGrad)" opacity=".25"/>
-      <!-- Top ridge -->
-      <path d="M18 10 Q60 6 102 10 L100 18 Q60 14 20 18 Z" fill="rgba(0,229,255,.12)" stroke="none"/>
-      <!-- Forehead panel lines -->
+      <path d="M18 10 Q60 6 102 10 L100 18 Q60 14 20 18 Z" fill="rgba(0,229,255,.12)"/>
       <line x1="35" y1="12" x2="35" y2="24" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
       <line x1="60" y1="10" x2="60" y2="22" stroke="rgba(0,229,255,.3)" stroke-width="1"/>
       <line x1="85" y1="12" x2="85" y2="24" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
       <line x1="22" y1="18" x2="98" y2="18" stroke="rgba(0,229,255,.2)" stroke-width=".8"/>
-      <!-- Brow ridge -->
       <path d="M24 30 Q38 26 50 29" fill="none" stroke="rgba(0,229,255,.7)" stroke-width="2" stroke-linecap="round"/>
       <path d="M70 29 Q82 26 96 30" fill="none" stroke="rgba(0,229,255,.7)" stroke-width="2" stroke-linecap="round"/>
-      <!-- LEFT EYE -->
       <ellipse cx="38" cy="42" rx="13" ry="9" fill="#001525" stroke="rgba(0,229,255,.4)" stroke-width="1"/>
       <ellipse cx="38" cy="42" rx="10" ry="7" fill="url(#eyeGrad)" filter="url(#eyeBlur)" opacity=".95"/>
       <ellipse cx="38" cy="42" rx="5" ry="4" fill="rgba(0,229,255,.9)"/>
       <ellipse cx="38" cy="42" rx="2" ry="2" fill="white" opacity=".9"/>
       <ellipse cx="35" cy="40" rx="1.5" ry="1" fill="white" opacity=".6"/>
-      <!-- LEFT EYE GLOW -->
       <ellipse cx="38" cy="42" rx="13" ry="9" fill="none" stroke="#00e5ff" stroke-width=".8" opacity=".6" filter="url(#eyeBlur)"/>
-      <!-- RIGHT EYE -->
       <ellipse cx="82" cy="42" rx="13" ry="9" fill="#001525" stroke="rgba(0,229,255,.4)" stroke-width="1"/>
-      <ellipse cx="82" cy="42" rx="10" ry="7" fill="url(#eyeGrad2)" filter="url(#eyeBlur)" opacity=".95"/>
+      <ellipse cx="82" cy="42" rx="10" ry="7" fill="url(#eyeGrad)" filter="url(#eyeBlur)" opacity=".95"/>
       <ellipse cx="82" cy="42" rx="5" ry="4" fill="rgba(0,229,255,.9)"/>
       <ellipse cx="82" cy="42" rx="2" ry="2" fill="white" opacity=".9"/>
       <ellipse cx="79" cy="40" rx="1.5" ry="1" fill="white" opacity=".6"/>
       <ellipse cx="82" cy="42" rx="13" ry="9" fill="none" stroke="#00e5ff" stroke-width=".8" opacity=".6" filter="url(#eyeBlur)"/>
-      <!-- NOSE RIDGE -->
       <path d="M56 48 L52 62 L56 64 L60 65 L64 64 L68 62 L64 48 Z" fill="rgba(0,40,80,.6)" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
       <line x1="60" y1="48" x2="60" y2="64" stroke="rgba(0,229,255,.2)" stroke-width=".6"/>
-      <!-- MOUTH GRILLE -->
       <rect x="30" y="68" width="60" height="10" rx="2" fill="rgba(0,15,35,.8)" stroke="rgba(0,229,255,.4)" stroke-width=".8"/>
       <line x1="34" y1="68" x2="34" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
       <line x1="42" y1="68" x2="42" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
@@ -207,29 +165,22 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
       <line x1="70" y1="68" x2="70" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
       <line x1="78" y1="68" x2="78" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
       <line x1="86" y1="68" x2="86" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <!-- CHEEK PANELS -->
       <path d="M18 35 L26 32 L26 65 L18 68" fill="rgba(0,229,255,.06)" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
       <path d="M102 35 L94 32 L94 65 L102 68" fill="rgba(0,229,255,.06)" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <!-- EAR SENSORS -->
       <circle cx="14" cy="45" r="5" fill="rgba(0,10,30,.9)" stroke="rgba(0,229,255,.5)" stroke-width="1"/>
       <circle cx="14" cy="45" r="2.5" fill="#00e5ff" opacity=".7" filter="url(#eyeBlur)"/>
       <circle cx="106" cy="45" r="5" fill="rgba(0,10,30,.9)" stroke="rgba(0,229,255,.5)" stroke-width="1"/>
       <circle cx="106" cy="45" r="2.5" fill="#00e5ff" opacity=".7" filter="url(#eyeBlur)"/>
-      <!-- CHIN LINE -->
       <path d="M30 78 Q60 84 90 78" fill="none" stroke="rgba(0,229,255,.35)" stroke-width="1"/>
-      <!-- CENTER FOREHEAD SENSOR -->
       <circle cx="60" cy="22" r="4" fill="rgba(0,10,30,.9)" stroke="rgba(0,229,255,.6)" stroke-width="1"/>
       <circle cx="60" cy="22" r="2" fill="#00e5ff" opacity=".8" filter="url(#eyeBlur)"/>
     </svg>
   </div>
-
-  <!-- ARC RINGS + ORBIT DEPARTMENTS -->
   <div class="arc-wrap">
     <svg class="rings-svg" id="ringSvg"></svg>
     <div class="core"><div class="core-outer"><div class="core-inner">ATLAS</div></div></div>
   </div>
-</div>
-<style>
+</div><style>
 .right{grid-column:3;grid-row:2;padding:12px 10px;display:flex;flex-direction:column;gap:6px;border-left:1px solid rgba(0,229,255,.15);overflow:hidden}
 .agent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
 .anode{display:flex;flex-direction:column;align-items:center;gap:2px}
@@ -265,9 +216,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
     <div class="logrow"><span class="logtime">06:00</span><span class="logtag" style="background:rgba(0,229,255,.2);color:#00e5ff">SYS</span><span class="logmsg">Boot sequence complete</span></div>
   </div>
 </div>
-<style>
-.btm{grid-column:1/-1;grid-row:3;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-top:1px solid rgba(0,229,255,.2);background:rgba(0,8,18,.92);font-size:8px;letter-spacing:1px;color:rgba(0,229,255,.4)}
-</style>
+<style>.btm{grid-column:1/-1;grid-row:3;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-top:1px solid rgba(0,229,255,.2);background:rgba(0,8,18,.92);font-size:8px;letter-spacing:1px;color:rgba(0,229,255,.4)}</style>
 <div class="btm">
   <span>&#9632; ATLAS COMMAND CENTER v12 &nbsp;|&nbsp; STARK PROTOCOL ACTIVE &nbsp;|&nbsp; 2026</span>
   <div style="display:flex;gap:20px"><span id="btmSys">SYS: ONLINE</span><span id="btmPing">PING: 12ms</span><span id="btmUp">UPTIME: 0d 0h 0m</span></div>
@@ -288,14 +237,13 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   setInterval(tick,1000); tick();
   setInterval(function(){var bp=document.getElementById('btmPing'); if(bp) bp.textContent='PING: '+Math.floor(6+Math.random()*18)+'ms';},3000);
 
-  // DEPARTMENTS data for orbit nodes
   var depts=[
-    {name:'ETSY',   col:'#f97316', badge:'LIVE',  rev:'$0',  live:true,  angle:270},
-    {name:'TIKTOK', col:'#a855f7', badge:'LIVE',  rev:'$0',  live:true,  angle:330},
-    {name:'N8N',    col:'#06b6d4', badge:'AUTO',  rev:'$0',  live:true,  angle:30},
-    {name:'FIVERR', col:'#eab308', badge:'SETUP', rev:'--',  live:false, angle:90},
-    {name:'SAPPH',  col:'#3b82f6', badge:'SETUP', rev:'--',  live:false, angle:150},
-    {name:'RESRCH', col:'#f43f5e', badge:'AI',    rev:'--',  live:false, angle:210}
+    {name:'ETSY',   short:'ETSY',  col:'#f97316', badge:'LIVE',  rev:'$0',   live:true,  angle:270},
+    {name:'TIKTOK', short:'TIK',   col:'#a855f7', badge:'LIVE',  rev:'$0',   live:true,  angle:330},
+    {name:'N8N',    short:'N8N',   col:'#06b6d4', badge:'AUTO',  rev:'$0',   live:true,  angle:30},
+    {name:'FIVERR', short:'FIV',   col:'#eab308', badge:'SETUP', rev:'--',   live:false, angle:90},
+    {name:'SAPPHIRE',short:'SAPH', col:'#3b82f6', badge:'SETUP', rev:'--',   live:false, angle:150},
+    {name:'RESEARCH',short:'AI',   col:'#f43f5e', badge:'AI',    rev:'--',   live:false, angle:210}
   ];
 
   function buildSVG(){
@@ -304,170 +252,175 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
     if(!wrap){setTimeout(buildSVG,200);return;}
     var W=wrap.clientWidth, H=wrap.clientHeight;
     if(W<50||H<50){setTimeout(buildSVG,200);return;}
-
-    // Clear
     while(svg.firstChild) svg.removeChild(svg.firstChild);
     svg.setAttribute('width',W); svg.setAttribute('height',H);
     svg.setAttribute('viewBox','0 0 '+W+' '+H);
     var NS='http://www.w3.org/2000/svg';
     var cx=W/2, cy=H/2;
 
-    // Defs
+    // DEFS
     var defs=document.createElementNS(NS,'defs');
-    function mkFilter(id,blur){
+    function mkFilt(id,bl){
       var f=document.createElementNS(NS,'filter'); f.setAttribute('id',id);
-      var gb=document.createElementNS(NS,'feGaussianBlur'); gb.setAttribute('stdDeviation',blur); gb.setAttribute('result','b');
+      var gb=document.createElementNS(NS,'feGaussianBlur'); gb.setAttribute('stdDeviation',bl); gb.setAttribute('result','b');
       var fm=document.createElementNS(NS,'feMerge');
       var n1=document.createElementNS(NS,'feMergeNode'); n1.setAttribute('in','b');
       var n2=document.createElementNS(NS,'feMergeNode'); n2.setAttribute('in','SourceGraphic');
       fm.appendChild(n1); fm.appendChild(n2); f.appendChild(gb); f.appendChild(fm); return f;
     }
-    defs.appendChild(mkFilter('glow1',2.5));
-    defs.appendChild(mkFilter('glow2',5));
-    defs.appendChild(mkFilter('glow3',8));
+    defs.appendChild(mkFilt('glow1',2.5));
+    defs.appendChild(mkFilt('glow2',5));
+    defs.appendChild(mkFilt('glow3',9));
+
+    // Per-dept radial gradients for node backgrounds
+    depts.forEach(function(d,i){
+      var rg=document.createElementNS(NS,'radialGradient');
+      rg.setAttribute('id','ng'+i); rg.setAttribute('cx','50%'); rg.setAttribute('cy','50%'); rg.setAttribute('r','50%');
+      var s1=document.createElementNS(NS,'stop'); s1.setAttribute('offset','0%'); s1.setAttribute('stop-color',d.col); s1.setAttribute('stop-opacity','0.22');
+      var s2=document.createElementNS(NS,'stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color','#000a14'); s2.setAttribute('stop-opacity','0.97');
+      rg.appendChild(s1); rg.appendChild(s2); defs.appendChild(rg);
+    });
     svg.appendChild(defs);
 
-    // INNER ARC RINGS (5 rings)
+    // INNER ARC RINGS
     var innerRings=[
-      {r:140,col:'rgba(0,229,255,.55)',w:1.8,dash:'8,5',spd:22,dir:1},
-      {r:118,col:'rgba(0,180,220,.75)',w:2.2,dash:'none',spd:15,dir:-1,dot:true},
-      {r:98, col:'rgba(0,229,255,.35)',w:1.5,dash:'3,4',spd:10,dir:1},
-      {r:80, col:'rgba(0,110,180,.55)',w:1.5,dash:'none',spd:7,dir:-1},
-      {r:63, col:'rgba(0,229,255,.28)',w:1.2,dash:'2,6',spd:5,dir:1}
+      {r:138,col:'rgba(0,229,255,.55)',w:1.8,dash:'8,5',spd:22,dir:1},
+      {r:116,col:'rgba(0,180,220,.75)',w:2.2,dash:'none',spd:15,dir:-1,dot:true},
+      {r:97, col:'rgba(0,229,255,.35)',w:1.5,dash:'3,4',spd:10,dir:1},
+      {r:79, col:'rgba(0,110,180,.55)',w:1.5,dash:'none',spd:7, dir:-1},
+      {r:62, col:'rgba(0,229,255,.28)',w:1.2,dash:'2,6',spd:5, dir:1}
     ];
     var ringGroups=[];
-    innerRings.forEach(function(rd,i){
+    innerRings.forEach(function(rd){
       var g=document.createElementNS(NS,'g');
       g.setAttribute('transform','translate('+cx+','+cy+')');
       var c=document.createElementNS(NS,'circle');
       c.setAttribute('cx','0'); c.setAttribute('cy','0'); c.setAttribute('r',rd.r);
-      c.setAttribute('fill','none'); c.setAttribute('stroke',rd.col);
-      c.setAttribute('stroke-width',rd.w);
+      c.setAttribute('fill','none'); c.setAttribute('stroke',rd.col); c.setAttribute('stroke-width',rd.w);
       if(rd.dash!=='none') c.setAttribute('stroke-dasharray',rd.dash);
-      c.setAttribute('filter','url(#glow1)');
-      g.appendChild(c);
+      c.setAttribute('filter','url(#glow1)'); g.appendChild(c);
       if(rd.dot){
         var dt=document.createElementNS(NS,'circle');
-        dt.setAttribute('cx',rd.r); dt.setAttribute('cy','0');
-        dt.setAttribute('r','4'); dt.setAttribute('fill','#00e5ff');
-        dt.setAttribute('filter','url(#glow2)');
-        g.appendChild(dt);
-        // second dot opposite
+        dt.setAttribute('cx',rd.r); dt.setAttribute('cy','0'); dt.setAttribute('r','4');
+        dt.setAttribute('fill','#00e5ff'); dt.setAttribute('filter','url(#glow2)'); g.appendChild(dt);
         var dt2=document.createElementNS(NS,'circle');
-        dt2.setAttribute('cx',-rd.r); dt2.setAttribute('cy','0');
-        dt2.setAttribute('r','3'); dt2.setAttribute('fill','rgba(0,229,255,.6)');
-        dt2.setAttribute('filter','url(#glow1)');
-        g.appendChild(dt2);
+        dt2.setAttribute('cx',-rd.r); dt2.setAttribute('cy','0'); dt2.setAttribute('r','3');
+        dt2.setAttribute('fill','rgba(0,229,255,.6)'); dt2.setAttribute('filter','url(#glow1)'); g.appendChild(dt2);
       }
       svg.appendChild(g);
       ringGroups.push({el:g,spd:rd.spd,dir:rd.dir,angle:Math.random()*360});
     });
 
-    // TICK MARKS at 45 degree intervals
+    // TICK MARKS
     var tg=document.createElementNS(NS,'g'); tg.setAttribute('filter','url(#glow1)');
     [0,45,90,135,180,225,270,315].forEach(function(a){
-      var r=a*Math.PI/180;
-      var r1=145,r2=157;
-      var x1=cx+r1*Math.cos(r),y1=cy+r1*Math.sin(r);
-      var x2=cx+r2*Math.cos(r),y2=cy+r2*Math.sin(r);
+      var r=a*Math.PI/180, r1=143, r2=156;
       var ln=document.createElementNS(NS,'line');
-      ln.setAttribute('x1',x1);ln.setAttribute('y1',y1);ln.setAttribute('x2',x2);ln.setAttribute('y2',y2);
-      ln.setAttribute('stroke','rgba(0,229,255,.55)'); ln.setAttribute('stroke-width','2');
-      tg.appendChild(ln);
+      ln.setAttribute('x1',cx+r1*Math.cos(r)); ln.setAttribute('y1',cy+r1*Math.sin(r));
+      ln.setAttribute('x2',cx+r2*Math.cos(r)); ln.setAttribute('y2',cy+r2*Math.sin(r));
+      ln.setAttribute('stroke','rgba(0,229,255,.55)'); ln.setAttribute('stroke-width','2.5'); tg.appendChild(ln);
     });
     svg.appendChild(tg);
 
-    // OUTER ORBIT RING (departments)
-    var orbitR=Math.min(W,H)*0.42; // auto-size to fit
-    orbitR=Math.min(orbitR,195); orbitR=Math.max(orbitR,155);
-    var og=document.createElementNS(NS,'g');
+    // OUTER ORBIT RING — push out to accommodate big nodes
+    // Node radius is 32, so orbit ring needs room
+    var nodeR = 32; // node circle radius — BIG
+    var minOrbit = 138 + nodeR + 20; // clear inner rings + node size + padding
+    var maxOrbit = Math.min(W, H) * 0.46;
+    var orbitR = Math.max(minOrbit, Math.min(maxOrbit, 230));
+
+    // Orbit ring (dashed)
     var oc=document.createElementNS(NS,'circle');
     oc.setAttribute('cx',cx); oc.setAttribute('cy',cy); oc.setAttribute('r',orbitR);
-    oc.setAttribute('fill','none'); oc.setAttribute('stroke','rgba(0,229,255,.18)');
-    oc.setAttribute('stroke-width','1'); oc.setAttribute('stroke-dasharray','4,8');
-    og.appendChild(oc);
-    svg.appendChild(og);
+    oc.setAttribute('fill','none'); oc.setAttribute('stroke','rgba(0,229,255,.2)');
+    oc.setAttribute('stroke-width','1.2'); oc.setAttribute('stroke-dasharray','5,10');
+    svg.appendChild(oc);
 
-    // DEPARTMENT NODES on orbit
-    var nodeGroups=[];
+    // Second subtle orbit ring slightly larger
+    var oc2=document.createElementNS(NS,'circle');
+    oc2.setAttribute('cx',cx); oc2.setAttribute('cy',cy); oc2.setAttribute('r',orbitR+nodeR+8);
+    oc2.setAttribute('fill','none'); oc2.setAttribute('stroke','rgba(0,229,255,.07)');
+    oc2.setAttribute('stroke-width','1'); oc2.setAttribute('stroke-dasharray','2,14');
+    svg.appendChild(oc2);
+
+    // DEPT NODES
     depts.forEach(function(dept,i){
       var ng=document.createElementNS(NS,'g');
-      ng.setAttribute('id','dept-node-'+i);
-      var angleRad=dept.angle*Math.PI/180;
-      var nx=cx+orbitR*Math.cos(angleRad);
-      var ny=cy+orbitR*Math.sin(angleRad);
+      var aRad=dept.angle*Math.PI/180;
+      var nx=cx+orbitR*Math.cos(aRad);
+      var ny=cy+orbitR*Math.sin(aRad);
 
-      // Connection line from orbit to center
-      var connLine=document.createElementNS(NS,'line');
-      connLine.setAttribute('x1',cx); connLine.setAttribute('y1',cy);
-      connLine.setAttribute('x2',nx); connLine.setAttribute('y2',ny);
-      connLine.setAttribute('stroke',dept.col); connLine.setAttribute('stroke-width','0.6');
-      connLine.setAttribute('opacity','0.2');
-      svg.insertBefore(connLine, og); // behind orbit ring
+      // Connector line
+      var conn=document.createElementNS(NS,'line');
+      conn.setAttribute('x1',cx); conn.setAttribute('y1',cy);
+      conn.setAttribute('x2',nx); conn.setAttribute('y2',ny);
+      conn.setAttribute('stroke',dept.col); conn.setAttribute('stroke-width','0.8');
+      conn.setAttribute('opacity','0.25');
+      svg.insertBefore(conn, oc);
 
-      // Outer halo
+      // Outer halo ring (spinning feel)
       var halo=document.createElementNS(NS,'circle');
-      halo.setAttribute('cx',nx); halo.setAttribute('cy',ny);
-      halo.setAttribute('r','22'); halo.setAttribute('fill','none');
-      halo.setAttribute('stroke',dept.col); halo.setAttribute('stroke-width','0.8');
-      halo.setAttribute('opacity',dept.live?'0.5':'0.25');
+      halo.setAttribute('cx',nx); halo.setAttribute('cy',ny); halo.setAttribute('r',nodeR+10);
+      halo.setAttribute('fill','none'); halo.setAttribute('stroke',dept.col);
+      halo.setAttribute('stroke-width','0.8'); halo.setAttribute('opacity',dept.live?'0.4':'0.18');
+      halo.setAttribute('stroke-dasharray','4,8');
       ng.appendChild(halo);
 
-      // Node background
+      // Mid ring
+      var mid=document.createElementNS(NS,'circle');
+      mid.setAttribute('cx',nx); mid.setAttribute('cy',ny); mid.setAttribute('r',nodeR+3);
+      mid.setAttribute('fill','none'); mid.setAttribute('stroke',dept.col);
+      mid.setAttribute('stroke-width','1'); mid.setAttribute('opacity',dept.live?'0.55':'0.25');
+      ng.appendChild(mid);
+
+      // Main node circle
       var bg=document.createElementNS(NS,'circle');
-      bg.setAttribute('cx',nx); bg.setAttribute('cy',ny);
-      bg.setAttribute('r','16'); bg.setAttribute('fill','rgba(0,10,25,0.92)');
-      bg.setAttribute('stroke',dept.col); bg.setAttribute('stroke-width','1.8');
-      bg.setAttribute('filter','url(#glow1)');
-      ng.appendChild(bg);
+      bg.setAttribute('cx',nx); bg.setAttribute('cy',ny); bg.setAttribute('r',nodeR);
+      bg.setAttribute('fill','url(#ng'+i+')');
+      bg.setAttribute('stroke',dept.col); bg.setAttribute('stroke-width','2.2');
+      bg.setAttribute('filter','url(#glow1)'); ng.appendChild(bg);
 
-      // Department name
-      var lbl=document.createElementNS(NS,'text');
-      lbl.setAttribute('x',nx); lbl.setAttribute('y',ny+1);
-      lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('dominant-baseline','middle');
-      lbl.setAttribute('fill',dept.col); lbl.setAttribute('font-size','7');
-      lbl.setAttribute('font-weight','700'); lbl.setAttribute('letter-spacing','1');
-      lbl.setAttribute('font-family','Courier New,monospace');
-      lbl.textContent=dept.name;
-      ng.appendChild(lbl);
+      // Department name — large and bold
+      var nameTxt=document.createElementNS(NS,'text');
+      nameTxt.setAttribute('x',nx); nameTxt.setAttribute('y',ny-6);
+      nameTxt.setAttribute('text-anchor','middle'); nameTxt.setAttribute('dominant-baseline','middle');
+      nameTxt.setAttribute('fill',dept.col); nameTxt.setAttribute('font-size','10');
+      nameTxt.setAttribute('font-weight','900'); nameTxt.setAttribute('letter-spacing','1.5');
+      nameTxt.setAttribute('font-family','Courier New,monospace');
+      nameTxt.setAttribute('filter','url(#glow1)');
+      nameTxt.textContent=dept.name; ng.appendChild(nameTxt);
 
-      // Revenue/status below name
-      var sub=document.createElementNS(NS,'text');
-      sub.setAttribute('x',nx); sub.setAttribute('y',ny+10);
-      sub.setAttribute('text-anchor','middle'); sub.setAttribute('dominant-baseline','middle');
-      sub.setAttribute('fill','rgba(0,229,255,.55)'); sub.setAttribute('font-size','5.5');
-      sub.setAttribute('font-family','Courier New,monospace');
-      sub.textContent=dept.badge;
-      ng.appendChild(sub);
+      // Badge line
+      var badgeTxt=document.createElementNS(NS,'text');
+      badgeTxt.setAttribute('x',nx); badgeTxt.setAttribute('y',ny+8);
+      badgeTxt.setAttribute('text-anchor','middle'); badgeTxt.setAttribute('dominant-baseline','middle');
+      badgeTxt.setAttribute('fill',dept.live?dept.col:'rgba(0,229,255,.45)');
+      badgeTxt.setAttribute('font-size','7.5'); badgeTxt.setAttribute('letter-spacing','2');
+      badgeTxt.setAttribute('font-family','Courier New,monospace');
+      badgeTxt.textContent=dept.badge; ng.appendChild(badgeTxt);
 
-      // Live blink dot
+      // Revenue
+      var revTxt=document.createElementNS(NS,'text');
+      revTxt.setAttribute('x',nx); revTxt.setAttribute('y',ny+19);
+      revTxt.setAttribute('text-anchor','middle'); revTxt.setAttribute('dominant-baseline','middle');
+      revTxt.setAttribute('fill','rgba(0,229,255,.7)'); revTxt.setAttribute('font-size','8');
+      revTxt.setAttribute('font-weight','700'); revTxt.setAttribute('font-family','Courier New,monospace');
+      revTxt.textContent=dept.rev; ng.appendChild(revTxt);
+
+      // Live indicator dot (top-right of node)
       if(dept.live){
         var ldot=document.createElementNS(NS,'circle');
-        ldot.setAttribute('cx',nx+12); ldot.setAttribute('cy',ny-12);
-        ldot.setAttribute('r','3'); ldot.setAttribute('fill',dept.col);
+        ldot.setAttribute('cx',nx+nodeR-4); ldot.setAttribute('cy',ny-nodeR+4);
+        ldot.setAttribute('r','4'); ldot.setAttribute('fill',dept.col);
         ldot.setAttribute('filter','url(#glow2)');
         ldot.style.animation='blink 1.5s ease-in-out infinite';
         ng.appendChild(ldot);
       }
 
-      // Label outside the node
-      var outerLbl=document.createElementNS(NS,'text');
-      var lblDist=orbitR+30;
-      var lx=cx+lblDist*Math.cos(angleRad);
-      var ly=cy+lblDist*Math.sin(angleRad);
-      outerLbl.setAttribute('x',lx); outerLbl.setAttribute('y',ly);
-      outerLbl.setAttribute('text-anchor','middle'); outerLbl.setAttribute('dominant-baseline','middle');
-      outerLbl.setAttribute('fill',dept.col); outerLbl.setAttribute('font-size','7');
-      outerLbl.setAttribute('letter-spacing','1'); outerLbl.setAttribute('opacity','0.7');
-      outerLbl.setAttribute('font-family','Courier New,monospace');
-      outerLbl.textContent=dept.rev;
-      ng.appendChild(outerLbl);
-
       svg.appendChild(ng);
-      nodeGroups.push({el:ng,nx:nx,ny:ny,live:dept.live});
     });
 
-    // ANIMATION LOOP
+    // ANIMATION
     var lastT=null;
     function frame(ts){
       if(!lastT) lastT=ts;
@@ -484,7 +437,7 @@ body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;backg
   buildSVG();
   window.addEventListener('resize',function(){setTimeout(buildSVG,100);});
 
-  // ACTIVITY LOG
+  // LOG
   var logSrc=[
     {tag:'ETSY',col:'#f97316',bg:'rgba(249,115,22,.2)',msgs:['Listing viewed','Favorite added','Order inquiry','Product ranked','Store updated']},
     {tag:'TIK',col:'#a855f7',bg:'rgba(168,85,247,.2)',msgs:['Video uploaded','100 views hit','Comment replied','New follower','Reel scheduled']},
