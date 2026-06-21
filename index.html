@@ -3,457 +3,365 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ATLAS Command Center v12</title>
+<title>SHADY AI — Command Center</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#000507;font-family:'Courier New',monospace;color:#00e5ff}
-body{background:radial-gradient(ellipse at 50% 50%,#001520 0%,#000a14 50%,#000507 100%)}
-body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,200,255,.010) 3px,rgba(0,200,255,.010) 4px);pointer-events:none;z-index:999;animation:scan 12s linear infinite}
-@keyframes scan{0%{background-position:0 0}100%{background-position:0 200px}}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes spinR{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
-@keyframes pulse{0%,100%{opacity:1;text-shadow:0 0 20px #00e5ff,0 0 50px rgba(0,229,255,.6)}50%{opacity:.8;text-shadow:0 0 10px #00e5ff,0 0 20px rgba(0,229,255,.3)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-@keyframes coreGlow{0%,100%{box-shadow:0 0 20px #00e5ff,0 0 40px rgba(0,229,255,.6),0 0 80px rgba(0,229,255,.2),inset 0 0 25px rgba(0,229,255,.15)}50%{box-shadow:0 0 35px #00e5ff,0 0 80px rgba(0,229,255,.9),0 0 120px rgba(0,229,255,.5),inset 0 0 40px rgba(0,229,255,.35)}}
-@keyframes arcPulse{0%,100%{filter:brightness(1) drop-shadow(0 0 8px #00e5ff)}50%{filter:brightness(1.4) drop-shadow(0 0 30px #00e5ff) drop-shadow(0 0 60px rgba(0,229,255,.5))}}
-@keyframes fadeSlide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
-@keyframes nodePop{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-@keyframes faceFloat{0%,100%{transform:translateY(0px)}50%{transform:translateY(-4px)}}
-@keyframes faceGlow{0%,100%{filter:drop-shadow(0 0 6px #00e5ff) drop-shadow(0 0 15px rgba(0,229,255,.4))}50%{filter:drop-shadow(0 0 15px #00e5ff) drop-shadow(0 0 35px rgba(0,229,255,.8)) drop-shadow(0 0 60px rgba(0,229,255,.3))}}
-@keyframes nodeRing{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.hud{display:grid;grid-template-columns:200px 1fr 230px;grid-template-rows:50px 1fr 36px;width:100vw;height:100vh}
+html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:'Courier New',monospace;color:#e2e8f0}
+::-webkit-scrollbar{width:4px;background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,229,255,.2);border-radius:2px}
+
+/* LAYOUT */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* TOP NAV */
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:62px;background:#0d1120;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-orb{width:38px;height:38px;border-radius:50%;border:2px solid #00e5ff;background:radial-gradient(circle,rgba(0,229,255,.15) 0%,rgba(0,8,20,.9) 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(0,229,255,.35)}
+.brand-orb svg{width:18px;height:18px}
+.brand-text{line-height:1.15}
+.brand-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#00e5ff;text-shadow:0 0 12px rgba(0,229,255,.6)}
+.brand-sub{font-size:8px;letter-spacing:4px;color:rgba(0,229,255,.5)}
+.nav-right{display:flex;align-items:center;gap:18px}
+.sys-badge{display:flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid rgba(0,255,136,.3);border-radius:20px;background:rgba(0,255,136,.06)}
+.sys-dot{width:7px;height:7px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:blink 2s ease-in-out infinite}
+.sys-txt{font-size:9px;letter-spacing:2px;color:#00ff88;font-weight:700}
+.nav-clock{font-size:20px;font-weight:700;letter-spacing:3px;color:#e2e8f0;font-variant-numeric:tabular-nums}
+
+/* STATS BAR */
+.statsbar{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.stat-cell{padding:16px 24px;border-right:1px solid rgba(255,255,255,.06)}
+.stat-cell:last-child{border-right:none}
+.stat-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.35);margin-bottom:6px;text-transform:uppercase}
+.stat-val{font-size:28px;font-weight:900;line-height:1;letter-spacing:1px}
+.stat-sub{font-size:9px;color:rgba(255,255,255,.3);margin-top:4px;letter-spacing:.5px}
+.val-green{color:#00ff88;text-shadow:0 0 10px rgba(0,255,136,.4)}
+.val-cyan{color:#00e5ff;text-shadow:0 0 10px rgba(0,229,255,.4)}
+.val-purple{color:#c084fc;text-shadow:0 0 10px rgba(192,132,252,.4)}
+.val-white{color:#f1f5f9}
+
+/* MAIN GRID */
+.main{flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 420px;grid-template-rows:1fr auto;gap:0;padding:20px;gap:16px}
+
+/* CARDS */
+.card{background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
+.card.etsy::before{background:linear-gradient(180deg,#f97316,#ea580c)}
+.card.n8n::before{background:linear-gradient(180deg,#f97316,#ef4444)}
+.card.fiverr::before{background:linear-gradient(180deg,#22c55e,#16a34a)}
+.card.tiktok::before{background:linear-gradient(180deg,#a855f7,#7c3aed)}
+.card.research::before{background:linear-gradient(180deg,#a855f7,#7c3aed)}
+.card.sapphire::before{background:linear-gradient(180deg,#3b82f6,#1d4ed8)}
+
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:18px 20px 12px 22px}
+.card-title-row{display:flex;align-items:center;gap:12px}
+.card-icon{font-size:26px;line-height:1}
+.card-title{font-size:18px;font-weight:900;letter-spacing:2px;color:#f1f5f9}
+.card-subtitle{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:2px}
+.card-badge{padding:4px 12px;border-radius:20px;font-size:8px;font-weight:700;letter-spacing:2px;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.badge-live{background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.35);color:#00ff88}
+.badge-next{background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.35);color:#facc15}
+.badge-ai{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.35);color:#c084fc}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.5s infinite}
+
+.card-body{padding:0 20px 16px 22px;flex:1;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+
+/* AGENTS ROW */
+.agents-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.agents-lbl{font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.3);margin-right:4px}
+.agent-chip{padding:3px 10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;font-size:8px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:5px}
+.agent-chip::before{content:'';width:4px;height:4px;border-radius:50%;background:#00ff88;box-shadow:0 0 4px #00ff88}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:10px 14px}
+.sbox-val{font-size:26px;font-weight:900;letter-spacing:1px}
+.sbox-lbl{font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:2px}
+
+/* LISTINGS TABLE */
+.listings{display:flex;flex-direction:column;gap:2px;flex:1;overflow:hidden}
+.listing-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.listing-row:last-child{border-bottom:none}
+.listing-num{font-size:9px;color:rgba(255,255,255,.2);width:20px;flex-shrink:0}
+.listing-name{font-size:10px;color:rgba(255,255,255,.7);flex:1;letter-spacing:.3px}
+.listing-price{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);margin-right:8px}
+.listing-dot{width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 5px #00ff88;flex-shrink:0}
+
+/* PROGRESS BARS */
+.prog-section{display:flex;flex-direction:column;gap:6px}
+.prog-row{display:flex;align-items:center;justify-content:space-between;font-size:8px;color:rgba(255,255,255,.4);margin-bottom:2px;letter-spacing:1px}
+.prog-track{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px}
+
+/* BOTTOM GRID */
+.bottom-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card-mini .card-body{gap:8px}
+.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini-stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:8px 12px}
+.mini-val{font-size:20px;font-weight:900;letter-spacing:1px}
+.mini-lbl{font-size:7px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:1px}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
 </style>
 </head>
-<body><div class="hud"><style>
-.topbar{grid-column:1/-1;grid-row:1;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid rgba(0,229,255,.25);background:rgba(0,8,18,.92);backdrop-filter:blur(10px)}
-.tl{display:flex;align-items:center;gap:12px}
-.logo-icon{width:32px;height:32px;border:2px solid #00e5ff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#00e5ff;text-shadow:0 0 10px #00e5ff;box-shadow:0 0 10px rgba(0,229,255,.3),inset 0 0 8px rgba(0,229,255,.1)}
-.logo-name{font-size:18px;font-weight:900;letter-spacing:5px;color:#00e5ff;text-shadow:0 0 12px #00e5ff;line-height:1.1}
-.logo-sub{font-size:7px;letter-spacing:3px;color:rgba(0,229,255,.5)}
-.tc{display:flex;gap:6px}
-.pill{padding:3px 10px;border:1px solid rgba(0,229,255,.3);border-radius:2px;font-size:8px;letter-spacing:1px;color:rgba(0,229,255,.7);background:rgba(0,229,255,.04)}
-.pill b{color:#00e5ff;font-weight:700}
-.tr{display:flex;align-items:center;gap:14px}
-.live-badge{display:flex;align-items:center;gap:5px;font-size:8px;letter-spacing:2px;color:#00ff88;text-shadow:0 0 6px #00ff88}
-.live-dot{width:6px;height:6px;border-radius:50%;background:#00ff88;animation:blink 1s infinite;box-shadow:0 0 6px #00ff88}
-.clock{font-size:16px;letter-spacing:3px;color:#00e5ff;text-shadow:0 0 12px #00e5ff;font-weight:700}
-</style>
-<div class="topbar">
-  <div class="tl">
-    <div class="logo-icon">&#9670;</div>
-    <div><div class="logo-name">ATLAS</div><div class="logo-sub">COMMAND CENTER v12</div></div>
-  </div>
-  <div class="tc">
-    <div class="pill">DEPTS <b>6</b></div>
-    <div class="pill">AGENTS <b>12</b></div>
-    <div class="pill">REVENUE <b id="hp-rev">$0.00</b></div>
-    <div class="pill">ORDERS <b id="hp-ord">0</b></div>
-    <div class="pill">PHASE <b>1/4</b></div>
-  </div>
-  <div class="tr">
-    <div class="live-badge"><div class="live-dot"></div>SYSTEM ONLINE</div>
-    <div class="clock" id="clock">--:--:--</div>
-  </div>
-</div><style>
-.left{grid-column:1;grid-row:2;padding:12px 10px;display:flex;flex-direction:column;gap:6px;border-right:1px solid rgba(0,229,255,.15);overflow:hidden}
-.shdr{font-size:7px;letter-spacing:3px;color:rgba(0,229,255,.45);border-bottom:1px solid rgba(0,229,255,.12);padding-bottom:4px;margin-bottom:3px}
-.gauge{background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.14);border-radius:3px;padding:7px 9px;display:flex;align-items:center;gap:8px}
-.gauge-lbl{font-size:7px;letter-spacing:2px;color:rgba(0,229,255,.5);margin-bottom:1px}
-.gauge-val{font-size:15px;font-weight:700;color:#00e5ff;text-shadow:0 0 8px #00e5ff}
-.gauge-bar{height:2px;background:rgba(0,229,255,.1);border-radius:1px;margin-top:3px;width:100%}
-.gauge-fill{height:100%;border-radius:1px}
-.rev-section{background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.14);border-radius:3px;padding:8px 10px}
-.rev-lbl{font-size:6px;letter-spacing:3px;color:rgba(0,229,255,.4);margin-bottom:3px}
-.rev-val{font-size:26px;font-weight:900;color:#00e5ff;text-shadow:0 0 15px #00e5ff,0 0 30px rgba(0,229,255,.4);animation:pulse 3s ease-in-out infinite;letter-spacing:1px}
-.rev-meta{display:flex;gap:8px;margin-top:5px}
-.rm{flex:1;text-align:center;border:1px solid rgba(0,229,255,.1);border-radius:2px;padding:3px}
-.rm-v{font-size:11px;font-weight:700;color:rgba(0,229,255,.9)}
-.rm-l{font-size:6px;letter-spacing:1px;color:rgba(0,229,255,.35)}
-.pbar-track{height:3px;background:rgba(0,229,255,.1);border-radius:2px;margin-top:5px}
-.pbar-fill{height:100%;width:25%;background:linear-gradient(90deg,#00e5ff,rgba(0,229,255,.4));border-radius:2px;box-shadow:0 0 6px #00e5ff}
-.pbar-lbl{display:flex;justify-content:space-between;font-size:6px;color:rgba(0,229,255,.4);margin-top:3px}
-</style>
-<div class="left">
-  <div class="shdr">// TOTAL REVENUE 2026</div>
-  <div class="rev-section">
-    <div class="rev-lbl">// ATLAS EARNINGS</div>
-    <div class="rev-val" id="revVal">$0.00</div>
-    <div class="rev-meta">
-      <div class="rm"><div class="rm-v" id="ordVal">0</div><div class="rm-l">ORDERS</div></div>
-      <div class="rm"><div class="rm-v">12</div><div class="rm-l">AGENTS</div></div>
-      <div class="rm"><div class="rm-v" id="attVal">2</div><div class="rm-l">ALERT</div></div>
+<body>
+<div class="app">
+
+<!-- TOP NAV -->
+<div class="topnav">
+  <div class="brand">
+    <div class="brand-orb">
+      <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#00e5ff" stroke-width="1.5"/><circle cx="9" cy="9" r="3" fill="#00e5ff" opacity=".8"/><circle cx="9" cy="9" r="3" fill="#00e5ff" filter="blur(2px)" opacity=".5"/></svg>
     </div>
-    <div class="pbar-track"><div class="pbar-fill"></div></div>
-    <div class="pbar-lbl"><span>PHASE 1 — LAUNCH</span><span>25%</span></div>
+    <div class="brand-text">
+      <div class="brand-name">SHADY AI</div>
+      <div class="brand-sub">COMMAND CENTER V1.0</div>
+    </div>
   </div>
-  <div class="shdr" style="margin-top:4px">// SYSTEM STATUS</div>
-  <div class="gauge">
-    <svg width="44" height="26" viewBox="0 0 44 26" style="flex-shrink:0">
-      <path d="M4 24 A18 18 0 0 1 40 24" fill="none" stroke="rgba(0,229,255,.12)" stroke-width="5" stroke-linecap="round"/>
-      <path d="M4 24 A18 18 0 0 1 40 24" fill="none" stroke="#00e5ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="57" stroke-dashoffset="28"/>
-    </svg>
-    <div style="flex:1"><div class="gauge-lbl">CPU LOAD</div><div class="gauge-val">52%</div><div class="gauge-bar"><div class="gauge-fill" style="width:52%;background:linear-gradient(90deg,#00e5ff,#00b4d8)"></div></div></div>
-  </div>
-  <div class="gauge">
-    <svg width="44" height="26" viewBox="0 0 44 26" style="flex-shrink:0">
-      <path d="M4 24 A18 18 0 0 1 40 24" fill="none" stroke="rgba(0,229,255,.12)" stroke-width="5" stroke-linecap="round"/>
-      <path d="M4 24 A18 18 0 0 1 40 24" fill="none" stroke="#00b4d8" stroke-width="5" stroke-linecap="round" stroke-dasharray="57" stroke-dashoffset="19"/>
-    </svg>
-    <div style="flex:1"><div class="gauge-lbl">MEMORY</div><div class="gauge-val">68%</div><div class="gauge-bar"><div class="gauge-fill" style="width:68%;background:linear-gradient(90deg,#00b4d8,#0ea5e9)"></div></div></div>
-  </div>
-  <div class="gauge">
-    <svg width="44" height="26" viewBox="0 0 44 26" style="flex-shrink:0">
-      <path d="M4 24 A18 18 0 0 1 40 24" fill="none" stroke="rgba(0,229,255,.12)" stroke-width="5" stroke-linecap="round"/>
-      <path d="M4 24 A18 18 0 0 1 40 24" fill="none" stroke="#00ff88" stroke-width="5" stroke-linecap="round" stroke-dasharray="57" stroke-dashoffset="44"/>
-    </svg>
-    <div style="flex:1"><div class="gauge-lbl">NETWORK</div><div class="gauge-val" style="color:#00ff88;text-shadow:0 0 8px #00ff88">24%</div><div class="gauge-bar"><div class="gauge-fill" style="width:24%;background:linear-gradient(90deg,#00ff88,#00e5a0)"></div></div></div>
-  </div>
-</div><style>
-.center{grid-column:2;grid-row:2;position:relative;display:flex;flex-direction:column;align-items:center;overflow:hidden}
-.face-wrap{flex-shrink:0;display:flex;justify-content:center;align-items:center;padding-top:6px;animation:faceFloat 4s ease-in-out infinite}
-.face-svg{animation:faceGlow 3s ease-in-out infinite}
-.arc-wrap{position:relative;flex:1;width:100%;display:flex;align-items:center;justify-content:center;min-height:0}
-.rings-svg{position:absolute;top:0;left:0;pointer-events:none}
-.core{position:absolute;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.core-outer{width:86px;height:86px;border-radius:50%;border:2px solid rgba(0,229,255,.9);background:radial-gradient(circle,rgba(0,30,60,.95) 0%,rgba(0,8,20,.98) 70%);display:flex;align-items:center;justify-content:center;animation:coreGlow 2.5s ease-in-out infinite;position:relative}
-.core-outer::before{content:'';position:absolute;width:98px;height:98px;border-radius:50%;border:1px solid rgba(0,229,255,.2);top:-8px;left:-8px}
-.core-outer::after{content:'';position:absolute;width:74px;height:74px;border-radius:50%;border:1px solid rgba(0,180,220,.3);top:4px;left:4px}
-.core-inner{width:50px;height:50px;background:radial-gradient(circle,rgba(0,229,255,1) 0%,rgba(0,160,230,.85) 30%,rgba(0,60,120,.4) 70%,transparent 100%);border-radius:50%;animation:arcPulse 2s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 0 10px #fff,0 0 20px #00e5ff}
-</style>
-<div class="center">
-  <div class="face-wrap">
-    <svg class="face-svg" width="120" height="90" viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="faceGrad" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1a4060"/><stop offset="40%" stop-color="#0d2840"/><stop offset="100%" stop-color="#040e1a"/></radialGradient>
-        <radialGradient id="eyeGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffffff"/><stop offset="30%" stop-color="#00e5ff"/><stop offset="70%" stop-color="#0099cc"/><stop offset="100%" stop-color="#003355"/></radialGradient>
-        <filter id="ff"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <filter id="eyeBlur"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <linearGradient id="hlGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(0,229,255,.5)"/><stop offset="100%" stop-color="rgba(0,229,255,0)"/></linearGradient>
-        <linearGradient id="sideL" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#020b18"/><stop offset="100%" stop-color="#0d2840"/></linearGradient>
-        <linearGradient id="sideR" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0d2840"/><stop offset="100%" stop-color="#020b18"/></linearGradient>
-      </defs>
-      <path d="M18 15 L6 22 L6 72 L18 78 Z" fill="url(#sideL)" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
-      <path d="M102 15 L114 22 L114 72 L102 78 Z" fill="url(#sideR)" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
-      <path d="M18 10 Q60 6 102 10 L104 75 Q60 82 16 75 Z" fill="url(#faceGrad)" stroke="rgba(0,229,255,.6)" stroke-width="1.2" filter="url(#ff)"/>
-      <path d="M28 14 Q60 10 92 14 L88 40 Q60 36 32 40 Z" fill="url(#hlGrad)" opacity=".25"/>
-      <path d="M18 10 Q60 6 102 10 L100 18 Q60 14 20 18 Z" fill="rgba(0,229,255,.12)"/>
-      <line x1="35" y1="12" x2="35" y2="24" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
-      <line x1="60" y1="10" x2="60" y2="22" stroke="rgba(0,229,255,.3)" stroke-width="1"/>
-      <line x1="85" y1="12" x2="85" y2="24" stroke="rgba(0,229,255,.25)" stroke-width=".8"/>
-      <line x1="22" y1="18" x2="98" y2="18" stroke="rgba(0,229,255,.2)" stroke-width=".8"/>
-      <path d="M24 30 Q38 26 50 29" fill="none" stroke="rgba(0,229,255,.7)" stroke-width="2" stroke-linecap="round"/>
-      <path d="M70 29 Q82 26 96 30" fill="none" stroke="rgba(0,229,255,.7)" stroke-width="2" stroke-linecap="round"/>
-      <ellipse cx="38" cy="42" rx="13" ry="9" fill="#001525" stroke="rgba(0,229,255,.4)" stroke-width="1"/>
-      <ellipse cx="38" cy="42" rx="10" ry="7" fill="url(#eyeGrad)" filter="url(#eyeBlur)" opacity=".95"/>
-      <ellipse cx="38" cy="42" rx="5" ry="4" fill="rgba(0,229,255,.9)"/>
-      <ellipse cx="38" cy="42" rx="2" ry="2" fill="white" opacity=".9"/>
-      <ellipse cx="35" cy="40" rx="1.5" ry="1" fill="white" opacity=".6"/>
-      <ellipse cx="38" cy="42" rx="13" ry="9" fill="none" stroke="#00e5ff" stroke-width=".8" opacity=".6" filter="url(#eyeBlur)"/>
-      <ellipse cx="82" cy="42" rx="13" ry="9" fill="#001525" stroke="rgba(0,229,255,.4)" stroke-width="1"/>
-      <ellipse cx="82" cy="42" rx="10" ry="7" fill="url(#eyeGrad)" filter="url(#eyeBlur)" opacity=".95"/>
-      <ellipse cx="82" cy="42" rx="5" ry="4" fill="rgba(0,229,255,.9)"/>
-      <ellipse cx="82" cy="42" rx="2" ry="2" fill="white" opacity=".9"/>
-      <ellipse cx="79" cy="40" rx="1.5" ry="1" fill="white" opacity=".6"/>
-      <ellipse cx="82" cy="42" rx="13" ry="9" fill="none" stroke="#00e5ff" stroke-width=".8" opacity=".6" filter="url(#eyeBlur)"/>
-      <path d="M56 48 L52 62 L56 64 L60 65 L64 64 L68 62 L64 48 Z" fill="rgba(0,40,80,.6)" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <line x1="60" y1="48" x2="60" y2="64" stroke="rgba(0,229,255,.2)" stroke-width=".6"/>
-      <rect x="30" y="68" width="60" height="10" rx="2" fill="rgba(0,15,35,.8)" stroke="rgba(0,229,255,.4)" stroke-width=".8"/>
-      <line x1="34" y1="68" x2="34" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <line x1="42" y1="68" x2="42" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <line x1="50" y1="68" x2="50" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <line x1="60" y1="68" x2="60" y2="78" stroke="rgba(0,229,255,.5)" stroke-width="1"/>
-      <line x1="70" y1="68" x2="70" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <line x1="78" y1="68" x2="78" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <line x1="86" y1="68" x2="86" y2="78" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <path d="M18 35 L26 32 L26 65 L18 68" fill="rgba(0,229,255,.06)" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <path d="M102 35 L94 32 L94 65 L102 68" fill="rgba(0,229,255,.06)" stroke="rgba(0,229,255,.3)" stroke-width=".8"/>
-      <circle cx="14" cy="45" r="5" fill="rgba(0,10,30,.9)" stroke="rgba(0,229,255,.5)" stroke-width="1"/>
-      <circle cx="14" cy="45" r="2.5" fill="#00e5ff" opacity=".7" filter="url(#eyeBlur)"/>
-      <circle cx="106" cy="45" r="5" fill="rgba(0,10,30,.9)" stroke="rgba(0,229,255,.5)" stroke-width="1"/>
-      <circle cx="106" cy="45" r="2.5" fill="#00e5ff" opacity=".7" filter="url(#eyeBlur)"/>
-      <path d="M30 78 Q60 84 90 78" fill="none" stroke="rgba(0,229,255,.35)" stroke-width="1"/>
-      <circle cx="60" cy="22" r="4" fill="rgba(0,10,30,.9)" stroke="rgba(0,229,255,.6)" stroke-width="1"/>
-      <circle cx="60" cy="22" r="2" fill="#00e5ff" opacity=".8" filter="url(#eyeBlur)"/>
-    </svg>
-  </div>
-  <div class="arc-wrap">
-    <svg class="rings-svg" id="ringSvg"></svg>
-    <div class="core"><div class="core-outer"><div class="core-inner">ATLAS</div></div></div>
-  </div>
-</div><style>
-.right{grid-column:3;grid-row:2;padding:12px 10px;display:flex;flex-direction:column;gap:6px;border-left:1px solid rgba(0,229,255,.15);overflow:hidden}
-.agent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.anode{display:flex;flex-direction:column;align-items:center;gap:2px}
-.aicon{width:26px;height:26px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;letter-spacing:.5px}
-.aicon.on{animation:nodePop 2.5s ease-in-out infinite}
-.astat{font-size:6px;letter-spacing:.5px}
-.logbox{flex:1;display:flex;flex-direction:column;gap:1px;overflow:hidden}
-.logrow{display:flex;gap:5px;padding:3px 0;border-bottom:1px solid rgba(0,229,255,.05);animation:fadeSlide .3s ease;flex-shrink:0}
-.logtime{font-size:7px;color:rgba(0,229,255,.35);flex-shrink:0}
-.logtag{padding:1px 4px;border-radius:1px;font-size:6px;letter-spacing:.5px;flex-shrink:0}
-.logmsg{font-size:7px;color:rgba(0,229,255,.65);overflow:hidden;white-space:nowrap}
-</style>
-<div class="right">
-  <div class="shdr">// AGENT NETWORK</div>
-  <div class="agent-grid">
-    <div class="anode"><div class="aicon on" style="border-color:#00e5ff;background:rgba(0,229,255,.08);color:#00e5ff">A1</div><div class="astat" style="color:#00e5ff">ACTIVE</div></div>
-    <div class="anode"><div class="aicon on" style="border-color:#00e5ff;background:rgba(0,229,255,.08);color:#00e5ff">A2</div><div class="astat" style="color:#00e5ff">ACTIVE</div></div>
-    <div class="anode"><div class="aicon on" style="border-color:#a855f7;background:rgba(168,85,247,.08);color:#a855f7">A3</div><div class="astat" style="color:#a855f7">ACTIVE</div></div>
-    <div class="anode"><div class="aicon" style="border-color:rgba(0,229,255,.25);color:rgba(0,229,255,.3)">A4</div><div class="astat" style="color:rgba(0,229,255,.3)">IDLE</div></div>
-    <div class="anode"><div class="aicon on" style="border-color:#f97316;background:rgba(249,115,22,.08);color:#f97316">A5</div><div class="astat" style="color:#f97316">ACTIVE</div></div>
-    <div class="anode"><div class="aicon" style="border-color:rgba(0,229,255,.25);color:rgba(0,229,255,.3)">A6</div><div class="astat" style="color:rgba(0,229,255,.3)">IDLE</div></div>
-    <div class="anode"><div class="aicon on" style="border-color:#06b6d4;background:rgba(6,182,212,.08);color:#06b6d4">A7</div><div class="astat" style="color:#06b6d4">ACTIVE</div></div>
-    <div class="anode"><div class="aicon on" style="border-color:#00ff88;background:rgba(0,255,136,.08);color:#00ff88">A8</div><div class="astat" style="color:#00ff88">ACTIVE</div></div>
-  </div>
-  <div class="shdr" style="margin-top:4px">// ACTIVITY LOG</div>
-  <div class="logbox" id="actLog">
-    <div class="logrow"><span class="logtime">06:14</span><span class="logtag" style="background:rgba(249,115,22,.2);color:#f97316">ETSY</span><span class="logmsg">New listing published</span></div>
-    <div class="logrow"><span class="logtime">06:12</span><span class="logtag" style="background:rgba(6,182,212,.2);color:#06b6d4">N8N</span><span class="logmsg">Workflow triggered</span></div>
-    <div class="logrow"><span class="logtime">06:10</span><span class="logtag" style="background:rgba(168,85,247,.2);color:#a855f7">TIK</span><span class="logmsg">Content scheduled</span></div>
-    <div class="logrow"><span class="logtime">06:08</span><span class="logtag" style="background:rgba(0,229,255,.2);color:#00e5ff">SYS</span><span class="logmsg">System check passed</span></div>
-    <div class="logrow"><span class="logtime">06:05</span><span class="logtag" style="background:rgba(249,115,22,.2);color:#f97316">ETSY</span><span class="logmsg">6 listings live</span></div>
-    <div class="logrow"><span class="logtime">06:01</span><span class="logtag" style="background:rgba(0,255,136,.2);color:#00ff88">ATL</span><span class="logmsg">Atlas v12 deployed</span></div>
-    <div class="logrow"><span class="logtime">06:00</span><span class="logtag" style="background:rgba(0,229,255,.2);color:#00e5ff">SYS</span><span class="logmsg">Boot sequence complete</span></div>
+  <div class="nav-right">
+    <div class="sys-badge"><div class="sys-dot"></div><span class="sys-txt">ALL SYSTEMS ONLINE</span></div>
+    <div class="nav-clock" id="clock">--:--:--</div>
   </div>
 </div>
-<style>.btm{grid-column:1/-1;grid-row:3;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-top:1px solid rgba(0,229,255,.2);background:rgba(0,8,18,.92);font-size:8px;letter-spacing:1px;color:rgba(0,229,255,.4)}</style>
-<div class="btm">
-  <span>&#9632; ATLAS COMMAND CENTER v12 &nbsp;|&nbsp; STARK PROTOCOL ACTIVE &nbsp;|&nbsp; 2026</span>
-  <div style="display:flex;gap:20px"><span id="btmSys">SYS: ONLINE</span><span id="btmPing">PING: 12ms</span><span id="btmUp">UPTIME: 0d 0h 0m</span></div>
-  <span id="btmDate">--/--/----</span>
+
+<!-- STATS BAR -->
+<div class="statsbar">
+  <div class="stat-cell">
+    <div class="stat-lbl">Active Departments</div>
+    <div class="stat-val val-green">3</div>
+    <div class="stat-sub">of 6 total</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-lbl">Total AI Agents</div>
+    <div class="stat-val val-cyan">12</div>
+    <div class="stat-sub">across all depts</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-lbl">Etsy Listings Live</div>
+    <div class="stat-val val-green">6</div>
+    <div class="stat-sub">ShadyPrintables</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-lbl">Potential Revenue</div>
+    <div class="stat-val val-purple" id="revVal">$42.94</div>
+    <div class="stat-sub">per full conversion</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-lbl">Phase 1 Progress</div>
+    <div class="stat-val val-white">35%</div>
+    <div class="stat-sub">Etsy complete</div>
+  </div>
 </div>
-</div><script>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- ETSY CARD — big left -->
+  <div class="card etsy">
+    <div class="card-header">
+      <div class="card-title-row">
+        <div class="card-icon">🛍️</div>
+        <div>
+          <div class="card-title">ETSY DEPARTMENT</div>
+          <div class="card-subtitle">ShadyPrintables — Digital Printables Store</div>
+        </div>
+      </div>
+      <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+    </div>
+    <div class="card-body">
+      <div class="agents-row">
+        <span class="agents-lbl">ACTIVE AGENTS (3)</span>
+        <div class="agent-chip">Listing Builder</div>
+        <div class="agent-chip">PDF Generator</div>
+        <div class="agent-chip">Market Researcher</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="sbox-val val-green">6</div>
+          <div class="sbox-lbl">Active Listings</div>
+        </div>
+        <div class="stat-box">
+          <div class="sbox-val val-cyan">999</div>
+          <div class="sbox-lbl">Stock Per Listing</div>
+        </div>
+      </div>
+      <div class="listings">
+        <div class="listing-row"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- N8N CARD — right -->
+  <div class="card n8n">
+    <div class="card-header">
+      <div class="card-title-row">
+        <div class="card-icon">⚙️</div>
+        <div>
+          <div class="card-title">N8N AUTOMATION</div>
+          <div class="card-subtitle">Workflow Engine &amp; AI Orchestration</div>
+        </div>
+      </div>
+      <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+    </div>
+    <div class="card-body">
+      <div class="agents-row">
+        <span class="agents-lbl">ACTIVE WORKFLOWS (3)</span>
+        <div class="agent-chip">Listing Gen</div>
+        <div class="agent-chip">Market Research</div>
+        <div class="agent-chip">TikTok Planner</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="sbox-val val-cyan">3</div>
+          <div class="sbox-lbl">Workflows Built</div>
+        </div>
+        <div class="stat-box">
+          <div class="sbox-val val-green">1000</div>
+          <div class="sbox-lbl">Free Executions</div>
+        </div>
+      </div>
+      <div class="prog-section">
+        <div>
+          <div class="prog-row"><span>CAPACITY USED</span><span>2%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:2%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div>
+        </div>
+        <div style="margin-top:4px">
+          <div class="prog-row"><span>WORKFLOWS ACTIVE</span><span>3/10</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:30%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM ROW: Fiverr / TikTok / Research AI -->
+  <div class="bottom-row">
+
+    <!-- FIVERR -->
+    <div class="card fiverr card-mini">
+      <div class="card-header">
+        <div class="card-title-row">
+          <div class="card-icon">💼</div>
+          <div>
+            <div class="card-title">FIVERR DEPT</div>
+            <div class="card-subtitle">Freelance Services &amp; Gigs</div>
+          </div>
+        </div>
+        <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:1"></div>NEXT</div>
+      </div>
+      <div class="card-body">
+        <div class="agents-row">
+          <span class="agents-lbl">PLANNED AGENTS (2)</span>
+          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Gig Writer</div>
+          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Order Manager</div>
+        </div>
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <div class="mini-val" style="color:#facc15">0</div>
+            <div class="mini-lbl">Gigs Live</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-val" style="color:rgba(255,255,255,.3)">--</div>
+            <div class="mini-lbl">Orders</div>
+          </div>
+        </div>
+        <div class="prog-section">
+          <div class="prog-row"><span>SETUP PROGRESS</span><span>0%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:0%;background:#22c55e"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIKTOK -->
+    <div class="card tiktok card-mini">
+      <div class="card-header">
+        <div class="card-title-row">
+          <div class="card-icon">📱</div>
+          <div>
+            <div class="card-title">TIKTOK DEPT</div>
+            <div class="card-subtitle">@shadesphysique</div>
+          </div>
+        </div>
+        <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:1"></div>NEXT</div>
+      </div>
+      <div class="card-body">
+        <div class="agents-row">
+          <span class="agents-lbl">PLANNED AGENTS (3)</span>
+          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Script Writer</div>
+          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Scheduler</div>
+          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Analyst</div>
+        </div>
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <div class="mini-val" style="color:#a855f7">0</div>
+            <div class="mini-lbl">Videos Posted</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-val" style="color:rgba(255,255,255,.3)">--</div>
+            <div class="mini-lbl">Revenue</div>
+          </div>
+        </div>
+        <div class="prog-section">
+          <div class="prog-row"><span>CONTENT PIPELINE</span><span>0%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:0%;background:#a855f7"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESEARCH AI -->
+    <div class="card research card-mini">
+      <div class="card-header">
+        <div class="card-title-row">
+          <div class="card-icon">🔬</div>
+          <div>
+            <div class="card-title">RESEARCH AI</div>
+            <div class="card-subtitle">Market Intelligence &amp; Niche Analysis</div>
+          </div>
+        </div>
+        <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+      </div>
+      <div class="card-body">
+        <div class="agents-row">
+          <span class="agents-lbl">ACTIVE AGENTS (2)</span>
+          <div class="agent-chip">Niche Finder</div>
+          <div class="agent-chip">Trend Analyzer</div>
+        </div>
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <div class="mini-val" style="color:#c084fc">12</div>
+            <div class="mini-lbl">Niches Found</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-val" style="color:#00e5ff">Batch 2</div>
+            <div class="mini-lbl">Next Run</div>
+          </div>
+        </div>
+        <div class="prog-section">
+          <div class="prog-row"><span>RESEARCH DEPTH</span><span>60%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:60%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end bottom-row -->
+
+</div><!-- end main -->
+</div><!-- end app -->
+
+<script>
 (function(){
-  var start=Date.now();
   function pad(n){return n<10?'0'+n:''+n}
   function tick(){
     var d=new Date();
-    var cl=document.getElementById('clock'); if(cl) cl.textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
-    var bd=document.getElementById('btmDate'); if(bd) bd.textContent=pad(d.getMonth()+1)+'/'+pad(d.getDate())+'/'+d.getFullYear();
-    var up=Math.floor((Date.now()-start)/1000);
-    var dy=Math.floor(up/86400),hr=Math.floor((up%86400)/3600),mn=Math.floor((up%3600)/60);
-    var bu=document.getElementById('btmUp'); if(bu) bu.textContent='UPTIME: '+dy+'d '+hr+'h '+mn+'m';
+    var cl=document.getElementById('clock');
+    if(cl) cl.textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
   }
   setInterval(tick,1000); tick();
-  setInterval(function(){var bp=document.getElementById('btmPing'); if(bp) bp.textContent='PING: '+Math.floor(6+Math.random()*18)+'ms';},3000);
-
-  var depts=[
-    {name:'ETSY',   short:'ETSY',  col:'#f97316', badge:'LIVE',  rev:'$0',   live:true,  angle:270},
-    {name:'TIKTOK', short:'TIK',   col:'#a855f7', badge:'LIVE',  rev:'$0',   live:true,  angle:330},
-    {name:'N8N',    short:'N8N',   col:'#06b6d4', badge:'AUTO',  rev:'$0',   live:true,  angle:30},
-    {name:'FIVERR', short:'FIV',   col:'#eab308', badge:'SETUP', rev:'--',   live:false, angle:90},
-    {name:'SAPPHIRE',short:'SAPH', col:'#3b82f6', badge:'SETUP', rev:'--',   live:false, angle:150},
-    {name:'RESEARCH',short:'AI',   col:'#f43f5e', badge:'AI',    rev:'--',   live:false, angle:210}
-  ];
-
-  function buildSVG(){
-    var svg=document.getElementById('ringSvg');
-    var wrap=svg?svg.parentElement:null;
-    if(!wrap){setTimeout(buildSVG,200);return;}
-    var W=wrap.clientWidth, H=wrap.clientHeight;
-    if(W<50||H<50){setTimeout(buildSVG,200);return;}
-    while(svg.firstChild) svg.removeChild(svg.firstChild);
-    svg.setAttribute('width',W); svg.setAttribute('height',H);
-    svg.setAttribute('viewBox','0 0 '+W+' '+H);
-    var NS='http://www.w3.org/2000/svg';
-    var cx=W/2, cy=H/2;
-
-    // DEFS
-    var defs=document.createElementNS(NS,'defs');
-    function mkFilt(id,bl){
-      var f=document.createElementNS(NS,'filter'); f.setAttribute('id',id);
-      var gb=document.createElementNS(NS,'feGaussianBlur'); gb.setAttribute('stdDeviation',bl); gb.setAttribute('result','b');
-      var fm=document.createElementNS(NS,'feMerge');
-      var n1=document.createElementNS(NS,'feMergeNode'); n1.setAttribute('in','b');
-      var n2=document.createElementNS(NS,'feMergeNode'); n2.setAttribute('in','SourceGraphic');
-      fm.appendChild(n1); fm.appendChild(n2); f.appendChild(gb); f.appendChild(fm); return f;
-    }
-    defs.appendChild(mkFilt('glow1',2.5));
-    defs.appendChild(mkFilt('glow2',5));
-    defs.appendChild(mkFilt('glow3',9));
-
-    // Per-dept radial gradients for node backgrounds
-    depts.forEach(function(d,i){
-      var rg=document.createElementNS(NS,'radialGradient');
-      rg.setAttribute('id','ng'+i); rg.setAttribute('cx','50%'); rg.setAttribute('cy','50%'); rg.setAttribute('r','50%');
-      var s1=document.createElementNS(NS,'stop'); s1.setAttribute('offset','0%'); s1.setAttribute('stop-color',d.col); s1.setAttribute('stop-opacity','0.22');
-      var s2=document.createElementNS(NS,'stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color','#000a14'); s2.setAttribute('stop-opacity','0.97');
-      rg.appendChild(s1); rg.appendChild(s2); defs.appendChild(rg);
-    });
-    svg.appendChild(defs);
-
-    // INNER ARC RINGS
-    var innerRings=[
-      {r:138,col:'rgba(0,229,255,.55)',w:1.8,dash:'8,5',spd:22,dir:1},
-      {r:116,col:'rgba(0,180,220,.75)',w:2.2,dash:'none',spd:15,dir:-1,dot:true},
-      {r:97, col:'rgba(0,229,255,.35)',w:1.5,dash:'3,4',spd:10,dir:1},
-      {r:79, col:'rgba(0,110,180,.55)',w:1.5,dash:'none',spd:7, dir:-1},
-      {r:62, col:'rgba(0,229,255,.28)',w:1.2,dash:'2,6',spd:5, dir:1}
-    ];
-    var ringGroups=[];
-    innerRings.forEach(function(rd){
-      var g=document.createElementNS(NS,'g');
-      g.setAttribute('transform','translate('+cx+','+cy+')');
-      var c=document.createElementNS(NS,'circle');
-      c.setAttribute('cx','0'); c.setAttribute('cy','0'); c.setAttribute('r',rd.r);
-      c.setAttribute('fill','none'); c.setAttribute('stroke',rd.col); c.setAttribute('stroke-width',rd.w);
-      if(rd.dash!=='none') c.setAttribute('stroke-dasharray',rd.dash);
-      c.setAttribute('filter','url(#glow1)'); g.appendChild(c);
-      if(rd.dot){
-        var dt=document.createElementNS(NS,'circle');
-        dt.setAttribute('cx',rd.r); dt.setAttribute('cy','0'); dt.setAttribute('r','4');
-        dt.setAttribute('fill','#00e5ff'); dt.setAttribute('filter','url(#glow2)'); g.appendChild(dt);
-        var dt2=document.createElementNS(NS,'circle');
-        dt2.setAttribute('cx',-rd.r); dt2.setAttribute('cy','0'); dt2.setAttribute('r','3');
-        dt2.setAttribute('fill','rgba(0,229,255,.6)'); dt2.setAttribute('filter','url(#glow1)'); g.appendChild(dt2);
-      }
-      svg.appendChild(g);
-      ringGroups.push({el:g,spd:rd.spd,dir:rd.dir,angle:Math.random()*360});
-    });
-
-    // TICK MARKS
-    var tg=document.createElementNS(NS,'g'); tg.setAttribute('filter','url(#glow1)');
-    [0,45,90,135,180,225,270,315].forEach(function(a){
-      var r=a*Math.PI/180, r1=143, r2=156;
-      var ln=document.createElementNS(NS,'line');
-      ln.setAttribute('x1',cx+r1*Math.cos(r)); ln.setAttribute('y1',cy+r1*Math.sin(r));
-      ln.setAttribute('x2',cx+r2*Math.cos(r)); ln.setAttribute('y2',cy+r2*Math.sin(r));
-      ln.setAttribute('stroke','rgba(0,229,255,.55)'); ln.setAttribute('stroke-width','2.5'); tg.appendChild(ln);
-    });
-    svg.appendChild(tg);
-
-    // OUTER ORBIT RING — push out to accommodate big nodes
-    // Node radius is 32, so orbit ring needs room
-    var nodeR = 32; // node circle radius — BIG
-    var minOrbit = 138 + nodeR + 20; // clear inner rings + node size + padding
-    var maxOrbit = Math.min(W, H) * 0.46;
-    var orbitR = Math.max(minOrbit, Math.min(maxOrbit, 230));
-
-    // Orbit ring (dashed)
-    var oc=document.createElementNS(NS,'circle');
-    oc.setAttribute('cx',cx); oc.setAttribute('cy',cy); oc.setAttribute('r',orbitR);
-    oc.setAttribute('fill','none'); oc.setAttribute('stroke','rgba(0,229,255,.2)');
-    oc.setAttribute('stroke-width','1.2'); oc.setAttribute('stroke-dasharray','5,10');
-    svg.appendChild(oc);
-
-    // Second subtle orbit ring slightly larger
-    var oc2=document.createElementNS(NS,'circle');
-    oc2.setAttribute('cx',cx); oc2.setAttribute('cy',cy); oc2.setAttribute('r',orbitR+nodeR+8);
-    oc2.setAttribute('fill','none'); oc2.setAttribute('stroke','rgba(0,229,255,.07)');
-    oc2.setAttribute('stroke-width','1'); oc2.setAttribute('stroke-dasharray','2,14');
-    svg.appendChild(oc2);
-
-    // DEPT NODES
-    depts.forEach(function(dept,i){
-      var ng=document.createElementNS(NS,'g');
-      var aRad=dept.angle*Math.PI/180;
-      var nx=cx+orbitR*Math.cos(aRad);
-      var ny=cy+orbitR*Math.sin(aRad);
-
-      // Connector line
-      var conn=document.createElementNS(NS,'line');
-      conn.setAttribute('x1',cx); conn.setAttribute('y1',cy);
-      conn.setAttribute('x2',nx); conn.setAttribute('y2',ny);
-      conn.setAttribute('stroke',dept.col); conn.setAttribute('stroke-width','0.8');
-      conn.setAttribute('opacity','0.25');
-      svg.insertBefore(conn, oc);
-
-      // Outer halo ring (spinning feel)
-      var halo=document.createElementNS(NS,'circle');
-      halo.setAttribute('cx',nx); halo.setAttribute('cy',ny); halo.setAttribute('r',nodeR+10);
-      halo.setAttribute('fill','none'); halo.setAttribute('stroke',dept.col);
-      halo.setAttribute('stroke-width','0.8'); halo.setAttribute('opacity',dept.live?'0.4':'0.18');
-      halo.setAttribute('stroke-dasharray','4,8');
-      ng.appendChild(halo);
-
-      // Mid ring
-      var mid=document.createElementNS(NS,'circle');
-      mid.setAttribute('cx',nx); mid.setAttribute('cy',ny); mid.setAttribute('r',nodeR+3);
-      mid.setAttribute('fill','none'); mid.setAttribute('stroke',dept.col);
-      mid.setAttribute('stroke-width','1'); mid.setAttribute('opacity',dept.live?'0.55':'0.25');
-      ng.appendChild(mid);
-
-      // Main node circle
-      var bg=document.createElementNS(NS,'circle');
-      bg.setAttribute('cx',nx); bg.setAttribute('cy',ny); bg.setAttribute('r',nodeR);
-      bg.setAttribute('fill','url(#ng'+i+')');
-      bg.setAttribute('stroke',dept.col); bg.setAttribute('stroke-width','2.2');
-      bg.setAttribute('filter','url(#glow1)'); ng.appendChild(bg);
-
-      // Department name — large and bold
-      var nameTxt=document.createElementNS(NS,'text');
-      nameTxt.setAttribute('x',nx); nameTxt.setAttribute('y',ny-6);
-      nameTxt.setAttribute('text-anchor','middle'); nameTxt.setAttribute('dominant-baseline','middle');
-      nameTxt.setAttribute('fill',dept.col); nameTxt.setAttribute('font-size','10');
-      nameTxt.setAttribute('font-weight','900'); nameTxt.setAttribute('letter-spacing','1.5');
-      nameTxt.setAttribute('font-family','Courier New,monospace');
-      nameTxt.setAttribute('filter','url(#glow1)');
-      nameTxt.textContent=dept.name; ng.appendChild(nameTxt);
-
-      // Badge line
-      var badgeTxt=document.createElementNS(NS,'text');
-      badgeTxt.setAttribute('x',nx); badgeTxt.setAttribute('y',ny+8);
-      badgeTxt.setAttribute('text-anchor','middle'); badgeTxt.setAttribute('dominant-baseline','middle');
-      badgeTxt.setAttribute('fill',dept.live?dept.col:'rgba(0,229,255,.45)');
-      badgeTxt.setAttribute('font-size','7.5'); badgeTxt.setAttribute('letter-spacing','2');
-      badgeTxt.setAttribute('font-family','Courier New,monospace');
-      badgeTxt.textContent=dept.badge; ng.appendChild(badgeTxt);
-
-      // Revenue
-      var revTxt=document.createElementNS(NS,'text');
-      revTxt.setAttribute('x',nx); revTxt.setAttribute('y',ny+19);
-      revTxt.setAttribute('text-anchor','middle'); revTxt.setAttribute('dominant-baseline','middle');
-      revTxt.setAttribute('fill','rgba(0,229,255,.7)'); revTxt.setAttribute('font-size','8');
-      revTxt.setAttribute('font-weight','700'); revTxt.setAttribute('font-family','Courier New,monospace');
-      revTxt.textContent=dept.rev; ng.appendChild(revTxt);
-
-      // Live indicator dot (top-right of node)
-      if(dept.live){
-        var ldot=document.createElementNS(NS,'circle');
-        ldot.setAttribute('cx',nx+nodeR-4); ldot.setAttribute('cy',ny-nodeR+4);
-        ldot.setAttribute('r','4'); ldot.setAttribute('fill',dept.col);
-        ldot.setAttribute('filter','url(#glow2)');
-        ldot.style.animation='blink 1.5s ease-in-out infinite';
-        ng.appendChild(ldot);
-      }
-
-      svg.appendChild(ng);
-    });
-
-    // ANIMATION
-    var lastT=null;
-    function frame(ts){
-      if(!lastT) lastT=ts;
-      var dt=(ts-lastT)/1000; lastT=ts;
-      ringGroups.forEach(function(rg){
-        rg.angle+=dt*(360/rg.spd)*rg.dir;
-        rg.el.setAttribute('transform','translate('+cx+','+cy+') rotate('+rg.angle+')');
-      });
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  }
-
-  buildSVG();
-  window.addEventListener('resize',function(){setTimeout(buildSVG,100);});
-
-  // LOG
-  var logSrc=[
-    {tag:'ETSY',col:'#f97316',bg:'rgba(249,115,22,.2)',msgs:['Listing viewed','Favorite added','Order inquiry','Product ranked','Store updated']},
-    {tag:'TIK',col:'#a855f7',bg:'rgba(168,85,247,.2)',msgs:['Video uploaded','100 views hit','Comment replied','New follower','Reel scheduled']},
-    {tag:'N8N',col:'#06b6d4',bg:'rgba(6,182,212,.2)',msgs:['Workflow ran','API synced','Data pushed','Schedule fired','Node executed']},
-    {tag:'SYS',col:'#00e5ff',bg:'rgba(0,229,255,.15)',msgs:['Heartbeat OK','Memory stable','CPU nominal','Cache cleared','Network OK']},
-    {tag:'ATL',col:'#00ff88',bg:'rgba(0,255,136,.15)',msgs:['Agent active','Phase on track','Goal updated','Milestone set','Scan complete']}
-  ];
-  function addLog(){
-    var s=logSrc[Math.floor(Math.random()*logSrc.length)];
-    var m=s.msgs[Math.floor(Math.random()*s.msgs.length)];
-    var log=document.getElementById('actLog'); if(!log) return;
-    var n=new Date(); var row=document.createElement('div'); row.className='logrow';
-    row.innerHTML='<span class="logtime">'+pad(n.getHours())+':'+pad(n.getMinutes())+'</span><span class="logtag" style="background:'+s.bg+';color:'+s.col+'">'+s.tag+'</span><span class="logmsg">'+m+'</span>';
-    log.insertBefore(row,log.firstChild);
-    while(log.children.length>14) log.removeChild(log.lastChild);
-  }
-  setInterval(addLog,4000);
 })();
-</script></body></html>
+</script>
+</body>
+</html>
