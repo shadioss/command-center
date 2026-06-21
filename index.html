@@ -3,105 +3,149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SHADY AI — Command Center</title>
+<title>ATLAS — Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:'Courier New',monospace;color:#e2e8f0}
-::-webkit-scrollbar{width:4px;background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(0,229,255,.2);border-radius:2px}
+html,body{width:100%;height:100%;overflow:hidden;background:#080d18;color:#e2e8f0}
+
+/* FONT ASSIGNMENTS */
+body{font-family:'Inter',sans-serif}
+.brand-name,.nav-clock,.stat-val,.sbox-val,.mini-val,.card-title{font-family:'Orbitron',monospace}
+.brand-sub,.stat-lbl,.stat-sub,.agents-lbl,.badge,.card-subtitle,.prog-row,.listing-num,.listing-name,.listing-price,.sbox-lbl,.mini-lbl,.shdr{font-family:'Rajdhani',sans-serif;letter-spacing:.5px}
+.agent-chip{font-family:'Rajdhani',sans-serif}
+
+/* SCANLINE OVERLAY */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,255,.012) 2px,rgba(0,229,255,.012) 4px);pointer-events:none;z-index:9999;animation:scanMove 10s linear infinite}
+@keyframes scanMove{0%{background-position:0 0}100%{background-position:0 80px}}
+
+/* ANIMATIONS */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes pulseGlow{0%,100%{text-shadow:0 0 8px currentColor,0 0 20px currentColor}50%{text-shadow:0 0 20px currentColor,0 0 50px currentColor,0 0 80px currentColor}}
+@keyframes borderFlow{0%{background-position:0% 0%}100%{background-position:0% 200%}}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes countUp{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes orbPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.4),0 0 12px rgba(0,229,255,.3)}50%{box-shadow:0 0 0 8px rgba(0,229,255,0),0 0 25px rgba(0,229,255,.6)}}
+@keyframes orbSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes rowSlide{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+@keyframes dotPing{0%{transform:scale(1);opacity:1}70%{transform:scale(2.5);opacity:0}100%{transform:scale(1);opacity:0}}
+@keyframes progressFill{from{width:0}to{width:var(--w)}}
+@keyframes glowBorder{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes statCount{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
 
 /* LAYOUT */
 .app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
 /* TOP NAV */
-.topnav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:62px;background:#0d1120;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:64px;background:rgba(8,13,24,.95);border-bottom:1px solid rgba(0,229,255,.12);flex-shrink:0;backdrop-filter:blur(10px);animation:fadeIn .6s ease both}
 .brand{display:flex;align-items:center;gap:14px}
-.brand-orb{width:38px;height:38px;border-radius:50%;border:2px solid #00e5ff;background:radial-gradient(circle,rgba(0,229,255,.15) 0%,rgba(0,8,20,.9) 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(0,229,255,.35)}
-.brand-orb svg{width:18px;height:18px}
-.brand-text{line-height:1.15}
-.brand-name{font-size:22px;font-weight:900;letter-spacing:4px;color:#00e5ff;text-shadow:0 0 12px rgba(0,229,255,.6)}
-.brand-sub{font-size:8px;letter-spacing:4px;color:rgba(0,229,255,.5)}
+.brand-orb{width:40px;height:40px;border-radius:50%;border:2px solid #00e5ff;background:radial-gradient(circle,rgba(0,229,255,.18) 0%,rgba(0,8,20,.9) 100%);display:flex;align-items:center;justify-content:center;animation:orbPulse 3s ease-in-out infinite;position:relative;flex-shrink:0}
+.brand-orb::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(0,229,255,.2);animation:orbSpin 8s linear infinite}
+.brand-orb svg{width:16px;height:16px;z-index:1}
+.brand-name{font-size:24px;font-weight:900;letter-spacing:6px;color:#00e5ff;animation:pulseGlow 4s ease-in-out infinite}
+.brand-sub{font-size:9px;letter-spacing:5px;color:rgba(0,229,255,.45);font-weight:600}
 .nav-right{display:flex;align-items:center;gap:18px}
-.sys-badge{display:flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid rgba(0,255,136,.3);border-radius:20px;background:rgba(0,255,136,.06)}
-.sys-dot{width:7px;height:7px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:blink 2s ease-in-out infinite}
-.sys-txt{font-size:9px;letter-spacing:2px;color:#00ff88;font-weight:700}
-.nav-clock{font-size:20px;font-weight:700;letter-spacing:3px;color:#e2e8f0;font-variant-numeric:tabular-nums}
+.sys-badge{display:flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(0,255,136,.3);border-radius:20px;background:rgba(0,255,136,.06);position:relative;overflow:hidden}
+.sys-badge::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,255,136,.08),transparent);background-size:200% 100%;animation:shimmer 3s ease-in-out infinite}
+.sys-dot{width:7px;height:7px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;flex-shrink:0;position:relative}
+.sys-dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:#00ff88;animation:dotPing 2s ease-out infinite}
+.sys-txt{font-size:9px;letter-spacing:2px;color:#00ff88;font-weight:700;font-family:'Rajdhani',sans-serif}
+.nav-clock{font-size:20px;font-weight:700;letter-spacing:3px;color:#f1f5f9;font-variant-numeric:tabular-nums}
 
 /* STATS BAR */
-.statsbar{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
-.stat-cell{padding:16px 24px;border-right:1px solid rgba(255,255,255,.06)}
+.statsbar{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid rgba(0,229,255,.08);flex-shrink:0;animation:slideUp .6s ease .1s both}
+.stat-cell{padding:14px 24px;border-right:1px solid rgba(0,229,255,.08);position:relative;overflow:hidden}
 .stat-cell:last-child{border-right:none}
-.stat-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.35);margin-bottom:6px;text-transform:uppercase}
-.stat-val{font-size:28px;font-weight:900;line-height:1;letter-spacing:1px}
-.stat-sub{font-size:9px;color:rgba(255,255,255,.3);margin-top:4px;letter-spacing:.5px}
-.val-green{color:#00ff88;text-shadow:0 0 10px rgba(0,255,136,.4)}
-.val-cyan{color:#00e5ff;text-shadow:0 0 10px rgba(0,229,255,.4)}
-.val-purple{color:#c084fc;text-shadow:0 0 10px rgba(192,132,252,.4)}
+.stat-cell::after{content:'';position:absolute;bottom:0;left:0;height:2px;width:0;background:linear-gradient(90deg,transparent,currentColor,transparent);transition:width .4s ease}
+.stat-cell:hover::after{width:100%}
+.stat-lbl{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:5px;text-transform:uppercase;font-weight:600}
+.stat-val{font-size:26px;font-weight:700;line-height:1;animation:statCount .8s ease both}
+.stat-sub{font-size:10px;color:rgba(255,255,255,.28);margin-top:4px;font-weight:500}
+.val-green{color:#00ff88}
+.val-cyan{color:#00e5ff}
+.val-purple{color:#c084fc;animation:pulseGlow 4s ease-in-out infinite}
 .val-white{color:#f1f5f9}
+.val-orange{color:#fb923c}
 
 /* MAIN GRID */
-.main{flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 420px;grid-template-rows:1fr auto;gap:0;padding:20px;gap:16px}
+.main{flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 400px;grid-template-rows:1fr auto;padding:16px;gap:14px}
 
 /* CARDS */
-.card{background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.card{background:linear-gradient(135deg,#0f1629 0%,#0a1020 100%);border:1px solid rgba(255,255,255,.07);border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column}
 .card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
-.card.etsy::before{background:linear-gradient(180deg,#f97316,#ea580c)}
-.card.n8n::before{background:linear-gradient(180deg,#f97316,#ef4444)}
-.card.fiverr::before{background:linear-gradient(180deg,#22c55e,#16a34a)}
-.card.tiktok::before{background:linear-gradient(180deg,#a855f7,#7c3aed)}
-.card.research::before{background:linear-gradient(180deg,#a855f7,#7c3aed)}
-.card.sapphire::before{background:linear-gradient(180deg,#3b82f6,#1d4ed8)}
+.card::after{content:'';position:absolute;inset:0;border-radius:10px;border:1px solid transparent;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent) border-box;pointer-events:none}
+.card.etsy{animation:cardIn .7s ease .2s both}
+.card.etsy::before{background:linear-gradient(180deg,#f97316,#ea580c,#f97316);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.n8n{animation:cardIn .7s ease .3s both}
+.card.n8n::before{background:linear-gradient(180deg,#f97316,#ef4444,#f97316);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.fiverr{animation:cardIn .7s ease .4s both}
+.card.fiverr::before{background:linear-gradient(180deg,#22c55e,#16a34a,#22c55e);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.tiktok{animation:cardIn .7s ease .5s both}
+.card.tiktok::before{background:linear-gradient(180deg,#a855f7,#7c3aed,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.research{animation:cardIn .7s ease .6s both}
+.card.research::before{background:linear-gradient(180deg,#a855f7,#7c3aed,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.sapphire::before{background:linear-gradient(180deg,#3b82f6,#1d4ed8,#3b82f6);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 
-.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:18px 20px 12px 22px}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:16px 18px 10px 22px}
 .card-title-row{display:flex;align-items:center;gap:12px}
-.card-icon{font-size:26px;line-height:1}
-.card-title{font-size:18px;font-weight:900;letter-spacing:2px;color:#f1f5f9}
-.card-subtitle{font-size:9px;color:rgba(255,255,255,.35);letter-spacing:1px;margin-top:2px}
-.card-badge{padding:4px 12px;border-radius:20px;font-size:8px;font-weight:700;letter-spacing:2px;display:flex;align-items:center;gap:5px;flex-shrink:0}
-.badge-live{background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.35);color:#00ff88}
-.badge-next{background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.35);color:#facc15}
-.badge-ai{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.35);color:#c084fc}
-.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.5s infinite}
+.card-icon{font-size:24px;line-height:1;filter:drop-shadow(0 0 6px rgba(255,255,255,.3))}
+.card-title{font-size:16px;font-weight:700;letter-spacing:2px;color:#f1f5f9}
+.card-subtitle{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.5px;margin-top:2px;font-weight:500}
+.card-badge{padding:4px 12px;border-radius:20px;font-size:8px;font-weight:700;letter-spacing:2px;display:flex;align-items:center;gap:6px;flex-shrink:0;font-family:'Rajdhani',sans-serif}
+.badge-live{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);color:#00ff88}
+.badge-next{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.3);color:#facc15}
+.badge-ai{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.3);color:#c084fc}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.5s infinite;flex-shrink:0}
 
-.card-body{padding:0 20px 16px 22px;flex:1;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.card-body{padding:0 18px 14px 22px;flex:1;display:flex;flex-direction:column;gap:10px;overflow:hidden}
 
 /* AGENTS ROW */
-.agents-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.agents-lbl{font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.3);margin-right:4px}
-.agent-chip{padding:3px 10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;font-size:8px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:5px}
-.agent-chip::before{content:'';width:4px;height:4px;border-radius:50%;background:#00ff88;box-shadow:0 0 4px #00ff88}
+.agents-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.agents-lbl{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.28);margin-right:4px;font-weight:600;text-transform:uppercase}
+.agent-chip{padding:3px 10px;border:1px solid rgba(255,255,255,.12);border-radius:12px;font-size:9px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:5px;font-weight:500;transition:all .2s}
+.agent-chip:hover{border-color:rgba(0,229,255,.4);color:#00e5ff;background:rgba(0,229,255,.06)}
+.agent-chip::before{content:'';width:4px;height:4px;border-radius:50%;background:#00ff88;box-shadow:0 0 5px #00ff88;flex-shrink:0}
 
 /* STATS ROW */
 .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:10px 14px}
-.sbox-val{font-size:26px;font-weight:900;letter-spacing:1px}
-.sbox-lbl{font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:2px}
+.stat-box{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:10px 14px;transition:all .2s}
+.stat-box:hover{border-color:rgba(0,229,255,.25);background:rgba(0,229,255,.04)}
+.sbox-val{font-size:24px;font-weight:700;letter-spacing:1px}
+.sbox-lbl{font-size:9px;color:rgba(255,255,255,.28);margin-top:2px;font-weight:500}
 
 /* LISTINGS TABLE */
-.listings{display:flex;flex-direction:column;gap:2px;flex:1;overflow:hidden}
-.listing-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.listings{display:flex;flex-direction:column;gap:1px;flex:1;overflow:hidden}
+.listing-row{display:flex;align-items:center;justify-content:space-between;padding:6px 2px;border-bottom:1px solid rgba(255,255,255,.04);animation:rowSlide .5s ease both;transition:background .2s}
+.listing-row:hover{background:rgba(255,255,255,.03);border-radius:4px}
 .listing-row:last-child{border-bottom:none}
-.listing-num{font-size:9px;color:rgba(255,255,255,.2);width:20px;flex-shrink:0}
-.listing-name{font-size:10px;color:rgba(255,255,255,.7);flex:1;letter-spacing:.3px}
-.listing-price{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);margin-right:8px}
-.listing-dot{width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 5px #00ff88;flex-shrink:0}
+.listing-num{font-size:9px;color:rgba(255,255,255,.18);width:22px;flex-shrink:0;font-family:'Rajdhani',sans-serif;font-weight:600}
+.listing-name{font-size:11px;color:rgba(255,255,255,.65);flex:1;font-weight:400}
+.listing-price{font-size:11px;font-weight:600;color:rgba(255,255,255,.55);margin-right:10px;font-family:'Rajdhani',sans-serif;letter-spacing:1px}
+.listing-dot{width:6px;height:6px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;flex-shrink:0;animation:blink 2s ease-in-out infinite}
 
-/* PROGRESS BARS */
-.prog-section{display:flex;flex-direction:column;gap:6px}
-.prog-row{display:flex;align-items:center;justify-content:space-between;font-size:8px;color:rgba(255,255,255,.4);margin-bottom:2px;letter-spacing:1px}
-.prog-track{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;border-radius:2px}
+/* PROGRESS */
+.prog-section{display:flex;flex-direction:column;gap:8px}
+.prog-row{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.35);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.prog-track{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;animation:progressFill 1.5s ease both}
 
-/* BOTTOM GRID */
-.bottom-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.card-mini .card-body{gap:8px}
+/* MINI STATS */
 .mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.mini-stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:8px 12px}
-.mini-val{font-size:20px;font-weight:900;letter-spacing:1px}
-.mini-lbl{font-size:7px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:1px}
+.mini-stat{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 12px;transition:all .2s}
+.mini-stat:hover{border-color:rgba(0,229,255,.2);background:rgba(0,229,255,.03)}
+.mini-val{font-size:20px;font-weight:700;letter-spacing:1px}
+.mini-lbl{font-size:9px;color:rgba(255,255,255,.28);margin-top:1px;font-weight:500}
 
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+/* BOTTOM ROW */
+.bottom-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+/* ACTIVITY TICKER at very bottom of N8N card */
+.ticker{font-size:8px;font-family:'Rajdhani',sans-serif;color:rgba(0,229,255,.4);letter-spacing:1px;padding-top:6px;border-top:1px solid rgba(0,229,255,.08);overflow:hidden;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -111,52 +155,55 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
 <div class="topnav">
   <div class="brand">
     <div class="brand-orb">
-      <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#00e5ff" stroke-width="1.5"/><circle cx="9" cy="9" r="3" fill="#00e5ff" opacity=".8"/><circle cx="9" cy="9" r="3" fill="#00e5ff" filter="blur(2px)" opacity=".5"/></svg>
+      <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#00e5ff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.5" fill="#00e5ff"/></svg>
     </div>
-    <div class="brand-text">
-      <div class="brand-name">SHADY AI</div>
+    <div>
+      <div class="brand-name">ATLAS</div>
       <div class="brand-sub">COMMAND CENTER V1.0</div>
     </div>
   </div>
   <div class="nav-right">
-    <div class="sys-badge"><div class="sys-dot"></div><span class="sys-txt">ALL SYSTEMS ONLINE</span></div>
+    <div class="sys-badge">
+      <div class="sys-dot"></div>
+      <span class="sys-txt">ALL SYSTEMS ONLINE</span>
+    </div>
     <div class="nav-clock" id="clock">--:--:--</div>
   </div>
 </div>
 
 <!-- STATS BAR -->
 <div class="statsbar">
-  <div class="stat-cell">
+  <div class="stat-cell" style="--color:#00ff88">
     <div class="stat-lbl">Active Departments</div>
-    <div class="stat-val val-green">3</div>
+    <div class="stat-val val-green" style="animation-delay:.1s">3</div>
     <div class="stat-sub">of 6 total</div>
   </div>
   <div class="stat-cell">
     <div class="stat-lbl">Total AI Agents</div>
-    <div class="stat-val val-cyan">12</div>
+    <div class="stat-val val-cyan" style="animation-delay:.2s">12</div>
     <div class="stat-sub">across all depts</div>
   </div>
   <div class="stat-cell">
     <div class="stat-lbl">Etsy Listings Live</div>
-    <div class="stat-val val-green">6</div>
+    <div class="stat-val val-green" style="animation-delay:.3s">6</div>
     <div class="stat-sub">ShadyPrintables</div>
   </div>
   <div class="stat-cell">
     <div class="stat-lbl">Potential Revenue</div>
-    <div class="stat-val val-purple" id="revVal">$42.94</div>
+    <div class="stat-val val-purple" style="animation-delay:.4s">$42.94</div>
     <div class="stat-sub">per full conversion</div>
   </div>
   <div class="stat-cell">
     <div class="stat-lbl">Phase 1 Progress</div>
-    <div class="stat-val val-white">35%</div>
+    <div class="stat-val val-white" style="animation-delay:.5s">35%</div>
     <div class="stat-sub">Etsy complete</div>
   </div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <div class="main">
 
-  <!-- ETSY CARD — big left -->
+  <!-- ETSY CARD -->
   <div class="card etsy">
     <div class="card-header">
       <div class="card-title-row">
@@ -170,7 +217,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
     </div>
     <div class="card-body">
       <div class="agents-row">
-        <span class="agents-lbl">ACTIVE AGENTS (3)</span>
+        <span class="agents-lbl">Active Agents (3)</span>
         <div class="agent-chip">Listing Builder</div>
         <div class="agent-chip">PDF Generator</div>
         <div class="agent-chip">Market Researcher</div>
@@ -186,17 +233,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
         </div>
       </div>
       <div class="listings">
-        <div class="listing-row"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:.1s"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:.2s"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:.3s"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:.4s"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:.5s"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:.6s"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- N8N CARD — right -->
+  <!-- N8N CARD -->
   <div class="card n8n">
     <div class="card-header">
       <div class="card-title-row">
@@ -210,7 +257,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
     </div>
     <div class="card-body">
       <div class="agents-row">
-        <span class="agents-lbl">ACTIVE WORKFLOWS (3)</span>
+        <span class="agents-lbl">Active Workflows (3)</span>
         <div class="agent-chip">Listing Gen</div>
         <div class="agent-chip">Market Research</div>
         <div class="agent-chip">TikTok Planner</div>
@@ -227,22 +274,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
       </div>
       <div class="prog-section">
         <div>
-          <div class="prog-row"><span>CAPACITY USED</span><span>2%</span></div>
-          <div class="prog-track"><div class="prog-fill" style="width:2%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div>
+          <div class="prog-row"><span>Capacity Used</span><span>2%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="--w:2%;width:2%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div>
         </div>
-        <div style="margin-top:4px">
-          <div class="prog-row"><span>WORKFLOWS ACTIVE</span><span>3/10</span></div>
-          <div class="prog-track"><div class="prog-fill" style="width:30%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div>
+        <div>
+          <div class="prog-row"><span>Workflows Active</span><span>3/10</span></div>
+          <div class="prog-track"><div class="prog-fill" style="--w:30%;width:30%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div>
         </div>
       </div>
+      <div class="ticker" id="ticker">● ATLAS SYSTEM NOMINAL &nbsp;&nbsp;&nbsp; ● N8N HEARTBEAT OK &nbsp;&nbsp;&nbsp; ● ETSY SYNC ACTIVE &nbsp;&nbsp;&nbsp; ● AGENTS ONLINE</div>
     </div>
   </div>
 
-  <!-- BOTTOM ROW: Fiverr / TikTok / Research AI -->
+  <!-- BOTTOM ROW -->
   <div class="bottom-row">
 
-    <!-- FIVERR -->
-    <div class="card fiverr card-mini">
+    <div class="card fiverr">
       <div class="card-header">
         <div class="card-title-row">
           <div class="card-icon">💼</div>
@@ -251,33 +298,26 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
             <div class="card-subtitle">Freelance Services &amp; Gigs</div>
           </div>
         </div>
-        <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:1"></div>NEXT</div>
+        <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>NEXT</div>
       </div>
       <div class="card-body">
         <div class="agents-row">
-          <span class="agents-lbl">PLANNED AGENTS (2)</span>
-          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Gig Writer</div>
-          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Order Manager</div>
+          <span class="agents-lbl">Planned Agents (2)</span>
+          <div class="agent-chip" style="opacity:.4">Gig Writer</div>
+          <div class="agent-chip" style="opacity:.4">Order Manager</div>
         </div>
         <div class="mini-stats">
-          <div class="mini-stat">
-            <div class="mini-val" style="color:#facc15">0</div>
-            <div class="mini-lbl">Gigs Live</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-val" style="color:rgba(255,255,255,.3)">--</div>
-            <div class="mini-lbl">Orders</div>
-          </div>
+          <div class="mini-stat"><div class="mini-val" style="color:#facc15">0</div><div class="mini-lbl">Gigs Live</div></div>
+          <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.25)">--</div><div class="mini-lbl">Orders</div></div>
         </div>
         <div class="prog-section">
-          <div class="prog-row"><span>SETUP PROGRESS</span><span>0%</span></div>
-          <div class="prog-track"><div class="prog-fill" style="width:0%;background:#22c55e"></div></div>
+          <div class="prog-row"><span>Setup Progress</span><span>0%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="--w:0%;width:0%;background:#22c55e"></div></div>
         </div>
       </div>
     </div>
 
-    <!-- TIKTOK -->
-    <div class="card tiktok card-mini">
+    <div class="card tiktok">
       <div class="card-header">
         <div class="card-title-row">
           <div class="card-icon">📱</div>
@@ -286,34 +326,27 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
             <div class="card-subtitle">@shadesphysique</div>
           </div>
         </div>
-        <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:1"></div>NEXT</div>
+        <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>NEXT</div>
       </div>
       <div class="card-body">
         <div class="agents-row">
-          <span class="agents-lbl">PLANNED AGENTS (3)</span>
-          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Script Writer</div>
-          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Scheduler</div>
-          <div class="agent-chip" style="border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.35)">Analyst</div>
+          <span class="agents-lbl">Planned Agents (3)</span>
+          <div class="agent-chip" style="opacity:.4">Script Writer</div>
+          <div class="agent-chip" style="opacity:.4">Scheduler</div>
+          <div class="agent-chip" style="opacity:.4">Analyst</div>
         </div>
         <div class="mini-stats">
-          <div class="mini-stat">
-            <div class="mini-val" style="color:#a855f7">0</div>
-            <div class="mini-lbl">Videos Posted</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-val" style="color:rgba(255,255,255,.3)">--</div>
-            <div class="mini-lbl">Revenue</div>
-          </div>
+          <div class="mini-stat"><div class="mini-val" style="color:#a855f7">0</div><div class="mini-lbl">Videos Posted</div></div>
+          <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.25)">--</div><div class="mini-lbl">Revenue</div></div>
         </div>
         <div class="prog-section">
-          <div class="prog-row"><span>CONTENT PIPELINE</span><span>0%</span></div>
-          <div class="prog-track"><div class="prog-fill" style="width:0%;background:#a855f7"></div></div>
+          <div class="prog-row"><span>Content Pipeline</span><span>0%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="--w:0%;width:0%;background:#a855f7"></div></div>
         </div>
       </div>
     </div>
 
-    <!-- RESEARCH AI -->
-    <div class="card research card-mini">
+    <div class="card research">
       <div class="card-header">
         <div class="card-title-row">
           <div class="card-icon">🔬</div>
@@ -326,34 +359,28 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
       </div>
       <div class="card-body">
         <div class="agents-row">
-          <span class="agents-lbl">ACTIVE AGENTS (2)</span>
+          <span class="agents-lbl">Active Agents (2)</span>
           <div class="agent-chip">Niche Finder</div>
           <div class="agent-chip">Trend Analyzer</div>
         </div>
         <div class="mini-stats">
-          <div class="mini-stat">
-            <div class="mini-val" style="color:#c084fc">12</div>
-            <div class="mini-lbl">Niches Found</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-val" style="color:#00e5ff">Batch 2</div>
-            <div class="mini-lbl">Next Run</div>
-          </div>
+          <div class="mini-stat"><div class="mini-val" style="color:#c084fc">12</div><div class="mini-lbl">Niches Found</div></div>
+          <div class="mini-stat"><div class="mini-val" style="color:#00e5ff;font-size:14px">Batch 2</div><div class="mini-lbl">Next Run</div></div>
         </div>
         <div class="prog-section">
-          <div class="prog-row"><span>RESEARCH DEPTH</span><span>60%</span></div>
-          <div class="prog-track"><div class="prog-fill" style="width:60%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div>
+          <div class="prog-row"><span>Research Depth</span><span>60%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="--w:60%;width:60%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div>
         </div>
       </div>
     </div>
 
-  </div><!-- end bottom-row -->
-
-</div><!-- end main -->
-</div><!-- end app -->
+  </div>
+</div>
+</div>
 
 <script>
 (function(){
+  // Clock
   function pad(n){return n<10?'0'+n:''+n}
   function tick(){
     var d=new Date();
@@ -361,6 +388,29 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:
     if(cl) cl.textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
   }
   setInterval(tick,1000); tick();
+
+  // Ticker scroll
+  var ticker=document.getElementById('ticker');
+  if(ticker){
+    var pos=0;
+    var msgs=['● ATLAS SYSTEM NOMINAL','● N8N HEARTBEAT OK','● ETSY SYNC ACTIVE','● AGENTS ONLINE','● PHASE 1 — 35% COMPLETE','● SHADYPRINTABLES — 6 LISTINGS LIVE','● RESEARCH AI — BATCH 2 QUEUED','● FIVERR DEPT — LAUNCHING NEXT'];
+    ticker.textContent=msgs.join('          ');
+    setInterval(function(){
+      pos-=1;
+      var full=ticker.scrollWidth;
+      if(Math.abs(pos)>full/2) pos=0;
+      ticker.style.transform='translateX('+pos+'px)';
+    },30);
+  }
+
+  // Animate listing rows stagger on load
+  var rows=document.querySelectorAll('.listing-row');
+  rows.forEach(function(r,i){r.style.animationDelay=(0.05+i*0.08)+'s';});
+
+  // Stat cells hover underline color
+  var cells=document.querySelectorAll('.stat-cell');
+  var colors=['#00ff88','#00e5ff','#00ff88','#c084fc','#f1f5f9'];
+  cells.forEach(function(c,i){c.style.setProperty('--color',colors[i]||'#00e5ff');c.style.color=colors[i]||'#00e5ff';});
 })();
 </script>
 </body>
