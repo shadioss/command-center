@@ -2,235 +2,439 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ATLAS Command Center</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#04010f;font-family:'Courier New',monospace;overflow:hidden;width:100vw;height:100vh;color:#fff;}
-#topbar{display:flex;align-items:center;justify-content:space-between;height:64px;background:linear-gradient(180deg,#0d0025,#060015);border-bottom:2px solid #7c00ff;padding:0 24px;position:relative;z-index:10;}
-#atlas-logo{font-size:26px;font-weight:900;letter-spacing:6px;color:#bf00ff;text-shadow:0 0 20px #bf00ff;}
-#atlas-logo span{color:#e800ff;}
-#face-wrap{display:flex;align-items:center;gap:12px;}
-.wave{display:flex;align-items:center;gap:3px;height:34px;}
-.wb{width:4px;border-radius:2px;background:#bf00ff;animation:wb 0.8s ease-in-out infinite;}
-.wb:nth-child(1){height:10px;animation-delay:0s;}
-.wb:nth-child(2){height:22px;animation-delay:0.1s;}
-.wb:nth-child(3){height:30px;animation-delay:0.2s;}
-.wb:nth-child(4){height:18px;animation-delay:0.3s;}
-.wb:nth-child(5){height:26px;animation-delay:0.4s;}
-.wb:nth-child(6){height:12px;animation-delay:0.5s;}
-@keyframes wb{0%,100%{transform:scaleY(0.4);opacity:0.5;}50%{transform:scaleY(1);opacity:1;}}
-#hud{display:flex;gap:24px;}
-.hi{text-align:center;}
-.hv{font-size:17px;font-weight:700;color:#bf00ff;text-shadow:0 0 8px #bf00ff;}
-.hl{font-size:8px;color:#7733aa;letter-spacing:2px;}
-#pill{display:flex;align-items:center;gap:6px;background:#110030;border:1px solid #5500bb;border-radius:20px;padding:5px 12px;}
-.dot{width:9px;height:9px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:pd 2s ease-in-out infinite;}
-@keyframes pd{0%,100%{opacity:1;}50%{opacity:0.3;}}
-#clk{font-size:13px;color:#bb88ff;}
-#scene{position:relative;width:100vw;height:calc(100vh - 64px);}
-/* ACTIVITY LOG */
-#alog{position:absolute;right:0;top:0;bottom:0;width:220px;background:rgba(8,0,24,0.96);border-left:2px solid #4400aa;z-index:5;display:flex;flex-direction:column;}
-#alh{padding:8px 12px;border-bottom:1px solid #330088;font-size:9px;letter-spacing:2px;color:#9955ff;}
-#ale{flex:1;overflow:hidden;padding:6px;display:flex;flex-direction:column;gap:3px;}
-.le{font-size:8.5px;padding:3px 5px;border-left:2px solid #5500aa;color:#cc99ff;line-height:1.4;animation:fi 0.4s ease;}
-@keyframes fi{from{opacity:0;}to{opacity:1;}}
-.tg{font-size:7.5px;font-weight:700;padding:1px 4px;border-radius:2px;margin-right:3px;}
-/* CENTER ORB */
-#orbc{position:absolute;left:calc(50% - 140px);top:calc(50% - 140px - 32px);width:280px;height:280px;z-index:4;}
-#orb{width:280px;height:280px;position:relative;display:flex;align-items:center;justify-content:center;}
-#orbsvg{position:absolute;top:0;left:0;width:280px;height:280px;}
-#orbi{position:relative;z-index:2;text-align:center;}
-.orev{font-size:26px;font-weight:900;color:#e800ff;text-shadow:0 0 16px #bf00ff;}
-.olbl{font-size:7.5px;color:#9933cc;letter-spacing:2px;margin-bottom:4px;}
-.ost{font-size:12px;color:#cc88ff;margin:2px 0;}
-.oph{font-size:9px;color:#7700cc;letter-spacing:2px;margin-top:3px;}
-.oal{font-size:9.5px;color:#ffcc00;text-shadow:0 0 8px #ffaa00;animation:ap 1s ease-in-out infinite;margin-top:3px;}
-@keyframes ap{0%,100%{opacity:1;}50%{opacity:0.2;}}
-.pb{width:130px;height:5px;background:#220044;border-radius:3px;margin:5px auto;}
-.pbf{height:5px;background:linear-gradient(90deg,#7c00ff,#e800ff);border-radius:3px;width:15%;box-shadow:0 0 6px #bf00ff;}
-/* DEPARTMENTS - positioned around orb */
-.dept{position:absolute;width:210px;z-index:3;}
-#de{left:calc(50% - 140px - 220px);top:calc(50% - 32px - 200px);}
-#dt{left:calc(50% - 140px + 280px);top:calc(50% - 32px - 200px);}
-#dn{left:calc(50% - 140px - 240px);top:calc(50% - 32px - 20px);}
-#df{left:calc(50% - 140px + 280px);top:calc(50% - 32px - 20px);}
-#dr{left:calc(50% - 140px - 220px);top:calc(50% - 32px + 165px);}
-#ds{left:calc(50% - 140px + 280px);top:calc(50% - 32px + 165px);}
-.dc{width:100%;background:rgba(8,0,28,0.93);border:1px solid #5500aa;position:relative;overflow:hidden;clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px);}
-.dc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(100,0,255,0.07),transparent);pointer-events:none;}
-.dh{display:flex;align-items:center;gap:7px;padding:8px 10px 5px;border-bottom:1px solid #330066;}
-.di{font-size:18px;}
-.dn2{font-size:12px;font-weight:700;letter-spacing:2px;}
-.db2{font-size:7.5px;padding:2px 5px;border-radius:8px;margin-left:auto;}
-.dbody{padding:7px 10px;}
-.dr2{font-size:18px;font-weight:700;margin-bottom:3px;}
-.ds2{font-size:9.5px;color:#9966cc;margin:1px 0;}
-.ac{font-size:8.5px;color:#7744bb;padding:0 10px 3px;letter-spacing:1px;}
-.az{padding:4px 10px 7px;display:flex;flex-wrap:wrap;gap:3px;}
-.etsy .dn2{color:#ff9944;}.etsy .dr2{color:#ff9944;}
-.tiktok .dn2{color:#cc66ff;}.tiktok .dr2{color:#cc66ff;}
-.n8n .dn2{color:#00eeff;}.n8n .dr2{color:#00eeff;}
-.fiverr .dn2{color:#ffdd00;}.fiverr .dr2{color:#ffdd00;}
-.research .dn2{color:#ff6644;}.research .dr2{color:#ff6644;}
-.sapphire .dn2{color:#4499ff;}.sapphire .dr2{color:#4499ff;}
-/* ALIENS */
-.al{display:inline-block;width:20px;height:26px;}
-.al svg{width:100%;height:100%;}
-.al.active{animation:wk 0.5s steps(2) infinite;}
-.al.idle{opacity:0.3;}
-@keyframes wk{0%{transform:translateX(0);}50%{transform:translateX(3px);}100%{transform:translateX(0);}}
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #050510;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #e0e0ff;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  /* ── TOP BAR ── */
+  #topbar {
+    background: linear-gradient(90deg, #0a0a2a 0%, #12003a 50%, #0a0a2a 100%);
+    border-bottom: 2px solid #6600cc;
+    padding: 12px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  #logo {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    color: #cc44ff;
+    text-shadow: 0 0 12px #aa00ff;
+  }
+  #logo span { color: #fff; font-weight: 300; font-size: 12px; letter-spacing: 2px; display: block; margin-top: 2px; }
+  #hud-pills {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .hpill {
+    background: #0d0028;
+    border: 1px solid #440088;
+    border-radius: 8px;
+    padding: 6px 14px;
+    text-align: center;
+    min-width: 80px;
+  }
+  .hpill .val { font-size: 18px; font-weight: 700; color: #cc44ff; }
+  .hpill .lbl { font-size: 9px; color: #8855aa; letter-spacing: 2px; text-transform: uppercase; }
+  #status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .status-dot { width:10px; height:10px; border-radius:50%; background:#00ff88; box-shadow:0 0 8px #00ff88; animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  #clock { font-size: 15px; color: #bb88ff; font-weight: 600; letter-spacing: 1px; }
+
+  /* ── CENTER ORB SECTION ── */
+  #orb-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0 10px;
+  }
+  #orb {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #2a0060, #0a0018);
+    border: 3px solid #8800ff;
+    box-shadow: 0 0 30px #6600cc, inset 0 0 40px #1a0040;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    animation: orbpulse 4s ease-in-out infinite;
+  }
+  @keyframes orbpulse { 0%,100%{box-shadow:0 0 30px #6600cc,inset 0 0 40px #1a0040} 50%{box-shadow:0 0 55px #aa00ff,inset 0 0 50px #220055} }
+  #orb::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid #6600cc44;
+    animation: spin 8s linear infinite;
+  }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+  .orb-total { font-size: 28px; font-weight: 900; color: #e866ff; text-shadow: 0 0 14px #cc00ff; }
+  .orb-sublabel { font-size: 9px; color: #9955bb; letter-spacing: 2px; margin-bottom: 4px; }
+  .orb-stat { font-size: 12px; color: #cc99ff; margin: 2px 0; }
+  .orb-phase { font-size: 9px; color: #6633aa; letter-spacing: 2px; margin-top: 6px; }
+  .orb-progress { width: 120px; height: 5px; background: #1a0035; border-radius: 3px; margin: 6px auto; }
+  .orb-progress-fill { height: 5px; width: 15%; background: linear-gradient(90deg,#6600cc,#dd00ff); border-radius: 3px; }
+  .orb-alert { font-size: 10px; color: #ffcc00; margin-top: 5px; animation: alertblink 1.2s infinite; }
+  @keyframes alertblink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* ── DEPARTMENTS GRID ── */
+  #depts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    padding: 10px 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .dept-card {
+    background: #08001e;
+    border: 1px solid #440077;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .dept-card:hover { border-color: #aa00ff; }
+  .dept-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px 8px;
+    border-bottom: 1px solid #2a0055;
+  }
+  .dept-icon { font-size: 22px; }
+  .dept-name { font-size: 14px; font-weight: 700; letter-spacing: 2px; flex: 1; }
+  .dept-badge {
+    font-size: 8px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+  .badge-live { background: #004400; color: #00ff88; border: 1px solid #00aa44; }
+  .badge-setup { background: #332200; color: #ffaa00; border: 1px solid #aa6600; }
+  .badge-auto { background: #001133; color: #00ccff; border: 1px solid #0077aa; }
+  .badge-ai { background: #1a0000; color: #ff6644; border: 1px solid #aa2200; }
+
+  .dept-body { padding: 10px 14px; }
+  .dept-revenue { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .dept-stats { font-size: 10px; color: #9966cc; line-height: 1.7; }
+
+  /* alien zone */
+  .dept-aliens {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px 14px 10px;
+    border-top: 1px solid #1a003a;
+    min-height: 44px;
+    background: #050012;
+  }
+  .alien-count { width: 100%; font-size: 9px; color: #664488; letter-spacing: 1px; margin-bottom: 3px; }
+  .alien { display: inline-flex; width: 20px; height: 26px; }
+  .alien svg { width: 100%; height: 100%; }
+  .alien.active { animation: walk 0.6s steps(2) infinite; }
+  .alien.idle { opacity: 0.28; }
+  @keyframes walk { 0%{transform:translateX(0)} 50%{transform:translateX(2px)} 100%{transform:translateX(0)} }
+
+  /* color themes */
+  .etsy .dept-name { color: #ff9944; } .etsy .dept-revenue { color: #ff9944; }
+  .tiktok .dept-name { color: #cc55ff; } .tiktok .dept-revenue { color: #cc55ff; }
+  .n8n .dept-name { color: #00ddff; } .n8n .dept-revenue { color: #00ddff; }
+  .fiverr .dept-name { color: #ffdd44; } .fiverr .dept-revenue { color: #ffdd44; }
+  .research .dept-name { color: #ff7755; } .research .dept-revenue { color: #ff7755; }
+  .sapphire .dept-name { color: #55aaff; } .sapphire .dept-revenue { color: #55aaff; }
+
+  /* ── ACTIVITY LOG ── */
+  #log-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 24px;
+  }
+  #log-title { font-size: 10px; letter-spacing: 3px; color: #664488; margin-bottom: 8px; }
+  #log-feed {
+    background: #060016;
+    border: 1px solid #330066;
+    border-radius: 8px;
+    padding: 10px 14px;
+    height: 110px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .log-line { font-size: 10px; color: #bb88ee; display: flex; gap: 8px; align-items: center; }
+  .log-tag { font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
 </style>
 </head>
 <body>
+
+<!-- TOP BAR -->
 <div id="topbar">
-  <div id="atlas-logo">⬡ <span>ATLAS</span> OS</div>
-  <div id="face-wrap">
-    <div class="wave"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
-    <svg width="52" height="62" viewBox="0 0 52 62" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 14px #00e5ff)">
-      <defs>
-        <linearGradient id="hg" x1="26" y1="0" x2="26" y2="62" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="50%" stop-color="#7090b8"/><stop offset="100%" stop-color="#1a2440"/></linearGradient>
-        <linearGradient id="vg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00ffee" stop-opacity="0.95"/><stop offset="100%" stop-color="#004499" stop-opacity="0.6"/></linearGradient>
-        <filter id="gl"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-      <path d="M12 4 L40 4 L48 11 L50 42 L44 54 L8 54 L2 42 L2 11 Z" fill="url(#hg)" stroke="#446688" stroke-width="0.8"/>
-      <path d="M16 13 L36 13 L40 20 L40 44 L12 44 L12 20 Z" fill="#18283e" stroke="#334466" stroke-width="0.5"/>
-      <path d="M14 19 L38 19 L41 27 L38 35 L14 35 L11 27 Z" fill="url(#vg)" filter="url(#gl)"/>
-      <path d="M16 21 L33 21 L35 26 L33 30 L16 30 L14 26 Z" fill="white" opacity="0.12"/>
-      <line x1="14" y1="27" x2="38" y2="27" stroke="#00ffee" stroke-width="0.7" opacity="0.5"/>
-      <rect x="16" y="38" width="4" height="3" rx="0.5" fill="#00ddee" opacity="0.85" id="m1"/>
-      <rect x="22" y="38" width="4" height="3" rx="0.5" fill="#00ddee" opacity="0.6" id="m2"/>
-      <rect x="28" y="38" width="4" height="3" rx="0.5" fill="#00ddee" opacity="0.85" id="m3"/>
-      <path d="M2 21 L0 21 L-1 28 L0 36 L2 36" fill="#bb2200" stroke="#ff3311" stroke-width="0.4"/>
-      <path d="M50 21 L52 21 L53 28 L52 36 L50 36" fill="#bb2200" stroke="#ff3311" stroke-width="0.4"/>
-      <path d="M18 4 L26 1 L34 4" stroke="#aabbdd" stroke-width="1.1" fill="none"/>
-      <circle cx="26" cy="1" r="1.8" fill="#00ffee" opacity="0.9"/>
-      <line x1="18" y1="9" x2="36" y2="9" stroke="#445577" stroke-width="0.5" opacity="0.6"/>
-      <line x1="14" y1="48" x2="38" y2="48" stroke="#334455" stroke-width="0.6"/>
-      <line x1="16" y1="51" x2="36" y2="51" stroke="#334455" stroke-width="0.4"/>
-    </svg>
-    <div class="wave"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
+  <div id="logo">⬡ ATLAS OS<span>ShadyPrintables Command Center · Phase 1</span></div>
+
+  <div id="hud-pills">
+    <div class="hpill"><div class="val">6</div><div class="lbl">Active Depts</div></div>
+    <div class="hpill"><div class="val">14</div><div class="lbl">Total Agents</div></div>
+    <div class="hpill"><div class="val">9</div><div class="lbl">Active</div></div>
+    <div class="hpill"><div class="val" id="h-rev">$0.00</div><div class="lbl">Revenue</div></div>
+    <div class="hpill"><div class="val" id="h-ord">0</div><div class="lbl">Orders</div></div>
+    <div class="hpill"><div class="val">35%</div><div class="lbl">Phase Progress</div></div>
   </div>
-  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
-    <div id="hud">
-      <div class="hi"><div class="hv">6</div><div class="hl">DEPTS</div></div>
-      <div class="hi"><div class="hv">14</div><div class="hl">AGENTS</div></div>
-      <div class="hi"><div class="hv">9</div><div class="hl">ACTIVE</div></div>
-      <div class="hi"><div class="hv" id="hrev">$0</div><div class="hl">REVENUE</div></div>
-      <div class="hi"><div class="hv" id="hord">0</div><div class="hl">ORDERS</div></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div id="pill"><div class="dot"></div><span style="font-size:9px;letter-spacing:2px;color:#88ffcc;">ALL SYSTEMS LIVE</span></div>
-      <div id="clk"></div>
-    </div>
+
+  <div id="status-bar">
+    <div class="status-dot"></div>
+    <span style="font-size:10px;letter-spacing:2px;color:#88ffcc;">ALL SYSTEMS LIVE</span>
+    <div id="clock"></div>
   </div>
 </div>
 
-<div id="scene">
-  <!-- ORB -->
-  <div id="orbc">
-    <div id="orb">
-      <svg id="orbsvg" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="og" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#2a0060"/><stop offset="100%" stop-color="#04010f"/></radialGradient>
-          <filter id="gw"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <circle cx="140" cy="140" r="136" fill="none" stroke="#2a0060" stroke-width="3"/>
-        <circle cx="140" cy="140" r="130" fill="none" stroke="#bf00ff" stroke-width="2.5" filter="url(#gw)" opacity="0.8"/>
-        <g id="seg" style="transform-origin:140px 140px">
-          <path d="M140 10 A130 130 0 0 1 240 57" stroke="#7c00ff" stroke-width="8" fill="none"/>
-          <path d="M240 57 A130 130 0 0 1 270 140" stroke="#330055" stroke-width="8" fill="none"/>
-          <path d="M270 140 A130 130 0 0 1 222 232" stroke="#7c00ff" stroke-width="8" fill="none"/>
-          <path d="M222 232 A130 130 0 0 1 140 270" stroke="#330055" stroke-width="8" fill="none"/>
-          <path d="M140 270 A130 130 0 0 1 40 223" stroke="#7c00ff" stroke-width="8" fill="none"/>
-          <path d="M40 223 A130 130 0 0 1 10 140" stroke="#330055" stroke-width="8" fill="none"/>
-          <path d="M10 140 A130 130 0 0 1 57 47" stroke="#7c00ff" stroke-width="8" fill="none"/>
-          <path d="M57 47 A130 130 0 0 1 140 10" stroke="#330055" stroke-width="8" fill="none"/>
-        </g>
-        <circle cx="140" cy="140" r="100" fill="url(#og)" stroke="#5500aa" stroke-width="1.5"/>
-      </svg>
-      <div id="orbi">
-        <div class="olbl">TOTAL REVENUE</div>
-        <div class="orev">$0.00</div>
-        <div class="ost">📦 Orders: 0</div>
-        <div class="ost">⚡ Status: LIVE</div>
-        <div class="pb"><div class="pbf"></div></div>
-        <div class="oph">◈ PHASE 1 — LAUNCH</div>
-        <div class="oal">⚠ 3 DEPTS NEED SETUP</div>
-      </div>
-    </div>
+<!-- CENTER ORB -->
+<div id="orb-section">
+  <div id="orb">
+    <div class="orb-sublabel">TOTAL REVENUE</div>
+    <div class="orb-total">$0.00</div>
+    <div class="orb-stat">📦 Orders: 0</div>
+    <div class="orb-stat">⚡ Status: LIVE</div>
+    <div class="orb-progress"><div class="orb-progress-fill"></div></div>
+    <div class="orb-phase">◈ PHASE 1 · LAUNCH</div>
+    <div class="orb-alert">⚠ 3 DEPTS NEED SETUP</div>
   </div>
+</div>
+
+<!-- DEPARTMENTS -->
+<div id="depts">
 
   <!-- ETSY -->
-  <div class="dept etsy" id="de">
-    <div class="dc">
-      <div class="dh"><span class="di">🛍️</span><span class="dn2">ETSY</span><span class="db2" style="background:#ff6600;color:#fff;">LIVE</span></div>
-      <div class="dbody"><div class="dr2">$0.00</div><div class="ds2">6 listings · ShadyPrintables</div></div>
-      <div class="ac">2 Active · 1 Idle</div><div class="az" id="ae"></div>
+  <div class="dept-card etsy">
+    <div class="dept-top">
+      <span class="dept-icon">🛍️</span>
+      <span class="dept-name">ETSY</span>
+      <span class="dept-badge badge-live">LIVE</span>
     </div>
-  </div>
-  <!-- TIKTOK -->
-  <div class="dept tiktok" id="dt">
-    <div class="dc">
-      <div class="dh"><span class="di">🎵</span><span class="dn2">TIKTOK</span><span class="db2" style="background:#6600ff;color:#fff;">LIVE</span></div>
-      <div class="dbody"><div class="dr2">$0.00</div><div class="ds2">@shadesphysique</div></div>
-      <div class="ac">3 Active · 0 Idle</div><div class="az" id="at2"></div>
+    <div class="dept-body">
+      <div class="dept-revenue">$0.00</div>
+      <div class="dept-stats">
+        6 Listings · ShadyPrintables<br>
+        Revenue: $0.00 · Orders: 0
+      </div>
     </div>
-  </div>
-  <!-- N8N -->
-  <div class="dept n8n" id="dn">
-    <div class="dc">
-      <div class="dh"><span class="di">⚙️</span><span class="dn2">N8N</span><span class="db2" style="background:#00aacc;color:#000;">AUTO</span></div>
-      <div class="dbody"><div class="dr2">3 Flows</div><div class="ds2">shadyagi · Automations</div></div>
-      <div class="ac">2 Active · 0 Idle</div><div class="az" id="an"></div>
-    </div>
-  </div>
-  <!-- FIVERR -->
-  <div class="dept fiverr" id="df">
-    <div class="dc">
-      <div class="dh"><span class="di">💼</span><span class="dn2">FIVERR</span><span class="db2" style="background:#886600;color:#fff;">SETUP</span></div>
-      <div class="dbody"><div class="dr2">$0.00</div><div class="ds2">Gigs pending setup</div></div>
-      <div class="ac">0 Active · 2 Idle</div><div class="az" id="af"></div>
-    </div>
-  </div>
-  <!-- RESEARCH -->
-  <div class="dept research" id="dr">
-    <div class="dc">
-      <div class="dh"><span class="di">🔬</span><span class="dn2">RESEARCH</span><span class="db2" style="background:#cc3300;color:#fff;">AI</span></div>
-      <div class="dbody"><div class="dr2">Running</div><div class="ds2">Market analysis · Trends</div></div>
-      <div class="ac">2 Active · 1 Idle</div><div class="az" id="ar"></div>
-    </div>
-  </div>
-  <!-- SAPPHIRE -->
-  <div class="dept sapphire" id="ds">
-    <div class="dc">
-      <div class="dh"><span class="di">💎</span><span class="dn2">SAPPHIRE</span><span class="db2" style="background:#0044ff;color:#fff;">SETUP</span></div>
-      <div class="dbody"><div class="dr2">$0.00</div><div class="ds2">Peptides website · Orders</div></div>
-      <div class="ac">0 Active · 1 Idle</div><div class="az" id="as2"></div>
+    <div class="dept-aliens">
+      <div class="alien-count">2 Active · 1 Idle</div>
+      <div id="a-etsy"></div>
     </div>
   </div>
 
-  <!-- LOG -->
-  <div id="alog">
-    <div id="alh">◈ SYSTEM LOG</div>
-    <div id="ale"></div>
+  <!-- TIKTOK -->
+  <div class="dept-card tiktok">
+    <div class="dept-top">
+      <span class="dept-icon">🎵</span>
+      <span class="dept-name">TIKTOK</span>
+      <span class="dept-badge badge-live">LIVE</span>
+    </div>
+    <div class="dept-body">
+      <div class="dept-revenue">$0.00</div>
+      <div class="dept-stats">
+        @shadesphysique<br>
+        Content engine active
+      </div>
+    </div>
+    <div class="dept-aliens">
+      <div class="alien-count">3 Active · 0 Idle</div>
+      <div id="a-tiktok"></div>
+    </div>
   </div>
+
+  <!-- N8N -->
+  <div class="dept-card n8n">
+    <div class="dept-top">
+      <span class="dept-icon">⚙️</span>
+      <span class="dept-name">N8N</span>
+      <span class="dept-badge badge-auto">AUTO</span>
+    </div>
+    <div class="dept-body">
+      <div class="dept-revenue">3 Flows</div>
+      <div class="dept-stats">
+        Account: shadyagi<br>
+        3 workflows running
+      </div>
+    </div>
+    <div class="dept-aliens">
+      <div class="alien-count">2 Active · 0 Idle</div>
+      <div id="a-n8n"></div>
+    </div>
+  </div>
+
+  <!-- FIVERR -->
+  <div class="dept-card fiverr">
+    <div class="dept-top">
+      <span class="dept-icon">💼</span>
+      <span class="dept-name">FIVERR</span>
+      <span class="dept-badge badge-setup">SETUP</span>
+    </div>
+    <div class="dept-body">
+      <div class="dept-revenue">$0.00</div>
+      <div class="dept-stats">
+        Gigs pending setup<br>
+        AI services planned
+      </div>
+    </div>
+    <div class="dept-aliens">
+      <div class="alien-count">0 Active · 2 Idle</div>
+      <div id="a-fiverr"></div>
+    </div>
+  </div>
+
+  <!-- RESEARCH AI -->
+  <div class="dept-card research">
+    <div class="dept-top">
+      <span class="dept-icon">🔬</span>
+      <span class="dept-name">RESEARCH AI</span>
+      <span class="dept-badge badge-ai">AI</span>
+    </div>
+    <div class="dept-body">
+      <div class="dept-revenue">Active</div>
+      <div class="dept-stats">
+        Market analysis running<br>
+        Trend detection on
+      </div>
+    </div>
+    <div class="dept-aliens">
+      <div class="alien-count">2 Active · 1 Idle</div>
+      <div id="a-research"></div>
+    </div>
+  </div>
+
+  <!-- SAPPHIRE -->
+  <div class="dept-card sapphire">
+    <div class="dept-top">
+      <span class="dept-icon">💎</span>
+      <span class="dept-name">SAPPHIRE</span>
+      <span class="dept-badge badge-setup">SETUP</span>
+    </div>
+    <div class="dept-body">
+      <div class="dept-revenue">$0.00</div>
+      <div class="dept-stats">
+        Peptides website<br>
+        Orders tracking pending
+      </div>
+    </div>
+    <div class="dept-aliens">
+      <div class="alien-count">0 Active · 1 Idle</div>
+      <div id="a-sapphire"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ACTIVITY LOG -->
+<div id="log-section">
+  <div id="log-title">◈ SYSTEM ACTIVITY LOG</div>
+  <div id="log-feed"></div>
 </div>
 
 <script>
-setInterval(()=>{const n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour12:false});},1000);
-let a=0;
-function rot(){a+=0.3;const s=document.getElementById('seg');if(s)s.style.transform='rotate('+a+'deg)';requestAnimationFrame(rot);}
-rot();
-function mkAlien(color,active){return '<div class="al '+(active?'active':'idle')+'"><svg viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="11" cy="9" rx="7" ry="8" fill="'+color+'" opacity="0.9"/><ellipse cx="8.5" cy="8" rx="2" ry="2.5" fill="#00ffee" opacity="0.9"/><ellipse cx="13.5" cy="8" rx="2" ry="2.5" fill="#00ffee" opacity="0.9"/><ellipse cx="8.5" cy="8" rx="1" ry="1.2" fill="white"/><ellipse cx="13.5" cy="8" rx="1" ry="1.2" fill="white"/><line x1="6" y1="4" x2="3" y2="1" stroke="'+color+'" stroke-width="1.2"/><line x1="16" y1="4" x2="19" y2="1" stroke="'+color+'" stroke-width="1.2"/><circle cx="3" cy="1" r="1.2" fill="'+color+'"/><circle cx="19" cy="1" r="1.2" fill="'+color+'"/><rect x="7" y="17" width="8" height="8" rx="2" fill="'+color+'" opacity="0.8"/><line x1="4" y1="19" x2="7" y2="20" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round"/><line x1="18" y1="19" x2="15" y2="20" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="25" x2="5" y2="28" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round"/><line x1="15" y1="25" x2="17" y2="28" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round"/></svg></div>';}
-const deptData=[{id:'ae',color:'#ff8833',a:2,i:1},{id:'at2',color:'#cc44ff',a:3,i:0},{id:'an',color:'#00ddff',a:2,i:0},{id:'af',color:'#ffdd00',a:0,i:2},{id:'ar',color:'#ff6644',a:2,i:1},{id:'as2',color:'#4499ff',a:0,i:1}];
-deptData.forEach(d=>{const z=document.getElementById(d.id);if(!z)return;let h='';for(let i=0;i<d.a;i++)h+=mkAlien(d.color,true);for(let i=0;i<d.i;i++)h+=mkAlien(d.color,false);z.innerHTML=h;});
-const lgs=[{t:'SYSTEM',c:'#333',tc:'#0ff',m:'Atlas v8 online — Jun 20 2026'},{t:'ETSY',c:'#ff5500',tc:'#fff',m:'6 listings live'},{t:'N8N',c:'#00aacc',tc:'#000',m:'3 automations running'},{t:'TIKTOK',c:'#6600ff',tc:'#fff',m:'@shadesphysique active'},{t:'ALERT',c:'#cc8800',tc:'#000',m:'Fiverr needs setup'},{t:'SAPPHIRE',c:'#0033cc',tc:'#fff',m:'Peptides store pending'},{t:'SYSTEM',c:'#333',tc:'#0ff',m:'All core systems live'}];
-const lc=document.getElementById('ale');
-lgs.forEach(l=>{const d=document.createElement('div');d.className='le';d.innerHTML='<span class="tg" style="background:'+l.c+';color:'+l.tc+'">'+l.t+'</span>'+l.m;lc.appendChild(d);});
-const nl=[{t:'SYSTEM',c:'#333',tc:'#0ff',m:'Revenue scan running...'},{t:'N8N',c:'#00aacc',tc:'#000',m:'Etsy sync triggered'},{t:'TIKTOK',c:'#6600ff',tc:'#fff',m:'3 posts scheduled'},{t:'ETSY',c:'#ff5500',tc:'#fff',m:'Store health: Excellent'}];
-let li=0;
-setInterval(()=>{const l=nl[li%nl.length];const d=document.createElement('div');d.className='le';d.innerHTML='<span class="tg" style="background:'+l.c+';color:'+l.tc+'">'+l.t+'</span>'+l.m;lc.prepend(d);li++;while(lc.children.length>18)lc.removeChild(lc.lastChild);},4500);
-setInterval(()=>{['m1','m2','m3'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.opacity=(0.4+Math.random()*0.6).toFixed(2);});},700);
+// Clock
+setInterval(() => {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US', {hour12: false});
+}, 1000);
+
+// Alien builder
+function makeAlien(color, active) {
+  return '<div class="alien ' + (active ? 'active' : 'idle') + '">' +
+    '<svg viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<ellipse cx="11" cy="9" rx="7" ry="8" fill="' + color + '" opacity="0.9"/>' +
+    '<ellipse cx="8.5" cy="8" rx="2" ry="2.5" fill="#00ffee" opacity="0.9"/>' +
+    '<ellipse cx="13.5" cy="8" rx="2" ry="2.5" fill="#00ffee" opacity="0.9"/>' +
+    '<ellipse cx="8.5" cy="8" rx="1" ry="1.2" fill="white"/>' +
+    '<ellipse cx="13.5" cy="8" rx="1" ry="1.2" fill="white"/>' +
+    '<line x1="6" y1="4" x2="3" y2="1" stroke="' + color + '" stroke-width="1.2"/>' +
+    '<line x1="16" y1="4" x2="19" y2="1" stroke="' + color + '" stroke-width="1.2"/>' +
+    '<circle cx="3" cy="1" r="1.2" fill="' + color + '"/>' +
+    '<circle cx="19" cy="1" r="1.2" fill="' + color + '"/>' +
+    '<rect x="7" y="17" width="8" height="8" rx="2" fill="' + color + '" opacity="0.8"/>' +
+    '<line x1="4" y1="19" x2="7" y2="20" stroke="' + color + '" stroke-width="1.5" stroke-linecap="round"/>' +
+    '<line x1="18" y1="19" x2="15" y2="20" stroke="' + color + '" stroke-width="1.5" stroke-linecap="round"/>' +
+    '<line x1="7" y1="25" x2="5" y2="28" stroke="' + color + '" stroke-width="1.5" stroke-linecap="round"/>' +
+    '<line x1="15" y1="25" x2="17" y2="28" stroke="' + color + '" stroke-width="1.5" stroke-linecap="round"/>' +
+    '</svg></div>';
+}
+
+const depts = [
+  { id: 'a-etsy',     color: '#ff8833', active: 2, idle: 1 },
+  { id: 'a-tiktok',   color: '#cc44ff', active: 3, idle: 0 },
+  { id: 'a-n8n',      color: '#00ddff', active: 2, idle: 0 },
+  { id: 'a-fiverr',   color: '#ffdd33', active: 0, idle: 2 },
+  { id: 'a-research', color: '#ff6644', active: 2, idle: 1 },
+  { id: 'a-sapphire', color: '#44aaff', active: 0, idle: 1 },
+];
+depts.forEach(d => {
+  const el = document.getElementById(d.id);
+  if (!el) return;
+  let h = '';
+  for (let i = 0; i < d.active; i++) h += makeAlien(d.color, true);
+  for (let i = 0; i < d.idle; i++)   h += makeAlien(d.color, false);
+  el.innerHTML = h;
+});
+
+// Activity Log
+const logData = [
+  { tag: 'SYSTEM',   bg: '#222', fg: '#00ffcc', msg: 'Atlas OS online — Jun 20 2026' },
+  { tag: 'ETSY',     bg: '#ff5500', fg: '#fff', msg: '6 listings live on ShadyPrintables' },
+  { tag: 'N8N',      bg: '#00aacc', fg: '#000', msg: '3 workflows running — Research, Content, Publisher' },
+  { tag: 'TIKTOK',   bg: '#6600ff', fg: '#fff', msg: '@shadesphysique content engine active' },
+  { tag: 'ALERT',    bg: '#cc8800', fg: '#000', msg: 'Fiverr needs setup — 2 agents idle' },
+  { tag: 'ALERT',    bg: '#cc8800', fg: '#000', msg: 'Sapphire needs setup — 2 agents idle' },
+  { tag: 'SAPPHIRE', bg: '#0044cc', fg: '#fff', msg: 'Peptides store added to Atlas — tracking ready' },
+  { tag: 'SYSTEM',   bg: '#222', fg: '#00ffcc', msg: 'Master HQ Sheet updated — Jun 20 2026' },
+];
+const feed = document.getElementById('log-feed');
+logData.forEach(l => {
+  const d = document.createElement('div');
+  d.className = 'log-line';
+  d.innerHTML = '<span class="log-tag" style="background:' + l.bg + ';color:' + l.fg + '">' + l.tag + '</span>' + l.msg;
+  feed.appendChild(d);
+});
+
+// Cycle new log entries
+const newLogs = [
+  { tag: 'SYSTEM', bg: '#222', fg: '#00ffcc', msg: 'Revenue scan running...' },
+  { tag: 'ETSY',   bg: '#ff5500', fg: '#fff',  msg: 'Store health: Excellent' },
+  { tag: 'N8N',    bg: '#00aacc', fg: '#000',   msg: 'Etsy sync workflow triggered' },
+  { tag: 'TIKTOK', bg: '#6600ff', fg: '#fff',   msg: '3 posts scheduled for today' },
+];
+let idx = 0;
+setInterval(() => {
+  const l = newLogs[idx % newLogs.length];
+  const d = document.createElement('div');
+  d.className = 'log-line';
+  d.innerHTML = '<span class="log-tag" style="background:' + l.bg + ';color:' + l.fg + '">' + l.tag + '</span>' + l.msg;
+  feed.prepend(d);
+  idx++;
+  while (feed.children.length > 12) feed.removeChild(feed.lastChild);
+}, 4000);
 </script>
 </body>
 </html>
