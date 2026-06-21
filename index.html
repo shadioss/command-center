@@ -184,61 +184,13 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .clock-stat-val{font-family:'Orbitron',monospace;font-size:8px;font-weight:700;line-height:1}
 .clock-stat-lbl{font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(255,255,255,.35);letter-spacing:.5px;font-weight:600;text-transform:uppercase;white-space:nowrap;text-align:center}
 
-/* ========== CARVE NOTCH (mask approach) ========== */
-/* N8N: a dark circle overlaid at bottom-center to create the "bite" */
-.card.n8n .notch-mask{
-  position:absolute;
-  width:328px;height:328px;
-  bottom:-164px;          /* half outside the card bottom */
-  left:50%;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:#060c18;     /* matches body bg */
-  z-index:10;
-  pointer-events:none;
-}
-/* Cyan glow ring on the carved edge of N8N */
-.card.n8n .notch-ring{
-  position:absolute;
-  width:328px;height:328px;
-  bottom:-164px;
-  left:50%;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:transparent;
-  border:1.5px solid rgba(0,229,255,.55);
-  box-shadow:0 0 12px rgba(0,229,255,.4),inset 0 0 12px rgba(0,229,255,.08);
-  z-index:11;
-  pointer-events:none;
-}
-/* Research AI: dark circle at top-center */
-.card.research .notch-mask{
-  position:absolute;
-  width:328px;height:328px;
-  top:-164px;
-  left:50%;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:#060c18;
-  z-index:10;
-  pointer-events:none;
-}
-.card.research .notch-ring{
-  position:absolute;
-  width:328px;height:328px;
-  top:-164px;
-  left:50%;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:transparent;
-  border:1.5px solid rgba(168,85,247,.55);
-  box-shadow:0 0 12px rgba(168,85,247,.4),inset 0 0 12px rgba(168,85,247,.08);
-  z-index:11;
-  pointer-events:none;
-}
-/* The orb sits at z-index:20 above the masks (z:10/11) so it overlaps cleanly */
-/* N8N and Research content must stay visible at sides (not clipped) */
-.card.n8n,.card.research{overflow:hidden}
+
+/* ========== CARVED CARDS ========== */
+.card.n8n,.card.research{overflow:visible}
+.card-accent{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;z-index:3;pointer-events:none;background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.n8n .card-accent{background:linear-gradient(180deg,#ef4444,#f97316,#ef4444);animation-duration:3.2s}
+.card.research .card-accent{background:linear-gradient(180deg,#a855f7,#ec4899,#a855f7)}
+.notch-glow-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:6}
 </style>
 </head>
 <body>
@@ -324,8 +276,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 <!-- N8N col2 row1 - notch at bottom -->
 <div class="card n8n" style="grid-column:2;grid-row:1">
-  <div class="notch-mask"></div>
-  <div class="notch-ring"></div>
+  <div class="card-accent"></div>
   <div class="card-header">
     <div class="card-title-row"><div class="card-icon">&#x2699;&#xFE0F;</div><div><div class="card-title">N8N AUTOMATION</div><div class="card-subtitle">Workflow Engine &amp; AI Orchestration</div></div></div>
     <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
@@ -397,8 +348,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 <!-- RESEARCH AI col2 row2 - notch at top -->
 <div class="card research" style="grid-column:2;grid-row:2">
-  <div class="notch-mask"></div>
-  <div class="notch-ring"></div>
+  <div class="card-accent"></div>
   <div class="card-header">
     <div class="card-title-row"><div class="card-icon">&#x1F52C;</div><div><div class="card-title">RESEARCH AI</div><div class="card-subtitle">Market Intelligence &amp; Niche Analysis</div></div></div>
     <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
@@ -450,21 +400,15 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <script>
 (function(){
   function pad(n){return n<10?'0'+n:''+n}
-  function tick(){
-    var d=new Date(),cl=document.getElementById('clock');
-    if(cl) cl.textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
-  }
-  tick(); setInterval(tick,1000);
+  function tick(){var d=new Date(),cl=document.getElementById('clock');if(cl)cl.textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
+  tick();setInterval(tick,1000);
 
-  function setArc(id,startDeg,spanDeg,pct){
-    var el=document.getElementById(id); if(!el) return;
-    var r=107,circ=2*Math.PI*r;
-    var arcLen=(spanDeg/360)*circ;
-    var filled=arcLen*(pct<0?0:pct>1?1:pct);
-    var off=((startDeg-90)/360)*circ;
-    el.setAttribute('stroke-dasharray',filled+' '+(circ-filled));
-    el.setAttribute('stroke-dashoffset',-off);
-    if(pct<=0) el.setAttribute('stroke','transparent');
+  function setArc(id,s,sp,p){
+    var el=document.getElementById(id);if(!el)return;
+    var r=107,c=2*Math.PI*r,al=(sp/360)*c,f=al*(p<0?0:p>1?1:p),o=((s-90)/360)*c;
+    el.setAttribute('stroke-dasharray',f+' '+(c-f));
+    el.setAttribute('stroke-dashoffset',-o);
+    if(p<=0)el.setAttribute('stroke','transparent');
   }
   setArc('arcPhase',   -27.5,55,0.35);
   setArc('arcDepts',    44,  55,0.50);
@@ -472,65 +416,99 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   setArc('arcListings',188,  55,1.0);
   setArc('arcRevenue', 260,  55,0.0);
 
-  function layout(){
-    var grid=document.getElementById('deptGrid');
+  function carve(){
     var orb=document.getElementById('orbWrap');
     var n8n=document.querySelector('.card.n8n');
     var res=document.querySelector('.card.research');
-    if(!grid||!orb||!n8n||!res) return;
+    if(!orb||!n8n||!res)return;
 
+    var oR=orb.getBoundingClientRect();
     var nR=n8n.getBoundingClientRect();
     var rR=res.getBoundingClientRect();
-    if(!nR.width) return; // layout not ready yet
+    if(!nR.width||!oR.width)return;
 
-    // Dynamic orb size
-    var orbDiam=Math.min(Math.floor(nR.width*0.82),Math.floor(nR.height*1.1),300);
+    // Notch radius = half orb + 12px gap
+    var r=Math.round(oR.width/2)+12;
+    // Orb center X relative to each card
+    var orbCX=oR.left+oR.width/2;
+
+    // --- N8N card: notch cut from BOTTOM ---
+    var W=nR.width,H=nR.height;
+    var cx=orbCX-nR.left;
+    var x1=Math.max(0,cx-r), x2=Math.min(W,cx+r);
+    // Rectangle with semicircle bitten from bottom center
+    // Path goes: top-left -> top-right -> bottom-right -> arc-start(x2,H) 
+    //            -> arc sweep=1 (CW, bows UP into card) -> arc-end(x1,H)
+    //            -> bottom-left -> close
+    var pN='M 0,0 L '+W+',0 L '+W+','+H+' L '+x2+','+H+' A '+r+','+r+' 0 0,1 '+x1+','+H+' L 0,'+H+' Z';
+    n8n.style.clipPath='path("'+pN+'")';
+
+    // --- Research AI card: notch cut from TOP ---
+    var Wr=rR.width,Hr=rR.height;
+    var rcx=orbCX-rR.left;
+    var rx1=Math.max(0,rcx-r), rx2=Math.min(Wr,rcx+r);
+    // Path: bottom-left -> bottom-right -> top-right -> arc-start(rx2,0)
+    //       -> arc sweep=1 (CW, bows DOWN into card) -> arc-end(rx1,0)
+    //       -> top-left -> close
+    var pR='M 0,'+Hr+' L '+Wr+','+Hr+' L '+Wr+',0 L '+rx2+',0 A '+r+','+r+' 0 0,1 '+rx1+',0 L 0,0 Z';
+    res.style.clipPath='path("'+pR+'")';
+
+    // Add glowing arc SVG at the carved edge
+    addGlowArc(n8n,'n8nGlow',cx,H,r,'rgba(0,229,255,0.8)',false);
+    addGlowArc(res,'resGlow',rcx,0,r,'rgba(168,85,247,0.8)',true);
+
+    // Size the orb dynamically
+    var orbDiam=Math.min(Math.round(nR.width*0.82),Math.round(nR.height*1.1),300);
     orbDiam=Math.max(orbDiam,180);
-    var nd=orbDiam+24;
-
-    orb.style.width=orbDiam+'px';
-    orb.style.height=orbDiam+'px';
-
-    var svgEl=orb.querySelector('svg');
-    if(svgEl){ svgEl.setAttribute('width',orbDiam); svgEl.setAttribute('height',orbDiam); }
-
-    var inset=Math.max(16,Math.round(orbDiam*0.065));
-    var core=orb.querySelector('.orb-core-bg');
-    var cont=orb.querySelector('.orb-content');
-    if(core) core.style.inset=inset+'px';
-    if(cont) cont.style.inset=inset+'px';
-
-    // Scale text in orb
-    var fs=Math.max(6,Math.round(orbDiam/38));
-    orb.querySelectorAll('.clock-stat-val').forEach(function(e){e.style.fontSize=fs+'px';});
-    orb.querySelectorAll('.clock-stat-lbl').forEach(function(e){e.style.fontSize=Math.max(5,fs-1)+'px';});
-    var rv=orb.querySelector('.orb-rev-val'); if(rv) rv.style.fontSize=Math.round(orbDiam/13)+'px';
-    var rl=orb.querySelector('.orb-rev-label'); if(rl) rl.style.fontSize=Math.max(6,Math.round(orbDiam/42))+'px';
-
-    // Notch masks - center x = center of N8N card
-    var cxN8n=nR.width/2;
-    var cxRes=rR.width/2;
-
-    [n8n,res].forEach(function(card,i){
-      var cx=i===0?cxN8n:cxRes;
-      var isTop=i===1;
-      [card.querySelector('.notch-mask'),card.querySelector('.notch-ring')].forEach(function(el){
-        if(!el) return;
-        el.style.width=nd+'px'; el.style.height=nd+'px';
-        el.style.left=cx+'px'; el.style.transform='translateX(-50%)';
-        if(isTop){el.style.top=(-nd/2)+'px';el.style.bottom='';}
-        else{el.style.bottom=(-nd/2)+'px';el.style.top='';}
-      });
-    });
+    var orb2=document.getElementById('orbWrap');
+    if(orb2){
+      orb2.style.width=orbDiam+'px';orb2.style.height=orbDiam+'px';
+      var svg=orb2.querySelector('svg');
+      if(svg){svg.setAttribute('width',orbDiam);svg.setAttribute('height',orbDiam);}
+      var ins=Math.max(16,Math.round(orbDiam*0.065));
+      var bg=orb2.querySelector('.orb-core-bg'),ct=orb2.querySelector('.orb-content');
+      if(bg)bg.style.inset=ins+'px';if(ct)ct.style.inset=ins+'px';
+      var fs=Math.max(6,Math.round(orbDiam/38));
+      orb2.querySelectorAll('.clock-stat-val').forEach(function(e){e.style.fontSize=fs+'px';});
+      orb2.querySelectorAll('.clock-stat-lbl').forEach(function(e){e.style.fontSize=Math.max(5,fs-1)+'px';});
+      var rv=orb2.querySelector('.orb-rev-val');if(rv)rv.style.fontSize=Math.round(orbDiam/13)+'px';
+    }
   }
 
-  // Run at multiple points to ensure layout is ready
-  function run(){ requestAnimationFrame(function(){ layout(); setTimeout(layout,200); setTimeout(layout,600); }); }
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', run);
-  } else { run(); }
-  window.addEventListener('load', run);
-  window.addEventListener('resize', layout);
+  function addGlowArc(card,id,cx,cy,r,color,isTop){
+    var old=document.getElementById(id);if(old)old.remove();
+    var ns='http://www.w3.org/2000/svg';
+    var svg=document.createElementNS(ns,'svg');
+    svg.id=id;svg.setAttribute('class','notch-glow-svg');
+    // Arc: from (cx+r, cy) going CW (sweep=1) to (cx-r, cy) - same direction as clip-path
+    var x1=cx-r, x2=cx+r;
+    var d='M '+x2+','+cy+' A '+r+','+r+' 0 0,1 '+x1+','+cy;
+    var path=document.createElementNS(ns,'path');
+    path.setAttribute('d',d);
+    path.setAttribute('stroke',color);
+    path.setAttribute('stroke-width','2.5');
+    path.setAttribute('fill','none');
+    path.setAttribute('opacity','0.9');
+    // Simple glow via filter
+    var defs=document.createElementNS(ns,'defs');
+    var filt=document.createElementNS(ns,'filter');
+    filt.setAttribute('id','gf'+id);
+    var blur=document.createElementNS(ns,'feGaussianBlur');
+    blur.setAttribute('in','SourceGraphic');blur.setAttribute('stdDeviation','3');
+    filt.appendChild(blur);defs.appendChild(filt);svg.appendChild(defs);
+    path.setAttribute('filter','url(#gf'+id+')');
+    // Add a second sharp path on top
+    var path2=document.createElementNS(ns,'path');
+    path2.setAttribute('d',d);path2.setAttribute('stroke',color);
+    path2.setAttribute('stroke-width','1.5');path2.setAttribute('fill','none');
+    svg.appendChild(path);svg.appendChild(path2);
+    card.appendChild(svg);
+  }
+
+  function run(){requestAnimationFrame(function(){carve();setTimeout(carve,300);setTimeout(carve,800);});}
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}else{run();}
+  window.addEventListener('load',run);
+  window.addEventListener('resize',carve);
 })();
 </script>
 </body>
