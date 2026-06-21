@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ATLAS — Command Center</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ATLAS Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden;background:#080d18;color:#e2e8f0}
@@ -19,10 +19,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-@keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes navOrbPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.4),0 0 12px rgba(0,229,255,.3)}50%{box-shadow:0 0 0 8px rgba(0,229,255,0),0 0 25px rgba(0,229,255,.6)}}
-@keyframes navOrbSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes dotPing{0%{transform:scale(1);opacity:1}70%{transform:scale(2.5);opacity:0}100%{transform:scale(1);opacity:0}}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes statCount{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes rowSlide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
 @keyframes coreGlow{0%,100%{box-shadow:0 0 20px #00e5ff,0 0 50px rgba(0,229,255,.5),0 0 90px rgba(0,229,255,.2),inset 0 0 30px rgba(0,229,255,.12)}50%{box-shadow:0 0 35px #00e5ff,0 0 80px rgba(0,229,255,.8),0 0 130px rgba(0,229,255,.4),inset 0 0 50px rgba(0,229,255,.28)}}
@@ -30,125 +27,175 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes ringSpinCW{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes ringSpinCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
 @keyframes orbIn{from{opacity:0;transform:translate(-50%,-50%) scale(.4)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-@keyframes alertPing{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes alertPing{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@keyframes dotPing{0%{transform:scale(1);opacity:1}100%{transform:scale(2.5);opacity:0}}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes navOrbSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes brandGlow{0%,100%{text-shadow:0 0 10px rgba(0,229,255,.4)}50%{text-shadow:0 0 20px rgba(0,229,255,.8),0 0 40px rgba(0,229,255,.4)}}
 
-/* LAYOUT */
-.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
-
-/* TOP NAV */
-.topnav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:62px;background:rgba(8,13,24,.97);border-bottom:1px solid rgba(0,229,255,.12);flex-shrink:0;animation:fadeIn .5s ease both}
-.brand{display:flex;align-items:center;gap:14px}
-.nav-orb{width:38px;height:38px;border-radius:50%;border:2px solid #00e5ff;background:radial-gradient(circle,rgba(0,229,255,.18) 0%,rgba(0,8,20,.9) 100%);display:flex;align-items:center;justify-content:center;animation:navOrbPulse 3s ease-in-out infinite;position:relative;flex-shrink:0}
-.nav-orb::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(0,229,255,.2);animation:navOrbSpin 8s linear infinite}
-.nav-orb svg{width:16px;height:16px;z-index:1}
-.brand-name{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;letter-spacing:6px;color:#00e5ff;animation:pulseGlow 4s ease-in-out infinite}
-.brand-sub{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:5px;color:rgba(0,229,255,.45);font-weight:600}
+/* NAV */
+.app{display:flex;flex-direction:column;height:100vh;padding:8px 10px;gap:8px}
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:0 6px;height:46px;flex-shrink:0;border-bottom:1px solid rgba(0,229,255,.1)}
+.brand{display:flex;align-items:center;gap:12px}
+.nav-orb{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(0,229,255,.5);display:flex;align-items:center;justify-content:center;animation:navOrbSpin 8s linear infinite;position:relative}
+.nav-orb::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1px solid rgba(0,229,255,.15);animation:navOrbSpin 12s linear infinite reverse}
+.nav-orb svg{width:16px;height:16px}
+.brand-name{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;letter-spacing:4px;color:#00e5ff;animation:brandGlow 3s ease-in-out infinite}
+.brand-sub{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:3px;color:rgba(0,229,255,.4);font-weight:600;margin-top:-2px}
 .nav-right{display:flex;align-items:center;gap:18px}
-.sys-badge{display:flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(0,255,136,.3);border-radius:20px;background:rgba(0,255,136,.06);position:relative;overflow:hidden}
-.sys-badge::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,255,136,.08),transparent);background-size:200% 100%;animation:shimmer 3s ease-in-out infinite}
+.sys-badge{display:flex;align-items:center;gap:7px;padding:5px 14px;border:1px solid rgba(0,255,136,.3);border-radius:20px;background:rgba(0,255,136,.06);background-size:200% auto;animation:shimmer 4s linear infinite}
 .sys-dot{width:7px;height:7px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;position:relative;flex-shrink:0}
 .sys-dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:#00ff88;animation:dotPing 2s ease-out infinite}
 .sys-txt{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:2px;color:#00ff88;font-weight:700}
 .nav-clock{font-family:'Orbitron',monospace;font-size:19px;font-weight:700;letter-spacing:3px;color:#f1f5f9;font-variant-numeric:tabular-nums}
+</style>
+<style>
+.dept-grid{display:grid;grid-template-columns:1fr 1.8fr 1fr;grid-template-rows:1fr 1fr;gap:8px;flex:1;min-height:0;position:relative}
 
-/* DEPT GRID — no stats bar, full height minus nav */
-/* 3 cols: left=1fr, middle=1.8fr, right=1fr */
-/* 2 equal rows */
-.dept-grid{flex:1;display:grid;grid-template-columns:1fr 1.8fr 1fr;grid-template-rows:1fr 1fr;gap:13px;padding:13px;overflow:hidden;min-height:0;position:relative}
+/* BASE CARD */
+.card{position:relative;border-radius:10px;background:linear-gradient(135deg,#0f1629 0%,#0a1020 100%);border:1px solid rgba(255,255,255,.06);overflow:visible;display:flex;flex-direction:column}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;z-index:3;pointer-events:none}
+.card:hover{border-color:rgba(0,229,255,.18);box-shadow:0 0 20px rgba(0,229,255,.06)}
 
-/* ORB CONTAINER */
-.orb-container{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:30;pointer-events:none;animation:orbIn .9s cubic-bezier(.34,1.56,.64,1) .5s both}
+/* CARD INNER - clips content to card shape */
+.card-inner-wrap{position:absolute;inset:0;border-radius:10px;overflow:hidden;z-index:1}
 
-/* CARDS base */
-.card{background:linear-gradient(145deg,#0f1629 0%,#0a1020 100%);border:1px solid rgba(255,255,255,.07);border-radius:10px;position:relative;display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px;z-index:2}
-.card.etsy{animation:cardIn .6s ease .1s both}
-.card.etsy::before{background:linear-gradient(180deg,#f97316,#ea580c,#f97316);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.tiktok{animation:cardIn .6s ease .2s both}
-.card.tiktok::before{background:linear-gradient(180deg,#a855f7,#7c3aed,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.fiverr{animation:cardIn .6s ease .3s both}
-.card.fiverr::before{background:linear-gradient(180deg,#22c55e,#16a34a,#22c55e);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.sapphire{animation:cardIn .6s ease .4s both}
-.card.sapphire::before{background:linear-gradient(180deg,#3b82f6,#06b6d4,#3b82f6);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+/* CARVED CARDS - overflow visible so orb can sit on boundary */
+.card.n8n,.card.research{overflow:visible}
 
-/* N8N — bottom carved with SVG clip-path, content splits L/R */
-.card.n8n{animation:cardIn .6s ease .5s both;overflow:visible}
+/* The carve mask: dark pseudo-element that covers the orb notch area */
+/* N8N - notch at bottom center */
+.card.n8n .card-inner-wrap{border-radius:10px}
+/* Research AI - notch at top center */
+.card.research .card-inner-wrap{border-radius:10px}
+
+/* card color borders */
+.card.etsy::before{background:linear-gradient(180deg,#f97316,#fb923c,#f97316);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 .card.n8n::before{background:linear-gradient(180deg,#ef4444,#f97316,#ef4444);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.n8n .card-inner{position:absolute;inset:0;border-radius:10px;overflow:hidden}
-.card.n8n .card-clip{width:100%;height:100%}
-
-/* Research AI — top carved with SVG clip-path, content splits L/R */
-.card.research{animation:cardIn .6s ease .6s both;overflow:visible}
+.card.tiktok::before{background:linear-gradient(180deg,#00e5ff,#0ea5e9,#00e5ff);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.fiverr::before{background:linear-gradient(180deg,#22c55e,#16a34a,#22c55e);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 .card.research::before{background:linear-gradient(180deg,#a855f7,#ec4899,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.research .card-inner{position:absolute;inset:0;border-radius:10px;overflow:hidden}
+.card.sapphire::before{background:linear-gradient(180deg,#3b82f6,#6366f1,#3b82f6);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 
-/* CARD STRUCTURE */
-.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:13px 16px 7px 20px;flex-shrink:0;position:relative;z-index:2}
+/* CARD ANIMATIONS */
+.card.etsy{animation:cardIn .6s ease .1s both}
+.card.n8n{animation:cardIn .6s ease .3s both}
+.card.tiktok{animation:cardIn .6s ease .2s both}
+.card.fiverr{animation:cardIn .6s ease .4s both}
+.card.research{animation:cardIn .6s ease .5s both}
+.card.sapphire{animation:cardIn .6s ease .6s both}
+
+/* CARD CONTENT */
+.card-content{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;padding:0}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:11px 14px 7px 18px;flex-shrink:0}
 .card-title-row{display:flex;align-items:center;gap:10px}
-.card-icon{font-size:20px;line-height:1}
-.card-title{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;color:#f1f5f9}
+.card-icon{font-size:18px;line-height:1}
+.card-title{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;color:#f1f5f9}
 .card-subtitle{font-family:'Rajdhani',sans-serif;font-size:10px;color:rgba(255,255,255,.28);letter-spacing:.5px;margin-top:1px;font-weight:500}
-.card-badge{padding:3px 10px;border-radius:20px;font-family:'Rajdhani',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;display:flex;align-items:center;gap:5px;flex-shrink:0}
-.badge-live{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);color:#00ff88}
-.badge-next{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.3);color:#facc15}
-.badge-setup{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);color:#60a5fa}
-.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.5s infinite;flex-shrink:0}
+.card-badge{padding:3px 10px;border-radius:20px;font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;display:flex;align-items:center;gap:5px}
+.badge-live{background:rgba(0,255,136,.1);color:#00ff88;border:1px solid rgba(0,255,136,.3)}
+.badge-next{background:rgba(251,191,36,.08);color:#fbbf24;border:1px solid rgba(251,191,36,.25)}
+.badge-setup{background:rgba(99,102,241,.1);color:#a78bfa;border:1px solid rgba(99,102,241,.3)}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.5s ease infinite}
+.card-body{flex:1;min-height:0;padding:0 14px 10px 18px;overflow:hidden;display:flex;flex-direction:column;gap:7px}
+</style>
+<style>
+/* STAT BOXES */
+.stat-row{display:flex;gap:7px;flex-shrink:0}
+.stat-box{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:7px;padding:7px 10px;min-width:0}
+.stat-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:#00e5ff;animation:statCount .5s ease .8s both}
+.stat-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.8px;margin-top:1px;text-transform:uppercase;font-weight:600}
+.stat-val.green{color:#00ff88}.stat-val.orange{color:#f97316}.stat-val.purple{color:#a855f7}
 
-.card-body{padding:0 16px 12px 20px;flex:1;display:flex;flex-direction:column;gap:7px;overflow:hidden;min-height:0;position:relative;z-index:2}
+/* AGENTS ROW */
+.agents-section{flex-shrink:0}
+.section-label{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,.3);font-weight:700;text-transform:uppercase;margin-bottom:5px}
+.agent-chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.5px}
+.chip::before{content:'';width:5px;height:5px;border-radius:50%;background:#00e5ff;box-shadow:0 0 5px #00e5ff;flex-shrink:0}
+.chip.planned::before{background:rgba(255,255,255,.25);box-shadow:none}
 
-/* Split body for N8N and Research */
-.split-body{padding:0 12px 10px 20px;flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow:hidden;min-height:0;position:relative;z-index:2;align-items:start}
-.split-col{display:flex;flex-direction:column;gap:6px}
-
-/* AGENTS */
-.agents-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex-shrink:0}
-.agents-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.25);font-weight:600;text-transform:uppercase;width:100%;margin-bottom:2px}
-.agent-chip{padding:2px 8px;border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:4px;font-weight:500}
-.agent-chip::before{content:'';width:4px;height:4px;border-radius:50%;background:#00ff88;box-shadow:0 0 4px #00ff88;flex-shrink:0}
-.agent-chip.dim{opacity:.35}
-.agent-chip.dim::before{background:rgba(255,255,255,.2);box-shadow:none}
-
-/* STATS */
-.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0}
-.stat-box{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:7px 10px}
-.sbox-val{font-family:'Orbitron',monospace;font-size:18px;font-weight:700}
-.sbox-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(255,255,255,.25);margin-top:1px}
+/* PROGRESS BARS */
+.progress-section{flex:1;min-height:0;display:flex;flex-direction:column;gap:5px;justify-content:flex-end}
+.progress-row{display:flex;align-items:center;gap:8px}
+.progress-label{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.8px;font-weight:600;flex-shrink:0;width:70px;text-transform:uppercase}
+.progress-track{flex:1;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;position:relative}
+.progress-fill{border-radius:3px;position:relative;overflow:hidden;transition:width 1.5s ease}
+.progress-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shimmer 2s linear infinite;background-size:200% 100%}
+.progress-val{font-family:'Orbitron',monospace;font-size:8px;font-weight:700;color:rgba(255,255,255,.4);flex-shrink:0;width:24px;text-align:right}
 
 /* LISTINGS */
-.listings{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
-.listing-row{display:flex;align-items:center;justify-content:space-between;padding:3px 2px;border-bottom:1px solid rgba(255,255,255,.04);animation:rowSlide .4s ease both;flex-shrink:0}
-.listing-row:last-child{border-bottom:none}
-.listing-num{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.2);width:18px;flex-shrink:0;font-weight:600}
-.listing-name{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,.6);flex:1}
-.listing-price{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.5);margin-right:7px}
-.listing-dot{width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 5px #00ff88;flex-shrink:0;animation:blink 2s ease-in-out infinite}
-
-/* PROGRESS */
-.prog-section{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
-.prog-row{display:flex;justify-content:space-between;font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(255,255,255,.3);margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
-.prog-track{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;border-radius:2px}
-
-/* MINI STATS */
-.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0}
-.mini-stat{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:6px 10px}
-.mini-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700}
-.mini-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(255,255,255,.25);margin-top:1px}
+.listing-section{flex:1;min-height:0;display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.listing-row{display:flex;align-items:center;gap:7px;padding:3px 7px;border-radius:5px;background:rgba(255,255,255,.02);border:1px solid transparent;animation:rowSlide .4s ease both}
+.listing-row:hover{background:rgba(0,229,255,.04);border-color:rgba(0,229,255,.1)}
+.listing-num{font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.25);font-weight:600;width:14px;flex-shrink:0}
+.listing-name{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,.65);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.listing-price{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:#f97316;flex-shrink:0}
+.listing-dot{width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 5px #00ff88;flex-shrink:0;animation:blink 2s ease infinite}
 
 /* TICKER */
-.ticker-wrap{flex-shrink:0;overflow:hidden;padding-top:4px;border-top:1px solid rgba(0,229,255,.08)}
-.ticker{font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(0,229,255,.4);letter-spacing:1px;white-space:nowrap;display:inline-block}
+.ticker-wrap{flex-shrink:0;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.1);border-radius:5px;overflow:hidden;padding:4px 0;position:relative}
+.ticker-inner{display:flex;gap:0;animation:tickerScroll 18s linear infinite;width:max-content}
+.ticker-item{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(0,229,255,.55);letter-spacing:.8px;padding:0 18px;white-space:nowrap}
+.ticker-item::before{content:'◈ ';color:rgba(0,229,255,.3)}
 
-/* SECTION LABEL */
-.sec-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.25);font-weight:600;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:3px;margin-bottom:2px}
+/* SPLIT LAYOUT for N8N and Research AI */
+.split-body{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0;padding:0 14px 10px 18px;overflow:hidden}
+.split-col{display:flex;flex-direction:column;gap:6px;min-width:0;overflow:hidden}
 
-.val-green{color:#00ff88}
-.val-cyan{color:#00e5ff}
-.val-purple{color:#c084fc}
-.val-orange{color:#fb923c}
+/* ORB WRAPPER - positioned absolute at center of grid gap between row1 and row2, col2 */
+.orb-wrap{position:absolute;width:300px;height:300px;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10;animation:orbIn .8s cubic-bezier(.175,.885,.32,1.275) .9s both;pointer-events:none}
+</style>
+<style>
+/* ORB GLOW CSS */
+.orb-glow-ring{position:absolute;border-radius:50%;pointer-events:none}
+.orb-outer-glow{inset:-15px;background:radial-gradient(circle,transparent 45%,rgba(0,229,255,.08) 65%,transparent 80%);animation:coreGlow 3s ease-in-out infinite}
+.orb-core-bg{position:absolute;inset:20px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#0d2a3d 0%,#061320 50%,#030b14 100%);box-shadow:inset 0 0 40px rgba(0,229,255,.15),0 0 30px rgba(0,229,255,.3),0 0 70px rgba(0,229,255,.15);animation:coreGlow 3s ease-in-out infinite}
+
+/* ORB CONTENT */
+.orb-content{position:absolute;inset:20px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;z-index:5}
+.orb-rev-label{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(0,229,255,.5);font-weight:700;text-transform:uppercase;margin-bottom:1px}
+.orb-rev-val{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:#00e5ff;animation:revPulse 3s ease-in-out infinite;letter-spacing:1px;line-height:1}
+.orb-alert{font-family:'Rajdhani',sans-serif;font-size:9px;color:#fbbf24;letter-spacing:1px;font-weight:600;margin-top:2px;animation:alertPing 2s ease infinite}
+.orb-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.3),transparent);margin:4px 0}
+
+/* CLOCKFACE STATS - positioned absolutely on orb */
+.clock-stat{position:absolute;display:flex;flex-direction:column;align-items:center;gap:1px;z-index:6}
+.clock-stat-val{font-family:'Orbitron',monospace;font-size:8px;font-weight:700;color:#00e5ff;line-height:1}
+.clock-stat-lbl{font-family:'Rajdhani',sans-serif;font-size:7px;color:rgba(255,255,255,.4);letter-spacing:.5px;font-weight:600;text-transform:uppercase;white-space:nowrap;text-align:center}
+
+/* N8N CARD GLOW EDGE at carved notch */
+.card.n8n .notch-glow{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:164px;
+  height:82px;
+  border-radius:0 0 82px 82px;
+  background:transparent;
+  box-shadow:0 6px 20px rgba(0,229,255,.35),0 2px 8px rgba(0,229,255,.5);
+  z-index:4;
+  pointer-events:none;
+}
+/* Research AI CARD GLOW EDGE at carved notch */
+.card.research .notch-glow{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:164px;
+  height:82px;
+  border-radius:82px 82px 0 0;
+  background:transparent;
+  box-shadow:0 -6px 20px rgba(0,229,255,.35),0 -2px 8px rgba(0,229,255,.5);
+  z-index:4;
+  pointer-events:none;
+}
 </style>
 </head>
-<body><div class="app">
+<body>
+<div class="app">
 <div class="topnav">
   <div class="brand">
     <div class="nav-orb"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#00e5ff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.5" fill="#00e5ff"/></svg></div>
@@ -162,269 +209,328 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 <div class="dept-grid" id="deptGrid">
 
-<!-- ETSY col1 row1 -->
-<div class="card etsy">
-  <div class="card-header">
-    <div class="card-title-row"><div class="card-icon">🛍️</div><div><div class="card-title">ETSY DEPT</div><div class="card-subtitle">ShadyPrintables — Digital Printables</div></div></div>
-    <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+<!-- ORB centered at grid midpoint col2 -->
+<div class="orb-wrap" id="orbWrap">
+  <svg width="300" height="300" viewBox="0 0 300 300" style="position:absolute;inset:0;overflow:visible">
+    <!-- outer ring - spins CW fast with traveling dot -->
+    <g style="transform-origin:150px 150px;animation:ringSpinCW 4s linear infinite">
+      <circle cx="150" cy="150" r="143" stroke="rgba(0,229,255,.25)" stroke-width="1.5" fill="none"/>
+      <circle cx="150" cy="7" r="4" fill="#00e5ff" filter="url(#glow)"/>
+    </g>
+    <!-- tick marks on outer ring -->
+    <g style="transform-origin:150px 150px;animation:ringSpinCW 4s linear infinite">
+      <circle cx="150" cy="150" r="143" stroke="rgba(0,229,255,.12)" stroke-width="6" stroke-dasharray="2 14" fill="none"/>
+    </g>
+    <!-- middle ring - spins CCW medium -->
+    <g style="transform-origin:150px 150px;animation:ringSpinCCW 8s linear infinite">
+      <circle cx="150" cy="150" r="132" stroke="rgba(0,229,255,.18)" stroke-width="1" fill="none" stroke-dasharray="6 10"/>
+    </g>
+    <!-- inner dashed ring - spins CW slow -->
+    <g style="transform-origin:150px 150px;animation:ringSpinCW 14s linear infinite">
+      <circle cx="150" cy="150" r="122" stroke="rgba(0,229,255,.12)" stroke-width="1.5" fill="none" stroke-dasharray="3 8"/>
+    </g>
+    <!-- arc gauges background track circles at ~105px radius -->
+    <!-- Phase at top (270deg = top) -->
+    <circle cx="150" cy="150" r="105" stroke="rgba(0,229,255,.06)" stroke-width="6" fill="none" stroke-dasharray="40 621" stroke-dashoffset="-291" stroke-linecap="round"/>
+    <!-- Active Depts top-right -->
+    <circle cx="150" cy="150" r="105" stroke="rgba(0,255,136,.06)" stroke-width="6" fill="none" stroke-dasharray="40 621" stroke-dashoffset="-331" stroke-linecap="round"/>
+    <!-- Agents bottom-right -->
+    <circle cx="150" cy="150" r="105" stroke="rgba(0,229,255,.06)" stroke-width="6" fill="none" stroke-dasharray="40 621" stroke-dashoffset="-371" stroke-linecap="round"/>
+    <!-- Listings bottom-left -->
+    <circle cx="150" cy="150" r="105" stroke="rgba(249,115,22,.06)" stroke-width="6" fill="none" stroke-dasharray="40 621" stroke-dashoffset="-411" stroke-linecap="round"/>
+    <!-- Revenue top-left -->
+    <circle cx="150" cy="150" r="105" stroke="rgba(168,85,247,.06)" stroke-width="6" fill="none" stroke-dasharray="40 621" stroke-dashoffset="-451" stroke-linecap="round"/>
+    
+    <!-- Arc fills -->
+    <!-- Phase arc: 35% of 40deg = 14deg arc span at top -->
+    <circle id="arcPhase" cx="150" cy="150" r="105" stroke="#00e5ff" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <!-- Active Depts arc: 50% green -->
+    <circle id="arcDepts" cx="150" cy="150" r="105" stroke="#00ff88" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <!-- Agents arc: 67% cyan -->
+    <circle id="arcAgents" cx="150" cy="150" r="105" stroke="#00e5ff" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <!-- Listings arc: 100% orange -->
+    <circle id="arcListings" cx="150" cy="150" r="105" stroke="#f97316" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <!-- Revenue arc: purple (no %) -->
+    <circle id="arcRevenue" cx="150" cy="150" r="105" stroke="#a855f7" stroke-width="6" fill="none" stroke-linecap="round"/>
+    
+    <defs>
+      <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+    </defs>
+  </svg>
+  
+  <!-- Core glow bg -->
+  <div class="orb-core-bg"></div>
+  
+  <!-- Orb center content -->
+  <div class="orb-content">
+    <div class="orb-rev-label">TOTAL REVENUE</div>
+    <div class="orb-rev-val">$42.94</div>
+    <div class="orb-alert">&#9888; 2 ALERTS</div>
+    <div class="orb-divider"></div>
   </div>
-  <div class="card-body">
-    <div class="agents-row"><span class="agents-lbl">Active Agents (3)</span><div class="agent-chip">Listing Builder</div><div class="agent-chip">PDF Generator</div><div class="agent-chip">Market Researcher</div></div>
-    <div class="stats-row">
-      <div class="stat-box"><div class="sbox-val val-green">6</div><div class="sbox-lbl">Active Listings</div></div>
-      <div class="stat-box"><div class="sbox-val val-cyan">999</div><div class="sbox-lbl">Stock/Listing</div></div>
+  
+  <!-- Clockface stat labels -->
+  <!-- TOP: Phase ~150,48 -->
+  <div class="clock-stat" style="top:38px;left:50%;transform:translateX(-50%)"><div class="clock-stat-val" style="color:#00e5ff">35%</div><div class="clock-stat-lbl">PHASE</div></div>
+  <!-- TOP-RIGHT: Active Depts ~220,72 -->
+  <div class="clock-stat" style="top:62px;right:28px"><div class="clock-stat-val" style="color:#00ff88">3/6</div><div class="clock-stat-lbl">DEPTS</div></div>
+  <!-- BOTTOM-RIGHT: Agents ~230,205 -->
+  <div class="clock-stat" style="bottom:62px;right:22px"><div class="clock-stat-val" style="color:#00e5ff">8/12</div><div class="clock-stat-lbl">AGENTS</div></div>
+  <!-- BOTTOM-LEFT: Listings ~80,205 -->
+  <div class="clock-stat" style="bottom:62px;left:22px"><div class="clock-stat-val" style="color:#f97316">6/6</div><div class="clock-stat-lbl">LISTINGS</div></div>
+  <!-- TOP-LEFT: Revenue ~80,72 -->
+  <div class="clock-stat" style="top:62px;left:28px"><div class="clock-stat-val" style="color:#a855f7">$42</div><div class="clock-stat-lbl">REVENUE</div></div>
+</div><!-- end orb-wrap -->
+
+<!-- ETSY col1 row1 -->
+<div class="card etsy" style="grid-column:1;grid-row:1">
+  <div class="card-inner-wrap"></div>
+  <div class="card-content">
+    <div class="card-header">
+      <div class="card-title-row"><div class="card-icon">🛍️</div><div><div class="card-title">ETSY DEPT</div><div class="card-subtitle">ShadyPrintables — Digital Printables</div></div></div>
+      <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
     </div>
-    <div class="listings">
-      <div class="listing-row"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
-      <div class="listing-row"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-      <div class="listing-row"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-      <div class="listing-row"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-      <div class="listing-row"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
-      <div class="listing-row"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
+    <div class="card-body">
+      <div class="agents-section">
+        <div class="section-label">ACTIVE AGENTS (3)</div>
+        <div class="agent-chips"><span class="chip">Listing Builder</span><span class="chip">PDF Generator</span><span class="chip">Market Researcher</span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val orange">6</div><div class="stat-lbl">Active Listings</div></div>
+        <div class="stat-box"><div class="stat-val">999</div><div class="stat-lbl">Stock Per Listing</div></div>
+      </div>
+      <div class="listing-section">
+        <div class="listing-row" style="animation-delay:.8s"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:.9s"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:1s"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:1.1s"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:1.2s"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
+        <div class="listing-row" style="animation-delay:1.3s"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
+      </div>
     </div>
   </div>
 </div>
-<!-- N8N col2 row1 — bottom curved toward orb -->
-<div class="card n8n" id="cardN8N">
-  <div class="card-header">
-    <div class="card-title-row"><div class="card-icon">⚙️</div><div><div class="card-title">N8N AUTOMATION</div><div class="card-subtitle">Workflow Engine &amp; AI Orchestration</div></div></div>
-    <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
-  </div>
-  <div class="split-body">
-    <div class="split-col">
-      <div class="sec-lbl">Workflows (3)</div>
-      <div class="agent-chip">Listing Gen</div>
-      <div class="agent-chip">Market Research</div>
-      <div class="agent-chip">TikTok Planner</div>
-      <div class="stat-box" style="margin-top:4px"><div class="sbox-val val-cyan">3</div><div class="sbox-lbl">Workflows Built</div></div>
+
+<!-- N8N col2 row1 - CARVED at bottom -->
+<div class="card n8n" id="n8nCard" style="grid-column:2;grid-row:1">
+  <div class="card-inner-wrap" id="n8nInner"></div>
+  <div class="notch-glow"></div>
+  <div class="card-content">
+    <div class="card-header">
+      <div class="card-title-row"><div class="card-icon">⚙️</div><div><div class="card-title">N8N AUTOMATION</div><div class="card-subtitle">Workflow Engine &amp; AI Orchestration</div></div></div>
+      <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
     </div>
-    <div class="split-col">
-      <div class="stat-box"><div class="sbox-val val-green">1000</div><div class="sbox-lbl">Free Executions</div></div>
-      <div class="prog-section" style="margin-top:4px">
-        <div><div class="prog-row"><span>Capacity</span><span>2%</span></div><div class="prog-track"><div class="prog-fill" style="width:2%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div></div>
-        <div><div class="prog-row"><span>Active</span><span>3/10</span></div><div class="prog-track"><div class="prog-fill" style="width:30%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
+    <div class="split-body">
+      <div class="split-col">
+        <div class="agents-section">
+          <div class="section-label">WORKFLOWS (3)</div>
+          <div class="agent-chips" style="flex-direction:column;gap:3px">
+            <span class="chip">Listing Gen</span>
+            <span class="chip">Market Research</span>
+            <span class="chip">TikTok Planner</span>
+          </div>
+        </div>
+        <div class="ticker-wrap" style="margin-top:auto">
+          <div class="ticker-inner">
+            <span class="ticker-item">ATLAS NOMINAL</span>
+            <span class="ticker-item">N8N OK</span>
+            <span class="ticker-item">ETSY SYNC</span>
+            <span class="ticker-item">AGENTS ONLINE</span>
+            <span class="ticker-item">PHASE 1 — 35%</span>
+            <span class="ticker-item">ATLAS NOMINAL</span>
+            <span class="ticker-item">N8N OK</span>
+            <span class="ticker-item">ETSY SYNC</span>
+            <span class="ticker-item">AGENTS ONLINE</span>
+            <span class="ticker-item">PHASE 1 — 35%</span>
+          </div>
+        </div>
       </div>
-      <div class="ticker-wrap" style="margin-top:4px"><div class="ticker" id="ticker">● ATLAS NOMINAL &nbsp;&nbsp; ● N8N OK &nbsp;&nbsp; ● ETSY SYNC &nbsp;&nbsp; ● AGENTS ONLINE &nbsp;&nbsp; ● PHASE 1 — 35% &nbsp;&nbsp;</div></div>
+      <div class="split-col">
+        <div class="stat-row" style="flex-direction:column">
+          <div class="stat-box"><div class="stat-val" style="font-size:22px">3</div><div class="stat-lbl">Workflows Built</div></div>
+          <div class="stat-box"><div class="stat-val green">1000</div><div class="stat-lbl">Free Executions</div></div>
+        </div>
+        <div class="progress-section">
+          <div class="section-label">CAPACITY USED</div>
+          <div class="progress-row">
+            <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:2%;background:#ef4444;height:5px"></div></div>
+            <div class="progress-val">2%</div>
+          </div>
+          <div class="section-label" style="margin-top:4px">WORKFLOWS ACTIVE</div>
+          <div class="progress-row">
+            <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:30%;background:linear-gradient(90deg,#6366f1,#a855f7);height:5px"></div></div>
+            <div class="progress-val">3/10</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- SVG overlay for curved bottom border drawn by JS -->
-  <svg id="n8nBorderSvg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;overflow:visible"></svg>
 </div>
 
 <!-- TIKTOK col3 row1 -->
-<div class="card tiktok">
-  <div class="card-header">
-    <div class="card-title-row"><div class="card-icon">📱</div><div><div class="card-title">TIKTOK DEPT</div><div class="card-subtitle">@shadesphysique</div></div></div>
-    <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>NEXT</div>
-  </div>
-  <div class="card-body">
-    <div class="agents-row"><span class="agents-lbl">Planned Agents (3)</span><div class="agent-chip dim">Script Writer</div><div class="agent-chip dim">Scheduler</div><div class="agent-chip dim">Analyst</div></div>
-    <div class="mini-stats">
-      <div class="mini-stat"><div class="mini-val" style="color:#a855f7">0</div><div class="mini-lbl">Videos Posted</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Followers</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Views</div></div>
+<div class="card tiktok" style="grid-column:3;grid-row:1">
+  <div class="card-inner-wrap"></div>
+  <div class="card-content">
+    <div class="card-header">
+      <div class="card-title-row"><div class="card-icon">📱</div><div><div class="card-title">TIKTOK DEPT</div><div class="card-subtitle">@shadesphysique</div></div></div>
+      <div class="card-badge badge-next"><div class="badge-dot"></div>NEXT</div>
     </div>
-    <div class="prog-section">
-      <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#a855f7"></div></div></div>
-      <div><div class="prog-row"><span>Content Pipeline</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#7c3aed"></div></div></div>
-    </div>
-  </div>
-</div>
-<!-- FIVERR col1 row2 -->
-<div class="card fiverr">
-  <div class="card-header">
-    <div class="card-title-row"><div class="card-icon">💼</div><div><div class="card-title">FIVERR DEPT</div><div class="card-subtitle">Freelance Services &amp; Gigs</div></div></div>
-    <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>NEXT</div>
-  </div>
-  <div class="card-body">
-    <div class="agents-row"><span class="agents-lbl">Planned Agents (2)</span><div class="agent-chip dim">Gig Writer</div><div class="agent-chip dim">Order Manager</div></div>
-    <div class="mini-stats">
-      <div class="mini-stat"><div class="mini-val" style="color:#facc15">0</div><div class="mini-lbl">Gigs Live</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Orders</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Rating</div></div>
-    </div>
-    <div class="prog-section">
-      <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#22c55e"></div></div></div>
-      <div><div class="prog-row"><span>Gig Readiness</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#16a34a"></div></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- RESEARCH AI col2 row2 — top U-curve toward orb, split L/R -->
-<div class="card research" id="cardResearch">
-  <div class="card-header">
-    <div class="card-title-row"><div class="card-icon">🔬</div><div><div class="card-title">RESEARCH AI</div><div class="card-subtitle">Market Intelligence &amp; Niche Analysis</div></div></div>
-    <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
-  </div>
-  <div class="split-body">
-    <div class="split-col">
-      <div class="sec-lbl">Active Agents (2)</div>
-      <div class="agent-chip">Niche Finder</div>
-      <div class="agent-chip">Trend Analyzer</div>
-      <div class="mini-stat" style="margin-top:4px"><div class="mini-val" style="color:#c084fc">12</div><div class="mini-lbl">Niches Found</div></div>
-      <div class="mini-stat" style="margin-top:4px"><div class="mini-val" style="color:#f97316">6</div><div class="mini-lbl">Products Found</div></div>
-    </div>
-    <div class="split-col">
-      <div class="mini-stat"><div class="mini-val" style="color:#00e5ff;font-size:13px">Batch 2</div><div class="mini-lbl">Next Run</div></div>
-      <div class="mini-stat" style="margin-top:4px"><div class="mini-val" style="color:#00ff88">High</div><div class="mini-lbl">Demand Signal</div></div>
-      <div class="prog-section" style="margin-top:4px">
-        <div><div class="prog-row"><span>Depth</span><span>60%</span></div><div class="prog-track"><div class="prog-fill" style="width:60%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
-        <div><div class="prog-row"><span>Coverage</span><span>45%</span></div><div class="prog-track"><div class="prog-fill" style="width:45%;background:linear-gradient(90deg,#ec4899,#a855f7)"></div></div></div>
+    <div class="card-body">
+      <div class="agents-section">
+        <div class="section-label">PLANNED AGENTS (3)</div>
+        <div class="agent-chips"><span class="chip planned">Script Writer</span><span class="chip planned">Scheduler</span><span class="chip planned">Analyst</span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val orange">0</div><div class="stat-lbl">Videos Posted</div></div>
+        <div class="stat-box"><div class="stat-val">—</div><div class="stat-lbl">Revenue</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val">—</div><div class="stat-lbl">Followers</div></div>
+        <div class="stat-box"><div class="stat-val">—</div><div class="stat-lbl">Views</div></div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-row">
+          <div class="progress-label">SETUP</div>
+          <div class="progress-track"><div class="progress-fill" style="width:0%;background:#00e5ff;height:5px"></div></div>
+          <div class="progress-val">0%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label">CONTENT</div>
+          <div class="progress-track"><div class="progress-fill" style="width:0%;background:#00e5ff;height:5px"></div></div>
+          <div class="progress-val">0%</div>
+        </div>
       </div>
     </div>
   </div>
-  <svg id="resBorderSvg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;overflow:visible"></svg>
+</div>
+
+<!-- FIVERR col1 row2 -->
+<div class="card fiverr" style="grid-column:1;grid-row:2">
+  <div class="card-inner-wrap"></div>
+  <div class="card-content">
+    <div class="card-header">
+      <div class="card-title-row"><div class="card-icon">💼</div><div><div class="card-title">FIVERR DEPT</div><div class="card-subtitle">Freelance Services &amp; Gigs</div></div></div>
+      <div class="card-badge badge-next"><div class="badge-dot"></div>NEXT</div>
+    </div>
+    <div class="card-body">
+      <div class="agents-section">
+        <div class="section-label">PLANNED AGENTS (2)</div>
+        <div class="agent-chips"><span class="chip planned">Gig Writer</span><span class="chip planned">Order Manager</span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val green">0</div><div class="stat-lbl">Gigs Live</div></div>
+        <div class="stat-box"><div class="stat-val">0</div><div class="stat-lbl">Orders</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val">—</div><div class="stat-lbl">Revenue</div></div>
+        <div class="stat-box"><div class="stat-val">—</div><div class="stat-lbl">Rating</div></div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-row">
+          <div class="progress-label">SETUP</div>
+          <div class="progress-track"><div class="progress-fill" style="width:0%;background:#22c55e;height:5px"></div></div>
+          <div class="progress-val">0%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label">GIG READINESS</div>
+          <div class="progress-track"><div class="progress-fill" style="width:0%;background:#22c55e;height:5px"></div></div>
+          <div class="progress-val">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESEARCH AI col2 row2 - CARVED at top -->
+<div class="card research" id="researchCard" style="grid-column:2;grid-row:2">
+  <div class="card-inner-wrap" id="researchInner"></div>
+  <div class="notch-glow"></div>
+  <div class="card-content">
+    <div class="card-header">
+      <div class="card-title-row"><div class="card-icon">🔬</div><div><div class="card-title">RESEARCH AI</div><div class="card-subtitle">Market Intelligence &amp; Niche Analysis</div></div></div>
+      <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+    </div>
+    <div class="split-body">
+      <div class="split-col">
+        <div class="agents-section">
+          <div class="section-label">ACTIVE AGENTS (2)</div>
+          <div class="agent-chips" style="flex-direction:column;gap:3px">
+            <span class="chip">Niche Finder</span>
+            <span class="chip">Trend Analyzer</span>
+          </div>
+        </div>
+        <div class="stat-row" style="flex-direction:column;gap:4px;margin-top:4px">
+          <div class="stat-box"><div class="stat-val" style="font-size:20px">12</div><div class="stat-lbl">Niches Found</div></div>
+          <div class="stat-box"><div class="stat-val orange" style="font-size:20px">6</div><div class="stat-lbl">Products Found</div></div>
+        </div>
+      </div>
+      <div class="split-col">
+        <div class="progress-section">
+          <div class="section-label">MARKET COVERAGE</div>
+          <div class="progress-row">
+            <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:65%;background:linear-gradient(90deg,#a855f7,#ec4899);height:5px"></div></div>
+            <div class="progress-val">65%</div>
+          </div>
+          <div class="section-label" style="margin-top:5px">DEMAND SCORE</div>
+          <div class="progress-row">
+            <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:82%;background:linear-gradient(90deg,#00e5ff,#00ff88);height:5px"></div></div>
+            <div class="progress-val">82%</div>
+          </div>
+          <div class="section-label" style="margin-top:5px">COMPETITION</div>
+          <div class="progress-row">
+            <div class="progress-track" style="flex:1"><div class="progress-fill" style="width:34%;background:#ef4444;height:5px"></div></div>
+            <div class="progress-val">34%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- SAPPHIRE col3 row2 -->
-<div class="card sapphire">
-  <div class="card-header">
-    <div class="card-title-row"><div class="card-icon">💎</div><div><div class="card-title">SAPPHIRE</div><div class="card-subtitle">Peptides &amp; Supplements Store</div></div></div>
-    <div class="card-badge badge-setup"><div class="badge-dot" style="animation:none;opacity:.8"></div>SETUP</div>
-  </div>
-  <div class="card-body">
-    <div class="agents-row"><span class="agents-lbl">Planned Agents (3)</span><div class="agent-chip dim">Store Builder</div><div class="agent-chip dim">SEO Agent</div><div class="agent-chip dim">Ad Manager</div></div>
-    <div class="mini-stats">
-      <div class="mini-stat"><div class="mini-val" style="color:#3b82f6">0</div><div class="mini-lbl">Products Live</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Orders</div></div>
-      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Visitors</div></div>
+<div class="card sapphire" style="grid-column:3;grid-row:2">
+  <div class="card-inner-wrap"></div>
+  <div class="card-content">
+    <div class="card-header">
+      <div class="card-title-row"><div class="card-icon">💎</div><div><div class="card-title">SAPPHIRE</div><div class="card-subtitle">Peptides &amp; Supplements Store</div></div></div>
+      <div class="card-badge badge-setup"><div class="badge-dot"></div>SETUP</div>
     </div>
-    <div class="prog-section">
-      <div><div class="prog-row"><span>Store Setup</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div></div>
-      <div><div class="prog-row"><span>Product Catalog</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,#06b6d4,#3b82f6)"></div></div></div>
+    <div class="card-body">
+      <div class="agents-section">
+        <div class="section-label">PLANNED AGENTS (3)</div>
+        <div class="agent-chips"><span class="chip planned">Store Builder</span><span class="chip planned">SEO Agent</span><span class="chip planned">Ad Manager</span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val">0</div><div class="stat-lbl">Products Live</div></div>
+        <div class="stat-box"><div class="stat-val">—</div><div class="stat-lbl">Revenue</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val">0</div><div class="stat-lbl">Orders</div></div>
+        <div class="stat-box"><div class="stat-val">—</div><div class="stat-lbl">Visitors</div></div>
+      </div>
+      <div class="progress-section">
+        <div class="progress-row">
+          <div class="progress-label">STORE SETUP</div>
+          <div class="progress-track"><div class="progress-fill" style="width:5%;background:#3b82f6;height:5px"></div></div>
+          <div class="progress-val">5%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-label">CATALOG</div>
+          <div class="progress-track"><div class="progress-fill" style="width:0%;background:#3b82f6;height:5px"></div></div>
+          <div class="progress-val">0%</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<!-- THE ORB — absolutely positioned in grid center -->
-<div class="orb-container" id="orbContainer">
-<svg id="orbSvg" width="340" height="340" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <filter id="glow1"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="glow2"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="glow3"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#001830"/>
-      <stop offset="70%" stop-color="#000d1f"/>
-      <stop offset="100%" stop-color="#00060f"/>
-    </radialGradient>
-  </defs>
-
-  <!-- OUTERMOST thin spinning ring (drawn via JS animation) -->
-  <g id="outerRing" style="transform-origin:170px 170px">
-    <circle cx="170" cy="170" r="162" fill="none" stroke="rgba(0,229,255,.4)" stroke-width="1.5" stroke-dasharray="8,6" filter="url(#glow1)"/>
-    <!-- traveling dot -->
-    <circle cx="170" cy="8" r="5" fill="#00e5ff" filter="url(#glow2)"/>
-  </g>
-
-  <!-- Second ring CCW -->
-  <g id="ring2" style="transform-origin:170px 170px">
-    <circle cx="170" cy="170" r="150" fill="none" stroke="rgba(0,180,220,.55)" stroke-width="1.8" filter="url(#glow1)"/>
-    <circle cx="170" cy="20" r="3.5" fill="rgba(0,229,255,.8)" filter="url(#glow1)"/>
-    <circle cx="170" cy="320" r="3.5" fill="rgba(0,229,255,.6)" filter="url(#glow1)"/>
-  </g>
-
-  <!-- Third ring CW dashed -->
-  <g id="ring3" style="transform-origin:170px 170px">
-    <circle cx="170" cy="170" r="138" fill="none" stroke="rgba(0,229,255,.3)" stroke-width="1.2" stroke-dasharray="3,5" filter="url(#glow1)"/>
-  </g>
-
-  <!-- Tick marks at 8 positions on ring2 -->
-  <g filter="url(#glow1)" opacity=".7">
-    <line x1="170" y1="18" x2="170" y2="30" stroke="#00e5ff" stroke-width="2"/>
-    <line x1="170" y1="310" x2="170" y2="322" stroke="#00e5ff" stroke-width="2"/>
-    <line x1="18" y1="170" x2="30" y2="170" stroke="#00e5ff" stroke-width="2"/>
-    <line x1="310" y1="170" x2="322" y2="170" stroke="#00e5ff" stroke-width="2"/>
-    <line x1="55" y1="55" x2="64" y2="64" stroke="#00e5ff" stroke-width="1.5"/>
-    <line x1="276" y1="55" x2="267" y2="64" stroke="#00e5ff" stroke-width="1.5"/>
-    <line x1="55" y1="285" x2="64" y2="276" stroke="#00e5ff" stroke-width="1.5"/>
-    <line x1="276" y1="285" x2="267" y2="276" stroke="#00e5ff" stroke-width="1.5"/>
-  </g>
-
-  <!-- CORE background circle -->
-  <circle cx="170" cy="170" r="110" fill="url(#coreGrad)" stroke="rgba(0,229,255,.8)" stroke-width="2" filter="url(#glow1)"/>
-  <circle cx="170" cy="170" r="119" fill="none" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
-
-  <!-- INNER glow rings -->
-  <circle cx="170" cy="170" r="95" fill="none" stroke="rgba(0,229,255,.2)" stroke-width="1" stroke-dasharray="2,4"/>
-  <circle cx="170" cy="170" r="80" fill="none" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
-
-  <!-- REVENUE label -->
-  <text x="170" y="138" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="9" fill="rgba(0,229,255,.5)" letter-spacing="3" font-weight="600">TOTAL REVENUE</text>
-
-  <!-- REVENUE number -->
-  <text id="orbRevText" x="170" y="172" text-anchor="middle" font-family="Orbitron,monospace" font-size="22" fill="#00e5ff" font-weight="900" letter-spacing="1" filter="url(#glow2)">$0.00</text>
-
-  <!-- Divider line -->
-  <line x1="120" y1="182" x2="220" y2="182" stroke="rgba(0,229,255,.3)" stroke-width="1"/>
-
-  <!-- ALERTS -->
-  <text x="170" y="200" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="9" fill="rgba(0,229,255,.4)" letter-spacing="2">2 ALERTS</text>
-
-  <!-- CLOCKFACE STATS — 5 positions around the ring (r=130 from center) -->
-  <!-- Each stat: mini arc gauge + number + label -->
-
-  <!-- TOP: Phase Progress (35%) at 270deg = top -->
-  <g id="statPhase">
-    <path d="M 170 42 A 128 128 0 0 1 170 42" fill="none" stroke="rgba(0,229,255,.12)" stroke-width="6" stroke-linecap="round"
-      stroke-dasharray="201" stroke-dashoffset="0"
-      transform="rotate(-90 170 170)"/>
-    <!-- arc fill for 35% of 201 = ~70 -->
-    <path d="M 170 42 A 128 128 0 0 1 170 42" fill="none" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"
-      stroke-dasharray="201" stroke-dashoffset="131"
-      transform="rotate(-90 170 170)" filter="url(#glow1)" opacity=".0"/>
-    <!-- Small arc positioned at top -->
-    <path id="arcPhase" cx="170" cy="42" fill="none" stroke="rgba(0,229,255,.15)" stroke-width="5" stroke-linecap="round"/>
-    <text x="170" y="46" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#00e5ff" font-weight="700" filter="url(#glow1)">35%</text>
-    <text x="170" y="59" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="8" fill="rgba(0,229,255,.5)" letter-spacing="1.5">PHASE 1</text>
-  </g>
-
-  <!-- TOP-RIGHT: Active Depts (3/6 = 50%) at ~330deg -->
-  <g id="statDepts" transform="translate(258,80)">
-    <circle cx="0" cy="0" r="22" fill="rgba(0,10,25,.8)" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
-    <path d="M 0 -19 A 19 19 0 0 1 0 -19" fill="none" stroke="rgba(0,229,255,.1)" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="0" stroke-linecap="round"/>
-    <path d="M 0 -19 A 19 19 0 0 1 0 19" fill="none" stroke="#00ff88" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="59" stroke-linecap="round" filter="url(#glow1)"/>
-    <text x="0" y="4" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#00ff88" font-weight="700">3</text>
-    <text x="0" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="7.5" fill="rgba(0,229,255,.5)" letter-spacing="1">DEPTS</text>
-  </g>
-
-  <!-- BOTTOM-RIGHT: Agents (8/12 = 67%) at ~30deg -->
-  <g id="statAgents" transform="translate(258,258)">
-    <circle cx="0" cy="0" r="22" fill="rgba(0,10,25,.8)" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
-    <path d="M 0 -19 A 19 19 0 0 1 0 -19" fill="none" stroke="rgba(0,229,255,.1)" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="0" stroke-linecap="round"/>
-    <path d="M 0 -19 A 19 19 0 0 1 9.7 16.8" fill="none" stroke="#00e5ff" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="39" stroke-linecap="round" filter="url(#glow1)"/>
-    <text x="0" y="4" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#00e5ff" font-weight="700">8</text>
-    <text x="0" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="7.5" fill="rgba(0,229,255,.5)" letter-spacing="1">AGENTS</text>
-  </g>
-
-  <!-- BOTTOM-LEFT: Etsy Listings (6/6 = 100%) at ~150deg -->
-  <g id="statListings" transform="translate(82,258)">
-    <circle cx="0" cy="0" r="22" fill="rgba(0,10,25,.8)" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
-    <path d="M 0 -19 A 19 19 0 1 1 0.001 -19" fill="none" stroke="#f97316" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow1)"/>
-    <text x="0" y="4" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#f97316" font-weight="700">6</text>
-    <text x="0" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="7.5" fill="rgba(0,229,255,.5)" letter-spacing="1">LISTINGS</text>
-  </g>
-
-  <!-- TOP-LEFT: Revenue label at ~210deg -->
-  <g id="statRev" transform="translate(82,80)">
-    <circle cx="0" cy="0" r="22" fill="rgba(0,10,25,.8)" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
-    <path d="M 0 -19 A 19 19 0 0 1 0 -19" fill="none" stroke="rgba(0,229,255,.1)" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="0" stroke-linecap="round"/>
-    <path d="M 0 -19 A 19 19 0 0 1 19 0" fill="none" stroke="#c084fc" stroke-width="4" stroke-linecap="round" filter="url(#glow1)"/>
-    <text x="0" y="1" text-anchor="middle" font-family="Orbitron,monospace" font-size="7" fill="#c084fc" font-weight="700">$42</text>
-    <text x="0" y="11" text-anchor="middle" font-family="Orbitron,monospace" font-size="7" fill="#c084fc" font-weight="700">.94</text>
-    <text x="0" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="7.5" fill="rgba(0,229,255,.5)" letter-spacing="1">REVENUE</text>
-  </g>
-
-</svg>
-</div><!-- end orb-container -->
 
 </div><!-- end dept-grid -->
-</div><!-- end app --><script>
+</div><!-- end app -->
+
+<script>
 (function(){
-  var ORB_R = 150; // half of 300px orb diameter
-  var GAP_PAD = 14; // small gap between card edge and orb ring
+  var ORB_R = 150;   // half of 300px orb diameter
+  var GAP_PAD = 14;  // small gap between card edge and orb ring
 
   function pad(n){return n<10?'0'+n:''+n}
   function tick(){
@@ -432,198 +538,126 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     var cl=document.getElementById('clock');
     if(cl) cl.textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
   }
-  setInterval(tick,1000); tick();
+  tick();setInterval(tick,1000);
 
-  // Ticker scroll
-  var ticker=document.getElementById('ticker');
-  if(ticker){
-    var pos=0;
-    setInterval(function(){
-      pos-=0.7;
-      if(Math.abs(pos)>ticker.scrollWidth/2) pos=0;
-      ticker.style.transform='translateX('+pos+'px)';
-    },25);
-  }
-
-  // Spinning orb rings
-  var angle1=0, angle2=0, angle3=0;
-  var r1=document.getElementById('outerRing');
-  var r2=document.getElementById('ring2');
-  var r3=document.getElementById('ring3');
-  var lastT=null;
-  function animRings(ts){
-    if(!lastT) lastT=ts;
-    var dt=(ts-lastT)/1000; lastT=ts;
-    angle1 += dt*18;   // CW fast
-    angle2 -= dt*11;   // CCW medium
-    angle3 += dt*5;    // CW slow
-    if(r1) r1.style.transform='rotate('+angle1+'deg)';
-    if(r2) r2.style.transform='rotate('+angle2+'deg)';
-    if(r3) r3.style.transform='rotate('+angle3+'deg)';
-    requestAnimationFrame(animRings);
-  }
-  requestAnimationFrame(animRings);
-
-  // Position orb and carve cards
-  function build(){
+  // Position orb at exact grid midpoint of col2
+  function positionOrb(){
     var grid=document.getElementById('deptGrid');
-    var n8n=document.getElementById('cardN8N');
-    var res=document.getElementById('cardResearch');
-    var orbC=document.getElementById('orbContainer');
-    if(!grid||!n8n||!res||!orbC){setTimeout(build,200);return;}
-
+    var n8n=document.getElementById('n8nCard');
+    var res=document.getElementById('researchCard');
+    var orb=document.getElementById('orbWrap');
+    if(!grid||!n8n||!res||!orb) return;
+    
     var gRect=grid.getBoundingClientRect();
     var n8nRect=n8n.getBoundingClientRect();
     var resRect=res.getBoundingClientRect();
-
-    // Orb center = midpoint of the gap between N8N and Research
-    var orbCX = (n8nRect.left+n8nRect.right)/2 - gRect.left;
+    
+    // Orb center = center of col2, at vertical midpoint between n8n bottom and res top
+    var orbCX = n8nRect.left + n8nRect.width/2 - gRect.left;
     var orbCY = (n8nRect.bottom + resRect.top)/2 - gRect.top;
-
-    orbC.style.left = orbCX+'px';
-    orbC.style.top  = orbCY+'px';
-
-    // --- CARVE N8N card (bottom U-curve) ---
-    var n8nW = n8nRect.width;
-    var n8nH = n8nRect.height;
-    // Orb center relative to N8N card
-    var orbRelY_n8n = orbCY - (n8nRect.top - gRect.top); // positive = below card bottom
-    var curveR = ORB_R + GAP_PAD;
-
-    // Build clip-path polygon for N8N: full rect minus a circular notch from bottom-center
-    // The arc sits at y = n8nH (bottom edge), center at (n8nW/2, n8nH + depth)
-    // where depth = distance from bottom of card to orb center
-    var depth_n8n = orbRelY_n8n - n8nH; // how far orb center is below N8N bottom
-    if(depth_n8n < 0) depth_n8n = 0;
-    var arcCY_n8n = n8nH + depth_n8n;
-
-    // How wide the notch cuts into the card bottom
-    // Intersection of circle (center cx=n8nW/2, cy=arcCY_n8n, r=curveR) with y=n8nH
-    var dy_n8n = arcCY_n8n - n8nH;
-    var halfChord_n8n = Math.sqrt(Math.max(0, curveR*curveR - dy_n8n*dy_n8n));
-    var x1_n8n = n8nW/2 - halfChord_n8n;
-    var x2_n8n = n8nW/2 + halfChord_n8n;
-
-    // How deep the curve dips into the card
-    var dip_n8n = Math.max(0, curveR - dy_n8n);
-
-    // SVG clip path for N8N
-    // We'll use clip-path with a path that goes: full rect, then carve a U from bottom
-    var n8nSvg = document.getElementById('n8nBorderSvg');
-    if(n8nSvg){
-      n8nSvg.setAttribute('width', n8nW);
-      n8nSvg.setAttribute('height', n8nH);
-      n8nSvg.setAttribute('viewBox','0 0 '+n8nW+' '+n8nH);
-
-      // Create clipPath
-      var NS='http://www.w3.org/2000/svg';
-      var defs=document.createElementNS(NS,'defs');
-      var cp=document.createElementNS(NS,'clipPath');
-      cp.setAttribute('id','n8nClip');
-      var pathEl=document.createElementNS(NS,'path');
-      // Path: top-left → top-right → bottom-right → arc-start → arc (U-curve up into card) → arc-end → bottom-left → close
-      var arcStartX=x2_n8n, arcEndX=x1_n8n;
-      var sweepDip = dip_n8n;
-      // SVG arc from arcStartX to arcEndX curving upward
-      var d='M 10 10 L '+(n8nW-10)+' 10 L '+(n8nW-10)+' '+(n8nH-10)+
-            ' L '+arcStartX+' '+(n8nH-10)+
-            ' A '+curveR+' '+curveR+' 0 0 1 '+arcEndX+' '+(n8nH-10)+
-            ' L 10 '+(n8nH-10)+' Z';
-      pathEl.setAttribute('d',d);
-      cp.appendChild(pathEl);
-      defs.appendChild(cp);
-      n8nSvg.appendChild(defs);
-
-      // Apply clip to card inner
-      n8n.style.clipPath='url(#n8nClip)';
-      n8n.style.webkitClipPath='url(#n8nClip)';
-
-      // Draw the curved border line
-      var borderPath=document.createElementNS(NS,'path');
-      borderPath.setAttribute('d',
-        'M 4 10 L 4 '+(n8nH-10)+
-        ' M 4 10 L '+(n8nW-4)+' 10'+
-        ' L '+(n8nW-4)+' '+(n8nH-10)+
-        ' L '+arcStartX+' '+(n8nH-10)+
-        ' A '+curveR+' '+curveR+' 0 0 1 '+arcEndX+' '+(n8nH-10)+
-        ' L 4 '+(n8nH-10)
-      );
-      borderPath.setAttribute('fill','none');
-      borderPath.setAttribute('stroke','rgba(255,255,255,.07)');
-      borderPath.setAttribute('stroke-width','1');
-      n8nSvg.appendChild(borderPath);
-
-      // Glowing arc border matching orb
-      var glowArc=document.createElementNS(NS,'path');
-      var arcD='M '+arcStartX+' '+(n8nH-10)+' A '+curveR+' '+curveR+' 0 0 1 '+arcEndX+' '+(n8nH-10);
-      glowArc.setAttribute('d',arcD);
-      glowArc.setAttribute('fill','none');
-      glowArc.setAttribute('stroke','rgba(0,229,255,.4)');
-      glowArc.setAttribute('stroke-width','1.5');
-      glowArc.setAttribute('filter','url(#gf)');
-      n8nSvg.appendChild(glowArc);
-    }
-
-    // --- CARVE Research card (top U-curve) ---
-    var resW = resRect.width;
-    var resH = resRect.height;
-    var orbRelY_res = (resRect.top - gRect.top) - orbCY; // distance from orb center to res top (positive)
-    var depth_res = orbRelY_res;
-    if(depth_res < 0) depth_res = 0;
-    var arcCY_res = -depth_res; // relative to res card top
-
-    var dy_res = Math.abs(arcCY_res);
-    var halfChord_res = Math.sqrt(Math.max(0, curveR*curveR - dy_res*dy_res));
-    var x1_res = resW/2 - halfChord_res;
-    var x2_res = resW/2 + halfChord_res;
-
-    var resSvg = document.getElementById('resBorderSvg');
-    if(resSvg){
-      resSvg.setAttribute('width', resW);
-      resSvg.setAttribute('height', resH);
-      resSvg.setAttribute('viewBox','0 0 '+resW+' '+resH);
-
-      var NS='http://www.w3.org/2000/svg';
-      var defs2=document.createElementNS(NS,'defs');
-      var cp2=document.createElementNS(NS,'clipPath');
-      cp2.setAttribute('id','resClip');
-      var pathEl2=document.createElementNS(NS,'path');
-      // Path: from arc-end (top-left side) → arc (inverted U) → arc-start (top-right side) → top-right → bottom-right → bottom-left → close
-      var d2='M 10 10 L '+x1_res+' 10'+
-             ' A '+curveR+' '+curveR+' 0 0 0 '+x2_res+' 10'+
-             ' L '+(resW-10)+' 10 L '+(resW-10)+' '+(resH-10)+
-             ' L 10 '+(resH-10)+' Z';
-      pathEl2.setAttribute('d',d2);
-      cp2.appendChild(pathEl2);
-      defs2.appendChild(cp2);
-      resSvg.appendChild(defs2);
-
-      res.style.clipPath='url(#resClip)';
-      res.style.webkitClipPath='url(#resClip)';
-
-      // Border
-      var bp2=document.createElementNS(NS,'path');
-      bp2.setAttribute('d',
-        'M 10 '+(resH-4)+' L 10 10'+
-        ' L '+x1_res+' 10'+
-        ' A '+curveR+' '+curveR+' 0 0 0 '+x2_res+' 10'+
-        ' L '+(resW-10)+' 10 L '+(resW-10)+' '+(resH-4)
-      );
-      bp2.setAttribute('fill','none');
-      bp2.setAttribute('stroke','rgba(255,255,255,.07)');
-      bp2.setAttribute('stroke-width','1');
-      resSvg.appendChild(bp2);
-
-      var ga2=document.createElementNS(NS,'path');
-      ga2.setAttribute('d','M '+x1_res+' 10 A '+curveR+' '+curveR+' 0 0 0 '+x2_res+' 10');
-      ga2.setAttribute('fill','none');
-      ga2.setAttribute('stroke','rgba(0,229,255,.4)');
-      ga2.setAttribute('stroke-width','1.5');
-      resSvg.appendChild(ga2);
-    }
+    
+    orb.style.left = orbCX + 'px';
+    orb.style.top = orbCY + 'px';
+    
+    // Now apply clip-path to the n8n and research inner-wraps
+    applyCarve(n8n, n8nRect, 'n8n', orbCX, orbCY, gRect);
+    applyCarve(res, resRect, 'research', orbCX, orbCY, gRect);
   }
+  
+  function applyCarve(card, cardRect, type, orbCX, orbCY, gRect){
+    // Inner wrap: same size as card, position 0,0 in card
+    var W = cardRect.width;
+    var H = cardRect.height;
+    // Orb center relative to this card's top-left
+    var cx = orbCX - (cardRect.left - gRect.left);
+    var ry = ORB_R + GAP_PAD; // radius of notch = orb radius + small gap
+    
+    var path;
+    if(type === 'n8n'){
+      // N8N: carved at BOTTOM center
+      // cy relative to this card = orbCY - (cardRect.top - gRect.top)
+      var cy_card = orbCY - (cardRect.top - gRect.top);
+      // The notch bottom point = cy_card + ORB_R + GAP_PAD (below card bottom probably)
+      // We carve a semicircle out of the bottom, centered at (cx, H)
+      // Path: go around card perimeter, but cut into the bottom with arc
+      // Arc: goes from (cx - ry, H) → curves down and back to (cx + ry, H)
+      // Large arc sweep = 1 (clockwise, going below = carving in)
+      // We use: sweep-flag=0 (counter-clockwise = arc bows DOWNWARD = into the card)
+      var x1 = Math.max(0, cx - ry);
+      var x2 = Math.min(W, cx + ry);
+      path = 'M 10,10' +
+             ' L ' + (W-10) + ',10' +
+             ' Q ' + (W-4) + ',10 ' + (W-4) + ',18' +
+             ' L ' + (W-4) + ',' + H +
+             ' L ' + x2 + ',' + H +
+             ' A ' + ry + ',' + ry + ' 0 0,0 ' + x1 + ',' + H +
+             ' L 4,' + H +
+             ' L 4,18' +
+             ' Q 4,10 10,10' +
+             ' Z';
+    } else {
+      // Research AI: carved at TOP center
+      var x1 = Math.max(0, cx - ry);
+      var x2 = Math.min(W, cx + ry);
+      // Arc from (x1, 0) sweeps upward (clockwise) to (x2, 0)
+      // sweep-flag=1 means clockwise (arc bows UP = away from card = carving in)
+      path = 'M 10,' + H +
+             ' L ' + (W-10) + ',' + H +
+             ' Q ' + (W-4) + ',' + H + ' ' + (W-4) + ',' + (H-8) +
+             ' L ' + (W-4) + ',0' +
+             ' L ' + x2 + ',0' +
+             ' A ' + ry + ',' + ry + ' 0 0,0 ' + x1 + ',0' +
+             ' L 4,0' +
+             ' L 4,' + (H-8) +
+             ' Q 4,' + H + ' 10,' + H +
+             ' Z';
+    }
+    
+    // Apply to the card-inner-wrap
+    var inner = card.querySelector('.card-inner-wrap');
+    if(inner) inner.style.clipPath = 'path("' + path + '")';
+    
+    // Also apply same path to the card itself for background clipping
+    card.style.clipPath = 'path("' + path + '")';
+  }
+  
+  // Set arc gauges on SVG
+  function setArc(id, startAngle, spanDeg, pct){
+    var el=document.getElementById(id);
+    if(!el) return;
+    var r=105;
+    var circ=2*Math.PI*r;
+    // dasharray = arc length, dashoffset = -(start position from right)
+    var arcLen = (spanDeg/360)*circ;
+    var filled = arcLen*pct;
+    // offset: SVG starts at 3 o'clock. We want startAngle from top (12 o'clock = -90)
+    var offsetAngle = startAngle - 90; // degrees from 3 o'clock
+    var offsetLen = (offsetAngle/360)*circ;
+    el.setAttribute('stroke-dasharray', filled + ' ' + (circ-filled));
+    el.setAttribute('stroke-dashoffset', -offsetLen);
+    if(pct===0) el.setAttribute('stroke','transparent');
+  }
+  // Phase at top (12 o'clock = 0deg from top), 60deg span, 35%
+  setArc('arcPhase', -30, 60, 0.35);
+  // Active Depts top-right (60deg from top), 60deg span, 50%
+  setArc('arcDepts', 42, 60, 0.50);
+  // Agents bottom-right (120deg from top), 60deg span, 67%
+  setArc('arcAgents', 114, 60, 0.67);
+  // Listings bottom-left (200deg from top), 60deg span, 100%
+  setArc('arcListings', 200, 60, 1.0);
+  // Revenue top-left (270deg from top), 60deg span, show as present
+  setArc('arcRevenue', 282, 60, 0.6);
 
-  setTimeout(build, 400);
-  window.addEventListener('resize', function(){setTimeout(build,100);});
+  // Run positioning after layout
+  window.addEventListener('load', function(){
+    setTimeout(positionOrb, 100);
+    setTimeout(positionOrb, 500);
+  });
+  
+  // Also run on resize
+  window.addEventListener('resize', positionOrb);
+
 })();
-</script></body></html>
+</script>
+</body>
+</html>
