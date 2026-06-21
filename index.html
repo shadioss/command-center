@@ -457,7 +457,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   }
   tick(); setInterval(tick,1000);
 
-  // Arc gauge helper - places small arc at a clock position
+  // Arc gauge helper
   function setArc(id, startDeg, spanDeg, pct){
     var el=document.getElementById(id);
     if(!el) return;
@@ -470,71 +470,96 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     el.setAttribute('stroke-dashoffset', -offsetLen);
     if(pct<=0) el.setAttribute('stroke','transparent');
   }
-  // Phase at 12 o'clock, 55deg span, 35%
   setArc('arcPhase',   -27.5, 55, 0.35);
-  // Active Depts at 1-2 o'clock, 55deg span, 50%
   setArc('arcDepts',    44,   55, 0.50);
-  // Agents at 4-5 o'clock, 55deg span, 67%
-  setArc('arcAgents',  116,  55, 0.67);
-  // Listings at 7-8 o'clock, 55deg span, 100%
-  setArc('arcListings',188,  55, 1.0);
-  // Revenue at 10-11 o'clock, 55deg span - show at 0% (no sales yet)
-  setArc('arcRevenue', 260,  55, 0.0);
+  setArc('arcAgents',  116,   55, 0.67);
+  setArc('arcListings',188,   55, 1.0);
+  setArc('arcRevenue', 260,   55, 0.0);
 
-  // Size the notch masks to match the actual orb size relative to card height
-  function sizeNotches(){
+  function sizeOrbAndNotches(){
     var grid=document.getElementById('deptGrid');
     var orb=document.getElementById('orbWrap');
-    if(!grid||!orb) return;
-    var gR=grid.getBoundingClientRect();
-    var oR=orb.getBoundingClientRect();
-    var oCX=oR.left+oR.width/2, oCY=oR.top+oR.height/2;
-    var orbR=oR.width/2; // 150
-
-    // Find N8N and Research cards
     var n8n=document.querySelector('.card.n8n');
     var res=document.querySelector('.card.research');
-    if(!n8n||!res) return;
+    if(!grid||!orb||!n8n||!res) return;
+
+    var gR=grid.getBoundingClientRect();
     var nR=n8n.getBoundingClientRect();
     var rR=res.getBoundingClientRect();
 
-    // Ideal notch diameter: orb diameter + 24px gap on each side = 300+24 = 324px
-    var nd=Math.round(orbR*2+24);
+    // Orb diameter = min(85% of middle col width, 85% of card height, 300px)
+    var midColW=nR.width;
+    var cardH=nR.height;
+    var orbDiam=Math.min(Math.floor(midColW*0.82), Math.floor(cardH*1.1), 300);
+    orbDiam=Math.max(orbDiam, 160); // minimum 160px
+    var orbR=orbDiam/2;
 
-    // Update N8N notch: center orb horizontally within card
-    var nMask=n8n.querySelector('.notch-mask');
-    var nRing=n8n.querySelector('.notch-ring');
-    if(nMask&&nRing){
-      var cxInN8n=oCX-nR.left; // orb center x relative to n8n card
-      [nMask,nRing].forEach(function(el){
-        el.style.width=nd+'px';
-        el.style.height=nd+'px';
-        el.style.bottom=(-nd/2)+'px';
-        el.style.left=cxInN8n+'px';
-        el.style.transform='translateX(-50%)';
-      });
+    // Apply orb size
+    orb.style.width=orbDiam+'px';
+    orb.style.height=orbDiam+'px';
+
+    // Scale SVG viewbox content proportionally (original designed for 300px = r150)
+    var svgEl=orb.querySelector('svg');
+    if(svgEl){
+      svgEl.setAttribute('width', orbDiam);
+      svgEl.setAttribute('height', orbDiam);
+      svgEl.setAttribute('viewBox', '0 0 300 300');
     }
 
-    // Update Research notch
-    var rMask=res.querySelector('.notch-mask');
-    var rRing=res.querySelector('.notch-ring');
-    if(rMask&&rRing){
-      var cxInRes=oCX-rR.left;
-      [rMask,rRing].forEach(function(el){
+    // Scale orb-core-bg inset proportionally
+    var coreBg=orb.querySelector('.orb-core-bg');
+    if(coreBg){
+      var inset=Math.round(orbR*0.12);
+      coreBg.style.inset=inset+'px';
+    }
+    var orbContent=orb.querySelector('.orb-content');
+    if(orbContent){
+      var inset=Math.round(orbR*0.12);
+      orbContent.style.inset=inset+'px';
+    }
+
+    // Clockface labels - scale font size
+    var fs=Math.max(6, Math.round(orbDiam/37));
+    orb.querySelectorAll('.clock-stat-val').forEach(function(el){ el.style.fontSize=fs+'px'; });
+    orb.querySelectorAll('.clock-stat-lbl').forEach(function(el){ el.style.fontSize=Math.max(5,fs-1)+'px'; });
+    var revVal=orb.querySelector('.orb-rev-val');
+    if(revVal) revVal.style.fontSize=Math.round(orbDiam/13)+'px';
+
+    // Notch size = orb diameter + 24px gap
+    var nd=orbDiam+24;
+
+    // Orb center relative to n8n card
+    var orbCX=nR.left+nR.width/2;
+    var cxInN8n=orbCX-nR.left;
+    var cxInRes=orbCX-rR.left;
+
+    [n8n,res].forEach(function(card,i){
+      var cx=i===0?cxInN8n:cxInRes;
+      var isTop=i===1;
+      var mask=card.querySelector('.notch-mask');
+      var ring=card.querySelector('.notch-ring');
+      if(!mask||!ring) return;
+      [mask,ring].forEach(function(el){
         el.style.width=nd+'px';
         el.style.height=nd+'px';
-        el.style.top=(-nd/2)+'px';
-        el.style.left=cxInRes+'px';
+        el.style.left=cx+'px';
         el.style.transform='translateX(-50%)';
+        if(isTop){
+          el.style.top=(-nd/2)+'px';
+          el.style.bottom='';
+        } else {
+          el.style.bottom=(-nd/2)+'px';
+          el.style.top='';
+        }
       });
-    }
+    });
   }
 
   window.addEventListener('load',function(){
-    setTimeout(sizeNotches,100);
-    setTimeout(sizeNotches,500);
+    setTimeout(sizeOrbAndNotches, 80);
+    setTimeout(sizeOrbAndNotches, 400);
   });
-  window.addEventListener('resize',sizeNotches);
+  window.addEventListener('resize', sizeOrbAndNotches);
 })();
 </script>
 </body>
