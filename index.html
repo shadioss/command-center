@@ -11,12 +11,8 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden;background:#080d18;color:#e2e8f0}
 body{font-family:'Inter',sans-serif}
-
-/* SCANLINES */
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,255,.010) 2px,rgba(0,229,255,.010) 4px);pointer-events:none;z-index:9999;animation:scanMove 10s linear infinite}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,255,.009) 2px,rgba(0,229,255,.009) 4px);pointer-events:none;z-index:9999;animation:scanMove 10s linear infinite}
 @keyframes scanMove{0%{background-position:0 0}100%{background-position:0 80px}}
-
-/* KEYFRAMES */
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
 @keyframes pulseGlow{0%,100%{text-shadow:0 0 8px currentColor,0 0 20px currentColor}50%{text-shadow:0 0 20px currentColor,0 0 50px currentColor,0 0 80px currentColor}}
 @keyframes borderFlow{0%{background-position:0% 0%}100%{background-position:0% 200%}}
@@ -24,16 +20,17 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes orbPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.4),0 0 12px rgba(0,229,255,.3)}50%{box-shadow:0 0 0 8px rgba(0,229,255,0),0 0 25px rgba(0,229,255,.6)}}
-@keyframes orbSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes orbSpinR{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
-@keyframes rowSlide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes navOrbPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.4),0 0 12px rgba(0,229,255,.3)}50%{box-shadow:0 0 0 8px rgba(0,229,255,0),0 0 25px rgba(0,229,255,.6)}}
+@keyframes navOrbSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes dotPing{0%{transform:scale(1);opacity:1}70%{transform:scale(2.5);opacity:0}100%{transform:scale(1);opacity:0}}
 @keyframes statCount{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
-@keyframes coreGlow{0%,100%{box-shadow:0 0 15px #00e5ff,0 0 35px rgba(0,229,255,.5),0 0 70px rgba(0,229,255,.2),inset 0 0 20px rgba(0,229,255,.12)}50%{box-shadow:0 0 30px #00e5ff,0 0 70px rgba(0,229,255,.8),0 0 110px rgba(0,229,255,.4),inset 0 0 35px rgba(0,229,255,.28)}}
-@keyframes arcPulse{0%,100%{filter:brightness(1) drop-shadow(0 0 6px #00e5ff)}50%{filter:brightness(1.4) drop-shadow(0 0 22px #00e5ff)}}
-@keyframes revPulse{0%,100%{text-shadow:0 0 15px #00e5ff,0 0 30px rgba(0,229,255,.5)}50%{text-shadow:0 0 25px #00e5ff,0 0 60px rgba(0,229,255,.8),0 0 90px rgba(0,229,255,.3)}}
-@keyframes orbIn{from{opacity:0;transform:translate(-50%,-50%) scale(.5)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes rowSlide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes coreGlow{0%,100%{box-shadow:0 0 20px #00e5ff,0 0 50px rgba(0,229,255,.5),0 0 90px rgba(0,229,255,.2),inset 0 0 30px rgba(0,229,255,.12)}50%{box-shadow:0 0 35px #00e5ff,0 0 80px rgba(0,229,255,.8),0 0 130px rgba(0,229,255,.4),inset 0 0 50px rgba(0,229,255,.28)}}
+@keyframes revPulse{0%,100%{text-shadow:0 0 15px #00e5ff,0 0 30px rgba(0,229,255,.5)}50%{text-shadow:0 0 30px #00e5ff,0 0 70px rgba(0,229,255,.9),0 0 100px rgba(0,229,255,.3)}}
+@keyframes ringSpinCW{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes ringSpinCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+@keyframes orbIn{from{opacity:0;transform:translate(-50%,-50%) scale(.4)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes alertPing{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 
 /* LAYOUT */
 .app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
@@ -41,109 +38,120 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 /* TOP NAV */
 .topnav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:62px;background:rgba(8,13,24,.97);border-bottom:1px solid rgba(0,229,255,.12);flex-shrink:0;animation:fadeIn .5s ease both}
 .brand{display:flex;align-items:center;gap:14px}
-.brand-orb{width:38px;height:38px;border-radius:50%;border:2px solid #00e5ff;background:radial-gradient(circle,rgba(0,229,255,.18) 0%,rgba(0,8,20,.9) 100%);display:flex;align-items:center;justify-content:center;animation:orbPulse 3s ease-in-out infinite;position:relative;flex-shrink:0}
-.brand-orb::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(0,229,255,.2);animation:orbSpin 8s linear infinite}
-.brand-orb svg{width:16px;height:16px;z-index:1}
+.nav-orb{width:38px;height:38px;border-radius:50%;border:2px solid #00e5ff;background:radial-gradient(circle,rgba(0,229,255,.18) 0%,rgba(0,8,20,.9) 100%);display:flex;align-items:center;justify-content:center;animation:navOrbPulse 3s ease-in-out infinite;position:relative;flex-shrink:0}
+.nav-orb::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(0,229,255,.2);animation:navOrbSpin 8s linear infinite}
+.nav-orb svg{width:16px;height:16px;z-index:1}
 .brand-name{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;letter-spacing:6px;color:#00e5ff;animation:pulseGlow 4s ease-in-out infinite}
 .brand-sub{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:5px;color:rgba(0,229,255,.45);font-weight:600}
 .nav-right{display:flex;align-items:center;gap:18px}
 .sys-badge{display:flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(0,255,136,.3);border-radius:20px;background:rgba(0,255,136,.06);position:relative;overflow:hidden}
 .sys-badge::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,255,136,.08),transparent);background-size:200% 100%;animation:shimmer 3s ease-in-out infinite}
-.sys-dot{width:7px;height:7px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;flex-shrink:0;position:relative}
+.sys-dot{width:7px;height:7px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;position:relative;flex-shrink:0}
 .sys-dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:#00ff88;animation:dotPing 2s ease-out infinite}
 .sys-txt{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:2px;color:#00ff88;font-weight:700}
 .nav-clock{font-family:'Orbitron',monospace;font-size:19px;font-weight:700;letter-spacing:3px;color:#f1f5f9;font-variant-numeric:tabular-nums}
 
-/* STATS BAR */
-.statsbar{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid rgba(0,229,255,.08);flex-shrink:0;animation:slideUp .5s ease .1s both}
-.stat-cell{padding:11px 22px;border-right:1px solid rgba(0,229,255,.08)}
-.stat-cell:last-child{border-right:none}
-.stat-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;letter-spacing:2.5px;color:rgba(255,255,255,.3);margin-bottom:3px;text-transform:uppercase;font-weight:600}
-.stat-val{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;line-height:1;animation:statCount .7s ease both}
-.stat-sub{font-family:'Rajdhani',sans-serif;font-size:10px;color:rgba(255,255,255,.25);margin-top:2px;font-weight:500}
-.val-green{color:#00ff88}
-.val-cyan{color:#00e5ff}
-.val-purple{color:#c084fc;animation:pulseGlow 4s ease-in-out infinite}
-.val-white{color:#f1f5f9}
+/* DEPT GRID — no stats bar, full height minus nav */
+/* 3 cols: left=1fr, middle=1.8fr, right=1fr */
+/* 2 equal rows */
+.dept-grid{flex:1;display:grid;grid-template-columns:1fr 1.8fr 1fr;grid-template-rows:1fr 1fr;gap:13px;padding:13px;overflow:hidden;min-height:0;position:relative}
 
-/* MAIN DEPT GRID
-   3 cols: left=1fr, middle=1.35fr (wider for orb), right=1fr
-   2 rows equal */
-.dept-grid{flex:1;display:grid;grid-template-columns:1fr 1.35fr 1fr;grid-template-rows:1fr 1fr;gap:13px;padding:13px;overflow:hidden;min-height:0;position:relative}
+/* ORB CONTAINER */
+.orb-container{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:30;pointer-events:none;animation:orbIn .9s cubic-bezier(.34,1.56,.64,1) .5s both}
 
-/* ORB CONTAINER — absolutely positioned in center of middle column gap */
-.orb-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:20;animation:orbIn .8s cubic-bezier(.34,1.56,.64,1) .4s both}
-
-/* CARDS */
-.card{background:linear-gradient(145deg,#0f1629 0%,#0a1020 100%);border:1px solid rgba(255,255,255,.07);border-radius:10px;overflow:hidden;position:relative;display:flex;flex-direction:column;min-height:0}
-.card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
-.card.etsy{animation:cardIn .6s ease .15s both}
+/* CARDS base */
+.card{background:linear-gradient(145deg,#0f1629 0%,#0a1020 100%);border:1px solid rgba(255,255,255,.07);border-radius:10px;position:relative;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px;z-index:2}
+.card.etsy{animation:cardIn .6s ease .1s both}
 .card.etsy::before{background:linear-gradient(180deg,#f97316,#ea580c,#f97316);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.n8n{animation:cardIn .6s ease .25s both;overflow:visible;position:relative}
-.card.n8n::before{background:linear-gradient(180deg,#ef4444,#f97316,#ef4444);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.tiktok{animation:cardIn .6s ease .35s both}
+.card.tiktok{animation:cardIn .6s ease .2s both}
 .card.tiktok::before{background:linear-gradient(180deg,#a855f7,#7c3aed,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.fiverr{animation:cardIn .6s ease .45s both}
+.card.fiverr{animation:cardIn .6s ease .3s both}
 .card.fiverr::before{background:linear-gradient(180deg,#22c55e,#16a34a,#22c55e);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.research{animation:cardIn .6s ease .55s both;overflow:visible;position:relative}
-.card.research::before{background:linear-gradient(180deg,#a855f7,#ec4899,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
-.card.sapphire{animation:cardIn .6s ease .65s both}
+.card.sapphire{animation:cardIn .6s ease .4s both}
 .card.sapphire::before{background:linear-gradient(180deg,#3b82f6,#06b6d4,#3b82f6);background-size:100% 200%;animation:borderFlow 3s linear infinite}
 
-/* N8N notch — curved cutout from bottom center */
-.card.n8n .notch-mask{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:130px;height:68px;background:#080d18;border-radius:65px 65px 0 0;z-index:5;pointer-events:none}
-/* Border arc on notch to match card border */
-.card.n8n .notch-border{position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:134px;height:70px;border:1px solid rgba(255,255,255,.07);border-bottom:none;border-radius:67px 67px 0 0;z-index:4;pointer-events:none}
+/* N8N — bottom carved with SVG clip-path, content splits L/R */
+.card.n8n{animation:cardIn .6s ease .5s both;overflow:visible}
+.card.n8n::before{background:linear-gradient(180deg,#ef4444,#f97316,#ef4444);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.n8n .card-inner{position:absolute;inset:0;border-radius:10px;overflow:hidden}
+.card.n8n .card-clip{width:100%;height:100%}
 
-/* Research notch — curved cutout from top center */
-.card.research .notch-mask{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:130px;height:68px;background:#080d18;border-radius:0 0 65px 65px;z-index:5;pointer-events:none}
-.card.research .notch-border{position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:134px;height:70px;border:1px solid rgba(255,255,255,.07);border-top:none;border-radius:0 0 67px 67px;z-index:4;pointer-events:none}
+/* Research AI — top carved with SVG clip-path, content splits L/R */
+.card.research{animation:cardIn .6s ease .6s both;overflow:visible}
+.card.research::before{background:linear-gradient(180deg,#a855f7,#ec4899,#a855f7);background-size:100% 200%;animation:borderFlow 3s linear infinite}
+.card.research .card-inner{position:absolute;inset:0;border-radius:10px;overflow:hidden}
 
-.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:13px 16px 7px 20px;flex-shrink:0}
+/* CARD STRUCTURE */
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:13px 16px 7px 20px;flex-shrink:0;position:relative;z-index:2}
 .card-title-row{display:flex;align-items:center;gap:10px}
-.card-icon{font-size:20px;line-height:1;filter:drop-shadow(0 0 5px rgba(255,255,255,.25))}
+.card-icon{font-size:20px;line-height:1}
 .card-title{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;color:#f1f5f9}
 .card-subtitle{font-family:'Rajdhani',sans-serif;font-size:10px;color:rgba(255,255,255,.28);letter-spacing:.5px;margin-top:1px;font-weight:500}
 .card-badge{padding:3px 10px;border-radius:20px;font-family:'Rajdhani',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;display:flex;align-items:center;gap:5px;flex-shrink:0}
 .badge-live{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);color:#00ff88}
 .badge-next{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.3);color:#facc15}
+.badge-setup{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);color:#60a5fa}
 .badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.5s infinite;flex-shrink:0}
 
-.card-body{padding:0 16px 12px 20px;flex:1;display:flex;flex-direction:column;gap:7px;overflow:hidden;min-height:0}
-.agents-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex-shrink:0}
-.agents-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.25);margin-right:2px;font-weight:600;text-transform:uppercase}
+.card-body{padding:0 16px 12px 20px;flex:1;display:flex;flex-direction:column;gap:7px;overflow:hidden;min-height:0;position:relative;z-index:2}
+
+/* Split body for N8N and Research */
+.split-body{padding:0 12px 10px 20px;flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow:hidden;min-height:0;position:relative;z-index:2;align-items:start}
+.split-col{display:flex;flex-direction:column;gap:6px}
+
+/* AGENTS */
+.agents-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex-shrink:0}
+.agents-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.25);font-weight:600;text-transform:uppercase;width:100%;margin-bottom:2px}
 .agent-chip{padding:2px 8px;border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:4px;font-weight:500}
 .agent-chip::before{content:'';width:4px;height:4px;border-radius:50%;background:#00ff88;box-shadow:0 0 4px #00ff88;flex-shrink:0}
 .agent-chip.dim{opacity:.35}
 .agent-chip.dim::before{background:rgba(255,255,255,.2);box-shadow:none}
-.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex-shrink:0}
-.stat-box{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:7px 12px}
-.sbox-val{font-family:'Orbitron',monospace;font-size:19px;font-weight:700}
-.sbox-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.25);margin-top:1px;font-weight:500}
-.listings{flex:1;display:flex;flex-direction:column;gap:0;overflow:hidden;min-height:0}
-.listing-row{display:flex;align-items:center;justify-content:space-between;padding:4px 2px;border-bottom:1px solid rgba(255,255,255,.04);animation:rowSlide .5s ease both;flex-shrink:0}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0}
+.stat-box{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:7px 10px}
+.sbox-val{font-family:'Orbitron',monospace;font-size:18px;font-weight:700}
+.sbox-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(255,255,255,.25);margin-top:1px}
+
+/* LISTINGS */
+.listings{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.listing-row{display:flex;align-items:center;justify-content:space-between;padding:3px 2px;border-bottom:1px solid rgba(255,255,255,.04);animation:rowSlide .4s ease both;flex-shrink:0}
 .listing-row:last-child{border-bottom:none}
-.listing-num{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.2);width:20px;flex-shrink:0;font-weight:600}
-.listing-name{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,.6);flex:1;font-weight:400}
-.listing-price{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);margin-right:8px;letter-spacing:.5px}
+.listing-num{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.2);width:18px;flex-shrink:0;font-weight:600}
+.listing-name{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,.6);flex:1}
+.listing-price{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.5);margin-right:7px}
 .listing-dot{width:5px;height:5px;border-radius:50%;background:#00ff88;box-shadow:0 0 5px #00ff88;flex-shrink:0;animation:blink 2s ease-in-out infinite}
+
+/* PROGRESS */
 .prog-section{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
-.prog-row{display:flex;justify-content:space-between;font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.3);margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.prog-row{display:flex;justify-content:space-between;font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(255,255,255,.3);margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
 .prog-track{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
 .prog-fill{height:100%;border-radius:2px}
-.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0}
-.mini-stat{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:7px 11px}
-.mini-val{font-family:'Orbitron',monospace;font-size:17px;font-weight:700}
-.mini-lbl{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,.25);margin-top:1px;font-weight:500}
-.ticker-wrap{flex-shrink:0;overflow:hidden;padding-top:5px;border-top:1px solid rgba(0,229,255,.08)}
+
+/* MINI STATS */
+.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0}
+.mini-stat{background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:6px 10px}
+.mini-val{font-family:'Orbitron',monospace;font-size:16px;font-weight:700}
+.mini-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(255,255,255,.25);margin-top:1px}
+
+/* TICKER */
+.ticker-wrap{flex-shrink:0;overflow:hidden;padding-top:4px;border-top:1px solid rgba(0,229,255,.08)}
 .ticker{font-family:'Rajdhani',sans-serif;font-size:8px;color:rgba(0,229,255,.4);letter-spacing:1px;white-space:nowrap;display:inline-block}
+
+/* SECTION LABEL */
+.sec-lbl{font-family:'Rajdhani',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.25);font-weight:600;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:3px;margin-bottom:2px}
+
+.val-green{color:#00ff88}
+.val-cyan{color:#00e5ff}
+.val-purple{color:#c084fc}
+.val-orange{color:#fb923c}
 </style>
 </head>
 <body><div class="app">
-<!-- TOP NAV -->
 <div class="topnav">
   <div class="brand">
-    <div class="brand-orb"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#00e5ff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.5" fill="#00e5ff"/></svg></div>
+    <div class="nav-orb"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#00e5ff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.5" fill="#00e5ff"/></svg></div>
     <div><div class="brand-name">ATLAS</div><div class="brand-sub">COMMAND CENTER V1.0</div></div>
   </div>
   <div class="nav-right">
@@ -152,199 +160,272 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   </div>
 </div>
 
-<!-- STATS BAR -->
-<div class="statsbar">
-  <div class="stat-cell"><div class="stat-lbl">Active Departments</div><div class="stat-val val-green" style="animation-delay:.1s">3</div><div class="stat-sub">of 6 total</div></div>
-  <div class="stat-cell"><div class="stat-lbl">Total AI Agents</div><div class="stat-val val-cyan" style="animation-delay:.2s">12</div><div class="stat-sub">across all depts</div></div>
-  <div class="stat-cell"><div class="stat-lbl">Etsy Listings Live</div><div class="stat-val val-green" style="animation-delay:.3s">6</div><div class="stat-sub">ShadyPrintables</div></div>
-  <div class="stat-cell"><div class="stat-lbl">Potential Revenue</div><div class="stat-val val-purple" style="animation-delay:.4s">$42.94</div><div class="stat-sub">per full conversion</div></div>
-  <div class="stat-cell"><div class="stat-lbl">Phase 1 Progress</div><div class="stat-val val-white" style="animation-delay:.5s">35%</div><div class="stat-sub">Etsy complete</div></div>
+<div class="dept-grid" id="deptGrid">
+
+<!-- ETSY col1 row1 -->
+<div class="card etsy">
+  <div class="card-header">
+    <div class="card-title-row"><div class="card-icon">🛍️</div><div><div class="card-title">ETSY DEPT</div><div class="card-subtitle">ShadyPrintables — Digital Printables</div></div></div>
+    <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+  </div>
+  <div class="card-body">
+    <div class="agents-row"><span class="agents-lbl">Active Agents (3)</span><div class="agent-chip">Listing Builder</div><div class="agent-chip">PDF Generator</div><div class="agent-chip">Market Researcher</div></div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="sbox-val val-green">6</div><div class="sbox-lbl">Active Listings</div></div>
+      <div class="stat-box"><div class="sbox-val val-cyan">999</div><div class="sbox-lbl">Stock/Listing</div></div>
+    </div>
+    <div class="listings">
+      <div class="listing-row"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
+      <div class="listing-row"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+      <div class="listing-row"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+      <div class="listing-row"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
+      <div class="listing-row"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
+      <div class="listing-row"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
+    </div>
+  </div>
+</div>
+<!-- N8N col2 row1 — bottom curved toward orb -->
+<div class="card n8n" id="cardN8N">
+  <div class="card-header">
+    <div class="card-title-row"><div class="card-icon">⚙️</div><div><div class="card-title">N8N AUTOMATION</div><div class="card-subtitle">Workflow Engine &amp; AI Orchestration</div></div></div>
+    <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+  </div>
+  <div class="split-body">
+    <div class="split-col">
+      <div class="sec-lbl">Workflows (3)</div>
+      <div class="agent-chip">Listing Gen</div>
+      <div class="agent-chip">Market Research</div>
+      <div class="agent-chip">TikTok Planner</div>
+      <div class="stat-box" style="margin-top:4px"><div class="sbox-val val-cyan">3</div><div class="sbox-lbl">Workflows Built</div></div>
+    </div>
+    <div class="split-col">
+      <div class="stat-box"><div class="sbox-val val-green">1000</div><div class="sbox-lbl">Free Executions</div></div>
+      <div class="prog-section" style="margin-top:4px">
+        <div><div class="prog-row"><span>Capacity</span><span>2%</span></div><div class="prog-track"><div class="prog-fill" style="width:2%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div></div>
+        <div><div class="prog-row"><span>Active</span><span>3/10</span></div><div class="prog-track"><div class="prog-fill" style="width:30%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
+      </div>
+      <div class="ticker-wrap" style="margin-top:4px"><div class="ticker" id="ticker">● ATLAS NOMINAL &nbsp;&nbsp; ● N8N OK &nbsp;&nbsp; ● ETSY SYNC &nbsp;&nbsp; ● AGENTS ONLINE &nbsp;&nbsp; ● PHASE 1 — 35% &nbsp;&nbsp;</div></div>
+    </div>
+  </div>
+  <!-- SVG overlay for curved bottom border drawn by JS -->
+  <svg id="n8nBorderSvg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;overflow:visible"></svg>
 </div>
 
-<!-- DEPT GRID -->
-<div class="dept-grid" id="deptGrid">
-  <!-- ETSY -->
-  <div class="card etsy">
-    <div class="card-header">
-      <div class="card-title-row"><div class="card-icon">🛍️</div><div><div class="card-title">ETSY DEPT</div><div class="card-subtitle">ShadyPrintables — Digital Printables</div></div></div>
-      <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+<!-- TIKTOK col3 row1 -->
+<div class="card tiktok">
+  <div class="card-header">
+    <div class="card-title-row"><div class="card-icon">📱</div><div><div class="card-title">TIKTOK DEPT</div><div class="card-subtitle">@shadesphysique</div></div></div>
+    <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>NEXT</div>
+  </div>
+  <div class="card-body">
+    <div class="agents-row"><span class="agents-lbl">Planned Agents (3)</span><div class="agent-chip dim">Script Writer</div><div class="agent-chip dim">Scheduler</div><div class="agent-chip dim">Analyst</div></div>
+    <div class="mini-stats">
+      <div class="mini-stat"><div class="mini-val" style="color:#a855f7">0</div><div class="mini-lbl">Videos Posted</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Followers</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Views</div></div>
     </div>
-    <div class="card-body">
-      <div class="agents-row"><span class="agents-lbl">Agents (3)</span><div class="agent-chip">Listing Builder</div><div class="agent-chip">PDF Generator</div><div class="agent-chip">Market Researcher</div></div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="sbox-val val-green">6</div><div class="sbox-lbl">Active Listings</div></div>
-        <div class="stat-box"><div class="sbox-val val-cyan">999</div><div class="sbox-lbl">Stock Per Listing</div></div>
-      </div>
-      <div class="listings">
-        <div class="listing-row"><span class="listing-num">01</span><span class="listing-name">2026 Monthly Budget Planner</span><span class="listing-price">$5.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">02</span><span class="listing-name">Kids Activity Sheets</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">03</span><span class="listing-name">2026 Mental Health Journal</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">04</span><span class="listing-name">2026 Daily Habit Tracker</span><span class="listing-price">$3.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">05</span><span class="listing-name">2026 Weekly Meal Planner</span><span class="listing-price">$6.99</span><div class="listing-dot"></div></div>
-        <div class="listing-row"><span class="listing-num">06</span><span class="listing-name">2026 Wedding Planner</span><span class="listing-price">$12.99</span><div class="listing-dot"></div></div>
-      </div>
+    <div class="prog-section">
+      <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#a855f7"></div></div></div>
+      <div><div class="prog-row"><span>Content Pipeline</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#7c3aed"></div></div></div>
     </div>
   </div>
-  <!-- N8N with bottom notch -->
-  <div class="card n8n">
-    <div class="notch-border"></div>
-    <div class="notch-mask"></div>
-    <div class="card-header">
-      <div class="card-title-row"><div class="card-icon">⚙️</div><div><div class="card-title">N8N AUTOMATION</div><div class="card-subtitle">Workflow Engine &amp; AI Orchestration</div></div></div>
-      <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+</div>
+<!-- FIVERR col1 row2 -->
+<div class="card fiverr">
+  <div class="card-header">
+    <div class="card-title-row"><div class="card-icon">💼</div><div><div class="card-title">FIVERR DEPT</div><div class="card-subtitle">Freelance Services &amp; Gigs</div></div></div>
+    <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>NEXT</div>
+  </div>
+  <div class="card-body">
+    <div class="agents-row"><span class="agents-lbl">Planned Agents (2)</span><div class="agent-chip dim">Gig Writer</div><div class="agent-chip dim">Order Manager</div></div>
+    <div class="mini-stats">
+      <div class="mini-stat"><div class="mini-val" style="color:#facc15">0</div><div class="mini-lbl">Gigs Live</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Orders</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Rating</div></div>
     </div>
-    <div class="card-body">
-      <div class="agents-row"><span class="agents-lbl">Workflows (3)</span><div class="agent-chip">Listing Gen</div><div class="agent-chip">Market Research</div><div class="agent-chip">TikTok Planner</div></div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="sbox-val val-cyan">3</div><div class="sbox-lbl">Workflows Built</div></div>
-        <div class="stat-box"><div class="sbox-val val-green">1000</div><div class="sbox-lbl">Free Executions</div></div>
-      </div>
-      <div class="prog-section">
-        <div><div class="prog-row"><span>Capacity Used</span><span>2%</span></div><div class="prog-track"><div class="prog-fill" style="width:2%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div></div>
-        <div><div class="prog-row"><span>Workflows Active</span><span>3/10</span></div><div class="prog-track"><div class="prog-fill" style="width:30%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
-      </div>
-      <div class="ticker-wrap"><div class="ticker" id="ticker">● ATLAS NOMINAL &nbsp;&nbsp; ● N8N HEARTBEAT OK &nbsp;&nbsp; ● ETSY SYNC ACTIVE &nbsp;&nbsp; ● AGENTS ONLINE &nbsp;&nbsp; ● PHASE 1 — 35% COMPLETE &nbsp;&nbsp; ● 6 LISTINGS LIVE &nbsp;&nbsp;</div></div>
+    <div class="prog-section">
+      <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#22c55e"></div></div></div>
+      <div><div class="prog-row"><span>Gig Readiness</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#16a34a"></div></div></div>
     </div>
   </div>
-  <!-- TIKTOK -->
-  <div class="card tiktok">
-    <div class="card-header">
-      <div class="card-title-row"><div class="card-icon">📱</div><div><div class="card-title">TIKTOK DEPT</div><div class="card-subtitle">@shadesphysique</div></div></div>
-      <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>NEXT</div>
-    </div>
-    <div class="card-body">
-      <div class="agents-row"><span class="agents-lbl">Planned (3)</span><div class="agent-chip dim">Script Writer</div><div class="agent-chip dim">Scheduler</div><div class="agent-chip dim">Analyst</div></div>
-      <div class="mini-stats">
-        <div class="mini-stat"><div class="mini-val" style="color:#a855f7">0</div><div class="mini-lbl">Videos Posted</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Followers</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Views</div></div>
-      </div>
-      <div class="prog-section">
-        <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#a855f7"></div></div></div>
-        <div><div class="prog-row"><span>Content Pipeline</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#7c3aed"></div></div></div>
-      </div>
-    </div>
-  </div>
+</div>
 
-  <!-- FIVERR -->
-  <div class="card fiverr">
-    <div class="card-header">
-      <div class="card-title-row"><div class="card-icon">💼</div><div><div class="card-title">FIVERR DEPT</div><div class="card-subtitle">Freelance Services &amp; Gigs</div></div></div>
-      <div class="card-badge badge-next"><div class="badge-dot" style="animation:none;opacity:.8"></div>NEXT</div>
+<!-- RESEARCH AI col2 row2 — top U-curve toward orb, split L/R -->
+<div class="card research" id="cardResearch">
+  <div class="card-header">
+    <div class="card-title-row"><div class="card-icon">🔬</div><div><div class="card-title">RESEARCH AI</div><div class="card-subtitle">Market Intelligence &amp; Niche Analysis</div></div></div>
+    <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
+  </div>
+  <div class="split-body">
+    <div class="split-col">
+      <div class="sec-lbl">Active Agents (2)</div>
+      <div class="agent-chip">Niche Finder</div>
+      <div class="agent-chip">Trend Analyzer</div>
+      <div class="mini-stat" style="margin-top:4px"><div class="mini-val" style="color:#c084fc">12</div><div class="mini-lbl">Niches Found</div></div>
+      <div class="mini-stat" style="margin-top:4px"><div class="mini-val" style="color:#f97316">6</div><div class="mini-lbl">Products Found</div></div>
     </div>
-    <div class="card-body">
-      <div class="agents-row"><span class="agents-lbl">Planned (2)</span><div class="agent-chip dim">Gig Writer</div><div class="agent-chip dim">Order Manager</div></div>
-      <div class="mini-stats">
-        <div class="mini-stat"><div class="mini-val" style="color:#facc15">0</div><div class="mini-lbl">Gigs Live</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Orders</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Rating</div></div>
-      </div>
-      <div class="prog-section">
-        <div><div class="prog-row"><span>Setup Progress</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#22c55e"></div></div></div>
-        <div><div class="prog-row"><span>Gig Readiness</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#16a34a"></div></div></div>
+    <div class="split-col">
+      <div class="mini-stat"><div class="mini-val" style="color:#00e5ff;font-size:13px">Batch 2</div><div class="mini-lbl">Next Run</div></div>
+      <div class="mini-stat" style="margin-top:4px"><div class="mini-val" style="color:#00ff88">High</div><div class="mini-lbl">Demand Signal</div></div>
+      <div class="prog-section" style="margin-top:4px">
+        <div><div class="prog-row"><span>Depth</span><span>60%</span></div><div class="prog-track"><div class="prog-fill" style="width:60%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
+        <div><div class="prog-row"><span>Coverage</span><span>45%</span></div><div class="prog-track"><div class="prog-fill" style="width:45%;background:linear-gradient(90deg,#ec4899,#a855f7)"></div></div></div>
       </div>
     </div>
   </div>
-  <!-- RESEARCH AI with top notch -->
-  <div class="card research">
-    <div class="notch-border"></div>
-    <div class="notch-mask"></div>
-    <div class="card-header">
-      <div class="card-title-row"><div class="card-icon">🔬</div><div><div class="card-title">RESEARCH AI</div><div class="card-subtitle">Market Intelligence &amp; Niche Analysis</div></div></div>
-      <div class="card-badge badge-live"><div class="badge-dot"></div>LIVE</div>
-    </div>
-    <div class="card-body">
-      <div class="agents-row"><span class="agents-lbl">Agents (2)</span><div class="agent-chip">Niche Finder</div><div class="agent-chip">Trend Analyzer</div></div>
-      <div class="mini-stats">
-        <div class="mini-stat"><div class="mini-val" style="color:#c084fc">12</div><div class="mini-lbl">Niches Found</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:#00e5ff;font-size:12px;padding-top:3px">Batch 2</div><div class="mini-lbl">Next Run</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:#f97316">6</div><div class="mini-lbl">Products Found</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:#00ff88">High</div><div class="mini-lbl">Demand Signal</div></div>
-      </div>
-      <div class="prog-section">
-        <div><div class="prog-row"><span>Research Depth</span><span>60%</span></div><div class="prog-track"><div class="prog-fill" style="width:60%;background:linear-gradient(90deg,#a855f7,#7c3aed)"></div></div></div>
-        <div><div class="prog-row"><span>Data Coverage</span><span>45%</span></div><div class="prog-track"><div class="prog-fill" style="width:45%;background:linear-gradient(90deg,#ec4899,#a855f7)"></div></div></div>
-      </div>
-    </div>
-  </div>
+  <svg id="resBorderSvg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;overflow:visible"></svg>
+</div>
 
-  <!-- SAPPHIRE -->
-  <div class="card sapphire" style="animation:cardIn .6s ease .7s both">
-    <div style="position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px;background:linear-gradient(180deg,#3b82f6,#06b6d4,#3b82f6);background-size:100% 200%;animation:borderFlow 3s linear infinite"></div>
-    <div class="card-header">
-      <div class="card-title-row"><div class="card-icon">💎</div><div><div class="card-title">SAPPHIRE</div><div class="card-subtitle">Peptides &amp; Supplements Store</div></div></div>
-      <div class="card-badge" style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);color:#60a5fa;font-family:'Rajdhani',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:5px"><div class="badge-dot" style="animation:none;opacity:.8"></div>SETUP</div>
+<!-- SAPPHIRE col3 row2 -->
+<div class="card sapphire">
+  <div class="card-header">
+    <div class="card-title-row"><div class="card-icon">💎</div><div><div class="card-title">SAPPHIRE</div><div class="card-subtitle">Peptides &amp; Supplements Store</div></div></div>
+    <div class="card-badge badge-setup"><div class="badge-dot" style="animation:none;opacity:.8"></div>SETUP</div>
+  </div>
+  <div class="card-body">
+    <div class="agents-row"><span class="agents-lbl">Planned Agents (3)</span><div class="agent-chip dim">Store Builder</div><div class="agent-chip dim">SEO Agent</div><div class="agent-chip dim">Ad Manager</div></div>
+    <div class="mini-stats">
+      <div class="mini-stat"><div class="mini-val" style="color:#3b82f6">0</div><div class="mini-lbl">Products Live</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Orders</div></div>
+      <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Visitors</div></div>
     </div>
-    <div class="card-body">
-      <div class="agents-row"><span class="agents-lbl">Planned (3)</span><div class="agent-chip dim">Store Builder</div><div class="agent-chip dim">SEO Agent</div><div class="agent-chip dim">Ad Manager</div></div>
-      <div class="mini-stats">
-        <div class="mini-stat"><div class="mini-val" style="color:#3b82f6">0</div><div class="mini-lbl">Products Live</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Revenue</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Orders</div></div>
-        <div class="mini-stat"><div class="mini-val" style="color:rgba(255,255,255,.2)">--</div><div class="mini-lbl">Visitors</div></div>
-      </div>
-      <div class="prog-section">
-        <div><div class="prog-row"><span>Store Setup</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div></div>
-        <div><div class="prog-row"><span>Product Catalog</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,#06b6d4,#3b82f6)"></div></div></div>
-      </div>
+    <div class="prog-section">
+      <div><div class="prog-row"><span>Store Setup</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,#3b82f6,#06b6d4)"></div></div></div>
+      <div><div class="prog-row"><span>Product Catalog</span><span>0%</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,#06b6d4,#3b82f6)"></div></div></div>
     </div>
   </div>
-  <!-- ORB: absolutely centered between N8N and Research AI -->
-  <div class="orb-wrap" id="orbWrap">
-    <style>
-    .orb-outer{position:relative;display:flex;align-items:center;justify-content:center}
-    /* Outermost thin spinning ring */
-    .orb-spin-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(0,229,255,.5);border-top-color:#00e5ff;border-right-color:rgba(0,229,255,.2)}
-    .orb-spin-ring.r1{width:168px;height:168px;animation:orbSpin 6s linear infinite}
-    .orb-spin-ring.r2{width:156px;height:156px;animation:orbSpinR 10s linear infinite;border-color:rgba(0,229,255,.25);border-top-color:rgba(0,229,255,.6)}
-    .orb-spin-ring.r3{width:144px;height:144px;animation:orbSpin 16s linear infinite;border-style:dashed;border-color:rgba(0,229,255,.2)}
-    /* Dot on outermost ring */
-    .orb-spin-ring.r1::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:#00e5ff;box-shadow:0 0 10px #00e5ff,0 0 20px #00e5ff}
-    /* Core */
-    .orb-core{width:120px;height:120px;border-radius:50%;border:2px solid rgba(0,229,255,.85);background:radial-gradient(circle,rgba(0,30,60,.98) 0%,rgba(0,10,25,1) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;animation:coreGlow 2.5s ease-in-out infinite;position:relative;z-index:2;gap:3px}
-    .orb-core::before{content:'';position:absolute;width:130px;height:130px;border-radius:50%;border:1px solid rgba(0,229,255,.15);top:-7px;left:-7px}
-    .orb-rev-lbl{font-family:'Rajdhani',sans-serif;font-size:7px;letter-spacing:3px;color:rgba(0,229,255,.5);font-weight:600;text-transform:uppercase}
-    .orb-rev{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:#00e5ff;letter-spacing:1px;animation:revPulse 3s ease-in-out infinite;line-height:1}
-    .orb-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.4),transparent);margin:3px 0}
-    .orb-stats{display:flex;gap:10px;align-items:center}
-    .orb-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
-    .orb-stat-val{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;line-height:1}
-    .orb-stat-lbl{font-family:'Rajdhani',sans-serif;font-size:6px;letter-spacing:1.5px;color:rgba(0,229,255,.4);text-transform:uppercase}
-    .orb-sep{width:1px;height:22px;background:rgba(0,229,255,.2)}
-    .orb-phase{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:3px;width:80px}
-    .orb-phase-lbl{font-family:'Rajdhani',sans-serif;font-size:6px;letter-spacing:2px;color:rgba(0,229,255,.4);text-transform:uppercase}
-    .orb-phase-track{width:72px;height:3px;background:rgba(0,229,255,.1);border-radius:2px;overflow:hidden}
-    .orb-phase-fill{height:100%;width:35%;background:linear-gradient(90deg,#00e5ff,#00ff88);border-radius:2px;box-shadow:0 0 6px #00e5ff}
-    /* Alert dot */
-    .orb-alert{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:#f97316;box-shadow:0 0 8px #f97316;animation:blink 1.2s ease-in-out infinite}
-    </style>
-    <div class="orb-outer">
-      <div class="orb-spin-ring r1"></div>
-      <div class="orb-spin-ring r2"></div>
-      <div class="orb-spin-ring r3"></div>
-      <div class="orb-core">
-        <div class="orb-alert"></div>
-        <div class="orb-rev-lbl">TOTAL REVENUE</div>
-        <div class="orb-rev" id="orbRev">$0.00</div>
-        <div class="orb-divider"></div>
-        <div class="orb-stats">
-          <div class="orb-stat"><div class="orb-stat-val" style="color:#00ff88">8</div><div class="orb-stat-lbl">ACTIVE</div></div>
-          <div class="orb-sep"></div>
-          <div class="orb-stat"><div class="orb-stat-val" style="color:rgba(0,229,255,.4)">4</div><div class="orb-stat-lbl">IDLE</div></div>
-        </div>
-        <div class="orb-phase">
-          <div class="orb-phase-lbl">PHASE 1 — 35%</div>
-          <div class="orb-phase-track"><div class="orb-phase-fill"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
+<!-- THE ORB — absolutely positioned in grid center -->
+<div class="orb-container" id="orbContainer">
+<svg id="orbSvg" width="340" height="340" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow1"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glow2"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glow3"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#001830"/>
+      <stop offset="70%" stop-color="#000d1f"/>
+      <stop offset="100%" stop-color="#00060f"/>
+    </radialGradient>
+  </defs>
+
+  <!-- OUTERMOST thin spinning ring (drawn via JS animation) -->
+  <g id="outerRing" style="transform-origin:170px 170px">
+    <circle cx="170" cy="170" r="162" fill="none" stroke="rgba(0,229,255,.4)" stroke-width="1.5" stroke-dasharray="8,6" filter="url(#glow1)"/>
+    <!-- traveling dot -->
+    <circle cx="170" cy="8" r="5" fill="#00e5ff" filter="url(#glow2)"/>
+  </g>
+
+  <!-- Second ring CCW -->
+  <g id="ring2" style="transform-origin:170px 170px">
+    <circle cx="170" cy="170" r="150" fill="none" stroke="rgba(0,180,220,.55)" stroke-width="1.8" filter="url(#glow1)"/>
+    <circle cx="170" cy="20" r="3.5" fill="rgba(0,229,255,.8)" filter="url(#glow1)"/>
+    <circle cx="170" cy="320" r="3.5" fill="rgba(0,229,255,.6)" filter="url(#glow1)"/>
+  </g>
+
+  <!-- Third ring CW dashed -->
+  <g id="ring3" style="transform-origin:170px 170px">
+    <circle cx="170" cy="170" r="138" fill="none" stroke="rgba(0,229,255,.3)" stroke-width="1.2" stroke-dasharray="3,5" filter="url(#glow1)"/>
+  </g>
+
+  <!-- Tick marks at 8 positions on ring2 -->
+  <g filter="url(#glow1)" opacity=".7">
+    <line x1="170" y1="18" x2="170" y2="30" stroke="#00e5ff" stroke-width="2"/>
+    <line x1="170" y1="310" x2="170" y2="322" stroke="#00e5ff" stroke-width="2"/>
+    <line x1="18" y1="170" x2="30" y2="170" stroke="#00e5ff" stroke-width="2"/>
+    <line x1="310" y1="170" x2="322" y2="170" stroke="#00e5ff" stroke-width="2"/>
+    <line x1="55" y1="55" x2="64" y2="64" stroke="#00e5ff" stroke-width="1.5"/>
+    <line x1="276" y1="55" x2="267" y2="64" stroke="#00e5ff" stroke-width="1.5"/>
+    <line x1="55" y1="285" x2="64" y2="276" stroke="#00e5ff" stroke-width="1.5"/>
+    <line x1="276" y1="285" x2="267" y2="276" stroke="#00e5ff" stroke-width="1.5"/>
+  </g>
+
+  <!-- CORE background circle -->
+  <circle cx="170" cy="170" r="110" fill="url(#coreGrad)" stroke="rgba(0,229,255,.8)" stroke-width="2" filter="url(#glow1)"/>
+  <circle cx="170" cy="170" r="119" fill="none" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
+
+  <!-- INNER glow rings -->
+  <circle cx="170" cy="170" r="95" fill="none" stroke="rgba(0,229,255,.2)" stroke-width="1" stroke-dasharray="2,4"/>
+  <circle cx="170" cy="170" r="80" fill="none" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
+
+  <!-- REVENUE label -->
+  <text x="170" y="138" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="9" fill="rgba(0,229,255,.5)" letter-spacing="3" font-weight="600">TOTAL REVENUE</text>
+
+  <!-- REVENUE number -->
+  <text id="orbRevText" x="170" y="172" text-anchor="middle" font-family="Orbitron,monospace" font-size="22" fill="#00e5ff" font-weight="900" letter-spacing="1" filter="url(#glow2)">$0.00</text>
+
+  <!-- Divider line -->
+  <line x1="120" y1="182" x2="220" y2="182" stroke="rgba(0,229,255,.3)" stroke-width="1"/>
+
+  <!-- ALERTS -->
+  <text x="170" y="200" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="9" fill="rgba(0,229,255,.4)" letter-spacing="2">2 ALERTS</text>
+
+  <!-- CLOCKFACE STATS — 5 positions around the ring (r=130 from center) -->
+  <!-- Each stat: mini arc gauge + number + label -->
+
+  <!-- TOP: Phase Progress (35%) at 270deg = top -->
+  <g id="statPhase">
+    <path d="M 170 42 A 128 128 0 0 1 170 42" fill="none" stroke="rgba(0,229,255,.12)" stroke-width="6" stroke-linecap="round"
+      stroke-dasharray="201" stroke-dashoffset="0"
+      transform="rotate(-90 170 170)"/>
+    <!-- arc fill for 35% of 201 = ~70 -->
+    <path d="M 170 42 A 128 128 0 0 1 170 42" fill="none" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"
+      stroke-dasharray="201" stroke-dashoffset="131"
+      transform="rotate(-90 170 170)" filter="url(#glow1)" opacity=".0"/>
+    <!-- Small arc positioned at top -->
+    <path id="arcPhase" cx="170" cy="42" fill="none" stroke="rgba(0,229,255,.15)" stroke-width="5" stroke-linecap="round"/>
+    <text x="170" y="46" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#00e5ff" font-weight="700" filter="url(#glow1)">35%</text>
+    <text x="170" y="59" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="8" fill="rgba(0,229,255,.5)" letter-spacing="1.5">PHASE 1</text>
+  </g>
+
+  <!-- TOP-RIGHT: Active Depts (3/6 = 50%) at ~330deg -->
+  <g id="statDepts" transform="translate(258,80)">
+    <circle cx="0" cy="0" r="22" fill="rgba(0,10,25,.8)" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
+    <path d="M 0 -19 A 19 19 0 0 1 0 -19" fill="none" stroke="rgba(0,229,255,.1)" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="0" stroke-linecap="round"/>
+    <path d="M 0 -19 A 19 19 0 0 1 0 19" fill="none" stroke="#00ff88" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="59" stroke-linecap="round" filter="url(#glow1)"/>
+    <text x="0" y="4" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#00ff88" font-weight="700">3</text>
+    <text x="0" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="7.5" fill="rgba(0,229,255,.5)" letter-spacing="1">DEPTS</text>
+  </g>
+
+  <!-- BOTTOM-RIGHT: Agents (8/12 = 67%) at ~30deg -->
+  <g id="statAgents" transform="translate(258,258)">
+    <circle cx="0" cy="0" r="22" fill="rgba(0,10,25,.8)" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
+    <path d="M 0 -19 A 19 19 0 0 1 0 -19" fill="none" stroke="rgba(0,229,255,.1)" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="0" stroke-linecap="round"/>
+    <path d="M 0 -19 A 19 19 0 0 1 9.7 16.8" fill="none" stroke="#00e5ff" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="39" stroke-linecap="round" filter="url(#glow1)"/>
+    <text x="0" y="4" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#00e5ff" font-weight="700">8</text>
+    <text x="0" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="7.5" fill="rgba(0,229,255,.5)" letter-spacing="1">AGENTS</text>
+  </g>
+
+  <!-- BOTTOM-LEFT: Etsy Listings (6/6 = 100%) at ~150deg -->
+  <g id="statListings" transform="translate(82,258)">
+    <circle cx="0" cy="0" r="22" fill="rgba(0,10,25,.8)" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
+    <path d="M 0 -19 A 19 19 0 1 1 0.001 -19" fill="none" stroke="#f97316" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="0" stroke-linecap="round" filter="url(#glow1)"/>
+    <text x="0" y="4" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#f97316" font-weight="700">6</text>
+    <text x="0" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="7.5" fill="rgba(0,229,255,.5)" letter-spacing="1">LISTINGS</text>
+  </g>
+
+  <!-- TOP-LEFT: Revenue label at ~210deg -->
+  <g id="statRev" transform="translate(82,80)">
+    <circle cx="0" cy="0" r="22" fill="rgba(0,10,25,.8)" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
+    <path d="M 0 -19 A 19 19 0 0 1 0 -19" fill="none" stroke="rgba(0,229,255,.1)" stroke-width="4" stroke-dasharray="119" stroke-dashoffset="0" stroke-linecap="round"/>
+    <path d="M 0 -19 A 19 19 0 0 1 19 0" fill="none" stroke="#c084fc" stroke-width="4" stroke-linecap="round" filter="url(#glow1)"/>
+    <text x="0" y="1" text-anchor="middle" font-family="Orbitron,monospace" font-size="7" fill="#c084fc" font-weight="700">$42</text>
+    <text x="0" y="11" text-anchor="middle" font-family="Orbitron,monospace" font-size="7" fill="#c084fc" font-weight="700">.94</text>
+    <text x="0" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="7.5" fill="rgba(0,229,255,.5)" letter-spacing="1">REVENUE</text>
+  </g>
+
+</svg>
+</div><!-- end orb-container -->
 
 </div><!-- end dept-grid -->
 </div><!-- end app --><script>
 (function(){
+  var ORB_R = 150; // half of 300px orb diameter
+  var GAP_PAD = 14; // small gap between card edge and orb ring
+
   function pad(n){return n<10?'0'+n:''+n}
   function tick(){
     var d=new Date();
@@ -353,40 +434,196 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   }
   setInterval(tick,1000); tick();
 
-  // Ticker
+  // Ticker scroll
   var ticker=document.getElementById('ticker');
   if(ticker){
     var pos=0;
     setInterval(function(){
-      pos-=0.8;
+      pos-=0.7;
       if(Math.abs(pos)>ticker.scrollWidth/2) pos=0;
       ticker.style.transform='translateX('+pos+'px)';
     },25);
   }
 
-  // Position the orb exactly in the center of the middle column, spanning the gap between rows
-  function positionOrb(){
+  // Spinning orb rings
+  var angle1=0, angle2=0, angle3=0;
+  var r1=document.getElementById('outerRing');
+  var r2=document.getElementById('ring2');
+  var r3=document.getElementById('ring3');
+  var lastT=null;
+  function animRings(ts){
+    if(!lastT) lastT=ts;
+    var dt=(ts-lastT)/1000; lastT=ts;
+    angle1 += dt*18;   // CW fast
+    angle2 -= dt*11;   // CCW medium
+    angle3 += dt*5;    // CW slow
+    if(r1) r1.style.transform='rotate('+angle1+'deg)';
+    if(r2) r2.style.transform='rotate('+angle2+'deg)';
+    if(r3) r3.style.transform='rotate('+angle3+'deg)';
+    requestAnimationFrame(animRings);
+  }
+  requestAnimationFrame(animRings);
+
+  // Position orb and carve cards
+  function build(){
     var grid=document.getElementById('deptGrid');
-    var n8n=document.querySelector('.card.n8n');
-    var research=document.querySelector('.card.research');
-    var orb=document.getElementById('orbWrap');
-    if(!grid||!n8n||!research||!orb) return;
+    var n8n=document.getElementById('cardN8N');
+    var res=document.getElementById('cardResearch');
+    var orbC=document.getElementById('orbContainer');
+    if(!grid||!n8n||!res||!orbC){setTimeout(build,200);return;}
 
     var gRect=grid.getBoundingClientRect();
     var n8nRect=n8n.getBoundingClientRect();
-    var resRect=research.getBoundingClientRect();
+    var resRect=res.getBoundingClientRect();
 
-    // Orb center X = center of the middle column cards
-    var orbX = (n8nRect.left + n8nRect.right)/2 - gRect.left;
-    // Orb center Y = midpoint of the gap between N8N bottom and Research top
-    var orbY = ((n8nRect.bottom + resRect.top)/2) - gRect.top;
+    // Orb center = midpoint of the gap between N8N and Research
+    var orbCX = (n8nRect.left+n8nRect.right)/2 - gRect.left;
+    var orbCY = (n8nRect.bottom + resRect.top)/2 - gRect.top;
 
-    orb.style.left = orbX + 'px';
-    orb.style.top  = orbY + 'px';
+    orbC.style.left = orbCX+'px';
+    orbC.style.top  = orbCY+'px';
+
+    // --- CARVE N8N card (bottom U-curve) ---
+    var n8nW = n8nRect.width;
+    var n8nH = n8nRect.height;
+    // Orb center relative to N8N card
+    var orbRelY_n8n = orbCY - (n8nRect.top - gRect.top); // positive = below card bottom
+    var curveR = ORB_R + GAP_PAD;
+
+    // Build clip-path polygon for N8N: full rect minus a circular notch from bottom-center
+    // The arc sits at y = n8nH (bottom edge), center at (n8nW/2, n8nH + depth)
+    // where depth = distance from bottom of card to orb center
+    var depth_n8n = orbRelY_n8n - n8nH; // how far orb center is below N8N bottom
+    if(depth_n8n < 0) depth_n8n = 0;
+    var arcCY_n8n = n8nH + depth_n8n;
+
+    // How wide the notch cuts into the card bottom
+    // Intersection of circle (center cx=n8nW/2, cy=arcCY_n8n, r=curveR) with y=n8nH
+    var dy_n8n = arcCY_n8n - n8nH;
+    var halfChord_n8n = Math.sqrt(Math.max(0, curveR*curveR - dy_n8n*dy_n8n));
+    var x1_n8n = n8nW/2 - halfChord_n8n;
+    var x2_n8n = n8nW/2 + halfChord_n8n;
+
+    // How deep the curve dips into the card
+    var dip_n8n = Math.max(0, curveR - dy_n8n);
+
+    // SVG clip path for N8N
+    // We'll use clip-path with a path that goes: full rect, then carve a U from bottom
+    var n8nSvg = document.getElementById('n8nBorderSvg');
+    if(n8nSvg){
+      n8nSvg.setAttribute('width', n8nW);
+      n8nSvg.setAttribute('height', n8nH);
+      n8nSvg.setAttribute('viewBox','0 0 '+n8nW+' '+n8nH);
+
+      // Create clipPath
+      var NS='http://www.w3.org/2000/svg';
+      var defs=document.createElementNS(NS,'defs');
+      var cp=document.createElementNS(NS,'clipPath');
+      cp.setAttribute('id','n8nClip');
+      var pathEl=document.createElementNS(NS,'path');
+      // Path: top-left → top-right → bottom-right → arc-start → arc (U-curve up into card) → arc-end → bottom-left → close
+      var arcStartX=x2_n8n, arcEndX=x1_n8n;
+      var sweepDip = dip_n8n;
+      // SVG arc from arcStartX to arcEndX curving upward
+      var d='M 10 10 L '+(n8nW-10)+' 10 L '+(n8nW-10)+' '+(n8nH-10)+
+            ' L '+arcStartX+' '+(n8nH-10)+
+            ' A '+curveR+' '+curveR+' 0 0 1 '+arcEndX+' '+(n8nH-10)+
+            ' L 10 '+(n8nH-10)+' Z';
+      pathEl.setAttribute('d',d);
+      cp.appendChild(pathEl);
+      defs.appendChild(cp);
+      n8nSvg.appendChild(defs);
+
+      // Apply clip to card inner
+      n8n.style.clipPath='url(#n8nClip)';
+      n8n.style.webkitClipPath='url(#n8nClip)';
+
+      // Draw the curved border line
+      var borderPath=document.createElementNS(NS,'path');
+      borderPath.setAttribute('d',
+        'M 4 10 L 4 '+(n8nH-10)+
+        ' M 4 10 L '+(n8nW-4)+' 10'+
+        ' L '+(n8nW-4)+' '+(n8nH-10)+
+        ' L '+arcStartX+' '+(n8nH-10)+
+        ' A '+curveR+' '+curveR+' 0 0 1 '+arcEndX+' '+(n8nH-10)+
+        ' L 4 '+(n8nH-10)
+      );
+      borderPath.setAttribute('fill','none');
+      borderPath.setAttribute('stroke','rgba(255,255,255,.07)');
+      borderPath.setAttribute('stroke-width','1');
+      n8nSvg.appendChild(borderPath);
+
+      // Glowing arc border matching orb
+      var glowArc=document.createElementNS(NS,'path');
+      var arcD='M '+arcStartX+' '+(n8nH-10)+' A '+curveR+' '+curveR+' 0 0 1 '+arcEndX+' '+(n8nH-10);
+      glowArc.setAttribute('d',arcD);
+      glowArc.setAttribute('fill','none');
+      glowArc.setAttribute('stroke','rgba(0,229,255,.4)');
+      glowArc.setAttribute('stroke-width','1.5');
+      glowArc.setAttribute('filter','url(#gf)');
+      n8nSvg.appendChild(glowArc);
+    }
+
+    // --- CARVE Research card (top U-curve) ---
+    var resW = resRect.width;
+    var resH = resRect.height;
+    var orbRelY_res = (resRect.top - gRect.top) - orbCY; // distance from orb center to res top (positive)
+    var depth_res = orbRelY_res;
+    if(depth_res < 0) depth_res = 0;
+    var arcCY_res = -depth_res; // relative to res card top
+
+    var dy_res = Math.abs(arcCY_res);
+    var halfChord_res = Math.sqrt(Math.max(0, curveR*curveR - dy_res*dy_res));
+    var x1_res = resW/2 - halfChord_res;
+    var x2_res = resW/2 + halfChord_res;
+
+    var resSvg = document.getElementById('resBorderSvg');
+    if(resSvg){
+      resSvg.setAttribute('width', resW);
+      resSvg.setAttribute('height', resH);
+      resSvg.setAttribute('viewBox','0 0 '+resW+' '+resH);
+
+      var NS='http://www.w3.org/2000/svg';
+      var defs2=document.createElementNS(NS,'defs');
+      var cp2=document.createElementNS(NS,'clipPath');
+      cp2.setAttribute('id','resClip');
+      var pathEl2=document.createElementNS(NS,'path');
+      // Path: from arc-end (top-left side) → arc (inverted U) → arc-start (top-right side) → top-right → bottom-right → bottom-left → close
+      var d2='M 10 10 L '+x1_res+' 10'+
+             ' A '+curveR+' '+curveR+' 0 0 0 '+x2_res+' 10'+
+             ' L '+(resW-10)+' 10 L '+(resW-10)+' '+(resH-10)+
+             ' L 10 '+(resH-10)+' Z';
+      pathEl2.setAttribute('d',d2);
+      cp2.appendChild(pathEl2);
+      defs2.appendChild(cp2);
+      resSvg.appendChild(defs2);
+
+      res.style.clipPath='url(#resClip)';
+      res.style.webkitClipPath='url(#resClip)';
+
+      // Border
+      var bp2=document.createElementNS(NS,'path');
+      bp2.setAttribute('d',
+        'M 10 '+(resH-4)+' L 10 10'+
+        ' L '+x1_res+' 10'+
+        ' A '+curveR+' '+curveR+' 0 0 0 '+x2_res+' 10'+
+        ' L '+(resW-10)+' 10 L '+(resW-10)+' '+(resH-4)
+      );
+      bp2.setAttribute('fill','none');
+      bp2.setAttribute('stroke','rgba(255,255,255,.07)');
+      bp2.setAttribute('stroke-width','1');
+      resSvg.appendChild(bp2);
+
+      var ga2=document.createElementNS(NS,'path');
+      ga2.setAttribute('d','M '+x1_res+' 10 A '+curveR+' '+curveR+' 0 0 0 '+x2_res+' 10');
+      ga2.setAttribute('fill','none');
+      ga2.setAttribute('stroke','rgba(0,229,255,.4)');
+      ga2.setAttribute('stroke-width','1.5');
+      resSvg.appendChild(ga2);
+    }
   }
 
-  // Wait for fonts + layout then position
-  setTimeout(positionOrb, 300);
-  window.addEventListener('resize', positionOrb);
+  setTimeout(build, 400);
+  window.addEventListener('resize', function(){setTimeout(build,100);});
 })();
 </script></body></html>
