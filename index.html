@@ -2,642 +2,235 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ATLAS — Command Center</title>
+<title>ATLAS Command Center</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --bg:#020c18;--cyan:#00d4ff;--cyan2:#0077aa;
-  --purple:#cc44ff;--purple2:#7700bb;
-  --gold:#f0c040;--green:#00ff9d;--red:#ff3a5c;
-  --orange:#ff7030;--sapphire:#4488ff;
-  --dimtxt:#2e5878;--txt:#7aafc8;
-  --panel:rgba(3,18,40,0.92);--border:rgba(0,170,210,0.22);--border2:rgba(0,170,210,0.09);
-}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);}
-body{font-family:'Rajdhani',sans-serif;
-  background-image:
-    radial-gradient(ellipse 60% 60% at 42% 52%,rgba(0,35,80,0.3) 0%,transparent 70%),
-    linear-gradient(rgba(0,40,70,0.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,40,70,0.045) 1px,transparent 1px);
-  background-size:100% 100%,52px 52px,52px 52px;}
-
-/* ========== TOP BAR ========== */
-.topbar{
-  position:fixed;top:0;left:0;right:0;height:72px;z-index:200;
-  background:rgba(2,10,22,0.99);
-  border-bottom:2px solid rgba(0,170,210,0.3);
-  display:grid;grid-template-columns:1fr auto 1fr;
-  align-items:center;padding:0 28px;gap:20px;
-}
-/* Brand */
-.brand{display:flex;align-items:center;gap:14px;}
-.brand-svg{width:40px;height:40px;flex-shrink:0;}
-.bname{font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:900;
-  letter-spacing:0.32em;
-  background:linear-gradient(130deg,#fff 0%,var(--cyan) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.bsub{font-size:0.7rem;letter-spacing:0.2em;color:var(--dimtxt);margin-top:2px;}
-
-/* ATLAS 3D FACE */
-.face-center{display:flex;align-items:center;justify-content:center;gap:14px;}
-.wf-side{height:36px;display:flex;align-items:center;gap:2px;width:130px;overflow:hidden;}
-.wf-left{justify-content:flex-end;}
-.wb{width:3px;border-radius:2px;background:var(--cyan);
-  animation:wba var(--d,.5s) ease-in-out infinite alternate;animation-delay:var(--dl,0s);}
-@keyframes wba{from{height:2px;opacity:0.15;}to{height:var(--h,14px);opacity:0.85;}}
-
-.face-orb{
-  width:80px;height:80px;position:relative;flex-shrink:0;
-  filter:drop-shadow(0 0 18px rgba(0,220,255,0.5));
-}
-
-/* Top-right */
-.topbar-right{display:flex;align-items:center;justify-content:flex-end;gap:18px;}
-.live-pill{display:flex;align-items:center;gap:7px;
-  font-size:0.75rem;letter-spacing:0.15em;color:var(--green);text-transform:uppercase;
-  padding:5px 14px;border:1px solid rgba(0,255,157,0.22);border-radius:20px;
-  background:rgba(0,255,157,0.04);}
-.lpdot{width:8px;height:8px;border-radius:50%;background:var(--green);
-  box-shadow:0 0 9px var(--green);animation:pd 2s infinite;}
-@keyframes pd{0%,100%{opacity:1;}50%{opacity:0.1;}}
-#clk{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:700;
-  color:var(--cyan);letter-spacing:0.07em;}
-
-/* ========== HUD STRIP ========== */
-.hudbar{
-  position:fixed;top:72px;left:0;right:280px;height:42px;z-index:200;
-  background:rgba(0,6,16,0.98);border-bottom:1px solid rgba(0,170,210,0.12);
-  display:grid;grid-template-columns:repeat(6,1fr);
-}
-.hc{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  border-right:1px solid rgba(0,170,210,0.08);}
-.hc:last-child{border-right:none;}
-.hl{font-size:0.55rem;letter-spacing:0.16em;color:var(--dimtxt);text-transform:uppercase;}
-.hv{font-family:'Orbitron',sans-serif;font-size:0.95rem;font-weight:700;color:var(--cyan);line-height:1.2;}
-.hv.g{color:var(--green);}.hv.go{color:var(--gold);}
-
-/* ========== ACTIVITY LOG (right panel) ========== */
-.act-panel{
-  position:fixed;top:0;right:0;bottom:0;width:280px;z-index:150;
-  background:rgba(2,12,28,0.98);
-  border-left:1px solid var(--border);
-  display:flex;flex-direction:column;
-}
-.act-panel::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;
-  background:linear-gradient(180deg,transparent,var(--cyan),transparent);opacity:0.3;}
-.act-top{
-  height:72px;background:rgba(0,10,24,0.99);
-  border-bottom:2px solid rgba(0,170,210,0.3);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;
-  letter-spacing:0.22em;color:var(--cyan);text-transform:uppercase;
-  flex-shrink:0;
-}
-.act-hud{
-  height:42px;background:rgba(0,6,16,0.98);
-  border-bottom:1px solid rgba(0,170,210,0.12);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.act-hud-inner{text-align:center;}
-.act-hud .hl{font-size:0.52rem;letter-spacing:0.15em;color:var(--dimtxt);text-transform:uppercase;}
-.act-hud .hv{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:var(--gold);}
-
-.act-scroll{flex:1;overflow:hidden;position:relative;}
-.act-inner{
-  position:absolute;top:0;left:0;right:0;
-  animation:scrollUp 35s linear infinite;
-}
-@keyframes scrollUp{from{transform:translateY(0);}to{transform:translateY(-50%);}}
-.act-item{
-  padding:10px 16px;border-bottom:1px solid rgba(0,170,210,0.07);
-}
-.act-tag{display:inline-flex;font-size:0.55rem;letter-spacing:0.1em;
-  padding:2px 8px;border-radius:20px;text-transform:uppercase;font-weight:700;margin-bottom:4px;}
-.act-msg{font-size:0.78rem;color:var(--txt);line-height:1.35;display:block;}
-.t-etsy{background:rgba(0,255,157,0.08);color:var(--green);border:1px solid rgba(0,255,157,0.2);}
-.t-sys{background:rgba(0,212,255,0.08);color:var(--cyan);border:1px solid rgba(0,212,255,0.2);}
-.t-gh{background:rgba(180,60,255,0.08);color:var(--purple);border:1px solid rgba(180,60,255,0.2);}
-.t-warn{background:rgba(240,192,64,0.08);color:var(--gold);border:1px solid rgba(240,192,64,0.2);}
-.t-sap{background:rgba(68,136,255,0.08);color:var(--sapphire);border:1px solid rgba(68,136,255,0.2);}
-
-/* ========== MAIN SCENE ========== */
-.scene{
-  position:fixed;top:114px;left:0;right:280px;bottom:0;
-  display:flex;align-items:center;justify-content:center;
-}
-#svgC{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;}
-
-/* ========== NEON ORB ========== */
-.orb-wrap{position:relative;width:290px;height:290px;flex-shrink:0;z-index:20;}
-
-.o-seg-outer{
-  position:absolute;inset:-22px;border-radius:50%;
-  background:conic-gradient(from 0deg,
-    rgba(160,30,255,0.7) 0deg 6deg,transparent 6deg 84deg,
-    rgba(160,30,255,0.7) 84deg 96deg,transparent 96deg 174deg,
-    rgba(160,30,255,0.7) 174deg 186deg,transparent 186deg 264deg,
-    rgba(160,30,255,0.7) 264deg 276deg,transparent 276deg 354deg,
-    rgba(160,30,255,0.7) 354deg 360deg);
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 5px));
-  mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 5px));
-  animation:rot 22s linear infinite;
-}
-@keyframes rot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.o-tick{
-  position:absolute;inset:-6px;border-radius:50%;
-  background:conic-gradient(from 0deg,
-    rgba(0,180,220,0.35) 0deg 2deg,transparent 2deg 30deg,
-    rgba(0,180,220,0.35) 30deg 32deg,transparent 32deg 60deg,
-    rgba(0,180,220,0.35) 60deg 62deg,transparent 62deg 90deg,
-    rgba(0,180,220,0.35) 90deg 92deg,transparent 92deg 120deg,
-    rgba(0,180,220,0.35) 120deg 122deg,transparent 122deg 150deg,
-    rgba(0,180,220,0.35) 150deg 152deg,transparent 152deg 180deg,
-    rgba(0,180,220,0.35) 180deg 182deg,transparent 182deg 210deg,
-    rgba(0,180,220,0.35) 210deg 212deg,transparent 212deg 240deg,
-    rgba(0,180,220,0.35) 240deg 242deg,transparent 242deg 270deg,
-    rgba(0,180,220,0.35) 270deg 272deg,transparent 272deg 300deg,
-    rgba(0,180,220,0.35) 300deg 302deg,transparent 302deg 330deg,
-    rgba(0,180,220,0.35) 330deg 332deg,transparent 332deg 360deg);
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 7px));
-  mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 7px));
-  animation:rot 60s linear infinite reverse;
-}
-.o-neon{
-  position:absolute;inset:4px;border-radius:50%;
-  box-shadow:0 0 0 3px rgba(180,40,255,0.7),0 0 25px rgba(180,40,255,0.45),0 0 60px rgba(160,20,255,0.2),inset 0 0 30px rgba(120,0,200,0.15);
-  animation:np 3s ease-in-out infinite;
-}
-@keyframes np{
-  0%,100%{box-shadow:0 0 0 3px rgba(180,40,255,0.7),0 0 25px rgba(180,40,255,0.45),0 0 60px rgba(160,20,255,0.2),inset 0 0 30px rgba(120,0,200,0.15);}
-  50%{box-shadow:0 0 0 4px rgba(210,80,255,0.9),0 0 40px rgba(200,60,255,0.65),0 0 90px rgba(180,30,255,0.3),inset 0 0 50px rgba(150,0,255,0.2);}
-}
-.o-inner-ring{
-  position:absolute;inset:18px;border-radius:50%;
-  border:1px solid rgba(0,180,220,0.18);
-  animation:rot 18s linear infinite;
-}
-.o-glow{
-  position:absolute;inset:20px;border-radius:50%;
-  background:radial-gradient(circle at 50% 44%,rgba(140,20,220,0.3) 0%,rgba(0,40,100,0.35) 50%,rgba(0,5,20,0.88) 80%);
-}
-.o-core{
-  position:absolute;inset:28px;border-radius:50%;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:8px;
-}
-.o-lbl{font-size:0.55rem;letter-spacing:0.22em;color:var(--dimtxt);text-transform:uppercase;margin-bottom:1px;}
-.o-rev{font-family:'Orbitron',sans-serif;font-size:1.85rem;font-weight:900;color:#fff;line-height:1;
-  text-shadow:0 0 20px rgba(200,80,255,1),0 0 55px rgba(180,40,255,0.6);}
-.o-orders{font-size:0.62rem;letter-spacing:0.12em;color:var(--txt);margin-top:2px;}
-.o-orders span{color:var(--gold);font-family:'Orbitron',sans-serif;font-weight:700;}
-.o-ph{font-size:0.52rem;letter-spacing:0.14em;color:var(--purple);margin-top:6px;text-transform:uppercase;}
-.o-trk{width:105px;height:4px;background:rgba(80,0,120,0.5);border-radius:2px;margin:5px auto 2px;overflow:hidden;}
-.o-fill{height:100%;width:35%;background:linear-gradient(90deg,var(--purple2),var(--purple));box-shadow:0 0 8px var(--purple);border-radius:2px;}
-.o-pct{font-family:'Orbitron',sans-serif;font-size:0.68rem;color:var(--purple);}
-.o-stat{margin-top:5px;display:flex;align-items:center;justify-content:center;gap:5px;}
-.sdt{width:7px;height:7px;border-radius:50%;}
-.s-warn{background:var(--gold);box-shadow:0 0 8px var(--gold);animation:pd 1s infinite;}
-.o-stxt{font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;}
-.o-alerts{margin-top:4px;width:100%;}
-.oal{font-size:0.46rem;padding:2px 6px;border-radius:2px;margin-top:2px;
-  animation:alp 1.6s ease-in-out infinite;color:var(--gold);
-  background:rgba(240,192,64,0.07);border:1px solid rgba(240,192,64,0.18);}
-@keyframes alp{0%,100%{opacity:1;}50%{opacity:0.3;}}
-
-/* ========== DEPT PANELS ========== */
-/* Clean minimal: just header + 2 stats + agent zone */
-.dept{
-  position:absolute;
-  width:200px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  z-index:15;
-  transition:box-shadow 0.3s;
-}
-.dept:hover{box-shadow:0 0 20px rgba(0,170,210,0.18);}
-.dept::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.5;}
-
-/* Clipped corners — armor plate feel */
-.dept-tl{clip-path:polygon(0 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%);}
-.dept-tr{clip-path:polygon(0 0,100% 0,100% 100%,18px 100%,0 calc(100% - 18px));}
-.dept-l{clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%);}
-.dept-r{clip-path:polygon(18px 0,100% 0,100% 100%,0 100%,0 18px);}
-.dept-bl{clip-path:polygon(0 0,100% 0,100% 100%,calc(100% - 18px) 100%,0 100%);}
-.dept-br{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);}
-
-.dh{display:flex;align-items:center;justify-content:space-between;
-  padding:9px 14px;background:rgba(0,15,36,0.95);border-bottom:1px solid var(--border2);}
-.dt{display:flex;align-items:center;gap:7px;
-  font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;
-  letter-spacing:0.18em;color:var(--cyan);text-transform:uppercase;}
-.dic{font-size:1.1rem;}
-.bdg{font-size:0.52rem;letter-spacing:0.1em;padding:2px 9px;border-radius:20px;text-transform:uppercase;font-weight:700;}
-.blive{background:rgba(0,255,157,0.08);color:var(--green);border:1px solid rgba(0,255,157,0.25);}
-.bnext{background:rgba(240,192,64,0.08);color:var(--gold);border:1px solid rgba(240,192,64,0.22);}
-
-.db{padding:10px 14px;}
-.dr{display:flex;align-items:center;justify-content:space-between;
-  padding:4px 0;border-bottom:1px solid var(--border2);font-size:0.8rem;}
-.dr:last-child{border-bottom:none;}
-.dl{color:var(--dimtxt);font-size:0.72rem;}
-.dv{font-family:'Orbitron',sans-serif;font-size:0.76rem;font-weight:700;color:var(--cyan);}
-.dv.g{color:var(--green);}.dv.go{color:var(--gold);}.dv.d{color:var(--dimtxt);}.dv.s{color:var(--sapphire);}
-
-/* Agent zone */
-.az{height:52px;margin:8px 0 0;
-  background:rgba(0,6,18,0.8);border:1px solid var(--border2);border-radius:3px;
-  position:relative;overflow:hidden;}
-.az-lbl{position:absolute;bottom:3px;right:5px;font-size:0.5rem;letter-spacing:0.06em;color:var(--dimtxt);}
-
-/* Aliens */
-.alien{position:absolute;bottom:4px;width:17px;height:26px;display:flex;flex-direction:column;align-items:center;}
-.al-ant{position:relative;height:5px;width:13px;flex-shrink:0;}
-.al-ant::before,.al-ant::after{content:'';position:absolute;bottom:0;width:1.5px;height:5px;background:currentColor;border-radius:1px;}
-.al-ant::before{left:3px;transform:rotate(-15deg);}
-.al-ant::after{right:3px;transform:rotate(15deg);}
-.al-hd{width:12px;height:9px;border-radius:50% 50% 40% 40%;border:1.5px solid currentColor;background:rgba(0,0,0,0.5);position:relative;flex-shrink:0;}
-.al-hd::before,.al-hd::after{content:'';position:absolute;width:3px;height:3px;border-radius:50%;background:currentColor;top:2px;}
-.al-hd::before{left:1.5px;}.al-hd::after{right:1.5px;}
-.al-bd{width:12px;height:8px;border:1.5px solid currentColor;background:rgba(0,0,0,0.3);border-radius:2px;margin-top:1px;flex-shrink:0;}
-.al-lg{display:flex;gap:3px;margin-top:1px;}
-.al-l{width:1.5px;height:6px;background:currentColor;border-radius:1px;}
-.alien.active{animation:awk var(--ws,1.9s) ease-in-out infinite;animation-delay:var(--wdl,0s);}
-@keyframes awk{0%{transform:translateX(0) scaleX(1);}23%{transform:translateX(10px) scaleX(1);}24%{transform:translateX(10px) scaleX(-1);}47%{transform:translateX(-10px) scaleX(-1);}48%{transform:translateX(-10px) scaleX(1);}72%{transform:translateX(5px) scaleX(1);}100%{transform:translateX(0) scaleX(1);}}
-.alien.active .al-l:first-child{animation:la .38s ease-in-out infinite alternate;}
-.alien.active .al-l:last-child{animation:la .38s ease-in-out infinite alternate-reverse;}
-@keyframes la{from{transform:rotate(-22deg);}to{transform:rotate(22deg);}}
-.alien.active .al-ant{animation:aa .6s ease-in-out infinite alternate;}
-@keyframes aa{from{transform:translateY(0);}to{transform:translateY(-1.5px);}}
-.alien.idle{animation:aid 3.2s ease-in-out infinite;animation-delay:var(--wdl,0s);}
-@keyframes aid{0%,100%{transform:translateY(0);}50%{transform:translateY(1.5px);}}
-.d-etsy .alien{color:var(--green);}
-.d-n8n .alien{color:var(--cyan);}
-.d-tiktok .alien{color:#b060ff;}
-.d-fiverr .alien{color:var(--gold);}
-.d-research .alien{color:var(--orange);}
-.d-sapphire .alien{color:var(--sapphire);}
-
-/* Dept positions — hexagonal around orb */
-/* Orb center = 50%, 50% of scene. Orb r ≈ 165px from center to outer seg */
-/* Panels: 200px wide, ~160px tall (approx) */
-/* Gap from orb edge to panel inner edge: ~20px */
-/* Distance from center to panel center: 165 + 20 + ~80 = ~265px */
-.d-etsy{left:calc(50% - 330px);top:calc(50% - 200px);}      /* top-left */
-.d-tiktok{left:calc(50% + 130px);top:calc(50% - 200px);}    /* top-right */
-.d-n8n{left:calc(50% - 355px);top:calc(50% - 75px);}        /* mid-left */
-.d-fiverr{left:calc(50% + 155px);top:calc(50% - 75px);}     /* mid-right */
-.d-research{left:calc(50% - 330px);top:calc(50% + 60px);}   /* bot-left */
-.d-sapphire{left:calc(50% + 130px);top:calc(50% + 60px);}   /* bot-right */
+body{background:#04010f;font-family:'Courier New',monospace;overflow:hidden;width:100vw;height:100vh;color:#fff;}
+#topbar{display:flex;align-items:center;justify-content:space-between;height:64px;background:linear-gradient(180deg,#0d0025,#060015);border-bottom:2px solid #7c00ff;padding:0 24px;position:relative;z-index:10;}
+#atlas-logo{font-size:26px;font-weight:900;letter-spacing:6px;color:#bf00ff;text-shadow:0 0 20px #bf00ff;}
+#atlas-logo span{color:#e800ff;}
+#face-wrap{display:flex;align-items:center;gap:12px;}
+.wave{display:flex;align-items:center;gap:3px;height:34px;}
+.wb{width:4px;border-radius:2px;background:#bf00ff;animation:wb 0.8s ease-in-out infinite;}
+.wb:nth-child(1){height:10px;animation-delay:0s;}
+.wb:nth-child(2){height:22px;animation-delay:0.1s;}
+.wb:nth-child(3){height:30px;animation-delay:0.2s;}
+.wb:nth-child(4){height:18px;animation-delay:0.3s;}
+.wb:nth-child(5){height:26px;animation-delay:0.4s;}
+.wb:nth-child(6){height:12px;animation-delay:0.5s;}
+@keyframes wb{0%,100%{transform:scaleY(0.4);opacity:0.5;}50%{transform:scaleY(1);opacity:1;}}
+#hud{display:flex;gap:24px;}
+.hi{text-align:center;}
+.hv{font-size:17px;font-weight:700;color:#bf00ff;text-shadow:0 0 8px #bf00ff;}
+.hl{font-size:8px;color:#7733aa;letter-spacing:2px;}
+#pill{display:flex;align-items:center;gap:6px;background:#110030;border:1px solid #5500bb;border-radius:20px;padding:5px 12px;}
+.dot{width:9px;height:9px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:pd 2s ease-in-out infinite;}
+@keyframes pd{0%,100%{opacity:1;}50%{opacity:0.3;}}
+#clk{font-size:13px;color:#bb88ff;}
+#scene{position:relative;width:100vw;height:calc(100vh - 64px);}
+/* ACTIVITY LOG */
+#alog{position:absolute;right:0;top:0;bottom:0;width:220px;background:rgba(8,0,24,0.96);border-left:2px solid #4400aa;z-index:5;display:flex;flex-direction:column;}
+#alh{padding:8px 12px;border-bottom:1px solid #330088;font-size:9px;letter-spacing:2px;color:#9955ff;}
+#ale{flex:1;overflow:hidden;padding:6px;display:flex;flex-direction:column;gap:3px;}
+.le{font-size:8.5px;padding:3px 5px;border-left:2px solid #5500aa;color:#cc99ff;line-height:1.4;animation:fi 0.4s ease;}
+@keyframes fi{from{opacity:0;}to{opacity:1;}}
+.tg{font-size:7.5px;font-weight:700;padding:1px 4px;border-radius:2px;margin-right:3px;}
+/* CENTER ORB */
+#orbc{position:absolute;left:calc(50% - 140px);top:calc(50% - 140px - 32px);width:280px;height:280px;z-index:4;}
+#orb{width:280px;height:280px;position:relative;display:flex;align-items:center;justify-content:center;}
+#orbsvg{position:absolute;top:0;left:0;width:280px;height:280px;}
+#orbi{position:relative;z-index:2;text-align:center;}
+.orev{font-size:26px;font-weight:900;color:#e800ff;text-shadow:0 0 16px #bf00ff;}
+.olbl{font-size:7.5px;color:#9933cc;letter-spacing:2px;margin-bottom:4px;}
+.ost{font-size:12px;color:#cc88ff;margin:2px 0;}
+.oph{font-size:9px;color:#7700cc;letter-spacing:2px;margin-top:3px;}
+.oal{font-size:9.5px;color:#ffcc00;text-shadow:0 0 8px #ffaa00;animation:ap 1s ease-in-out infinite;margin-top:3px;}
+@keyframes ap{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.pb{width:130px;height:5px;background:#220044;border-radius:3px;margin:5px auto;}
+.pbf{height:5px;background:linear-gradient(90deg,#7c00ff,#e800ff);border-radius:3px;width:15%;box-shadow:0 0 6px #bf00ff;}
+/* DEPARTMENTS - positioned around orb */
+.dept{position:absolute;width:210px;z-index:3;}
+#de{left:calc(50% - 140px - 220px);top:calc(50% - 32px - 200px);}
+#dt{left:calc(50% - 140px + 280px);top:calc(50% - 32px - 200px);}
+#dn{left:calc(50% - 140px - 240px);top:calc(50% - 32px - 20px);}
+#df{left:calc(50% - 140px + 280px);top:calc(50% - 32px - 20px);}
+#dr{left:calc(50% - 140px - 220px);top:calc(50% - 32px + 165px);}
+#ds{left:calc(50% - 140px + 280px);top:calc(50% - 32px + 165px);}
+.dc{width:100%;background:rgba(8,0,28,0.93);border:1px solid #5500aa;position:relative;overflow:hidden;clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px);}
+.dc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(100,0,255,0.07),transparent);pointer-events:none;}
+.dh{display:flex;align-items:center;gap:7px;padding:8px 10px 5px;border-bottom:1px solid #330066;}
+.di{font-size:18px;}
+.dn2{font-size:12px;font-weight:700;letter-spacing:2px;}
+.db2{font-size:7.5px;padding:2px 5px;border-radius:8px;margin-left:auto;}
+.dbody{padding:7px 10px;}
+.dr2{font-size:18px;font-weight:700;margin-bottom:3px;}
+.ds2{font-size:9.5px;color:#9966cc;margin:1px 0;}
+.ac{font-size:8.5px;color:#7744bb;padding:0 10px 3px;letter-spacing:1px;}
+.az{padding:4px 10px 7px;display:flex;flex-wrap:wrap;gap:3px;}
+.etsy .dn2{color:#ff9944;}.etsy .dr2{color:#ff9944;}
+.tiktok .dn2{color:#cc66ff;}.tiktok .dr2{color:#cc66ff;}
+.n8n .dn2{color:#00eeff;}.n8n .dr2{color:#00eeff;}
+.fiverr .dn2{color:#ffdd00;}.fiverr .dr2{color:#ffdd00;}
+.research .dn2{color:#ff6644;}.research .dr2{color:#ff6644;}
+.sapphire .dn2{color:#4499ff;}.sapphire .dr2{color:#4499ff;}
+/* ALIENS */
+.al{display:inline-block;width:20px;height:26px;}
+.al svg{width:100%;height:100%;}
+.al.active{animation:wk 0.5s steps(2) infinite;}
+.al.idle{opacity:0.3;}
+@keyframes wk{0%{transform:translateX(0);}50%{transform:translateX(3px);}100%{transform:translateX(0);}}
 </style>
 </head>
 <body>
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="brand">
-    <svg class="brand-svg" viewBox="0 0 40 40" fill="none">
-      <circle cx="20" cy="20" r="18" stroke="rgba(0,200,240,0.3)" stroke-width="1.2" stroke-dasharray="4 2"/>
-      <circle cx="20" cy="20" r="12" stroke="rgba(0,200,240,0.55)" stroke-width="1.4"/>
-      <circle cx="20" cy="20" r="5.5" fill="rgba(0,180,240,0.2)" stroke="#00d4ff" stroke-width="2"/>
-      <line x1="3" y1="20" x2="37" y2="20" stroke="rgba(0,200,240,0.18)" stroke-width="1"/>
-      <line x1="20" y1="3" x2="20" y2="37" stroke="rgba(0,200,240,0.18)" stroke-width="1"/>
-      <circle cx="20" cy="3" r="1.8" fill="#00d4ff"/>
-      <circle cx="37" cy="20" r="1.4" fill="#00d4ff" opacity="0.6"/>
-      <circle cx="3" cy="20" r="1.4" fill="#00d4ff" opacity="0.4"/>
-      <circle cx="20" cy="37" r="1.2" fill="#00d4ff" opacity="0.3"/>
+<div id="topbar">
+  <div id="atlas-logo">⬡ <span>ATLAS</span> OS</div>
+  <div id="face-wrap">
+    <div class="wave"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
+    <svg width="52" height="62" viewBox="0 0 52 62" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 14px #00e5ff)">
+      <defs>
+        <linearGradient id="hg" x1="26" y1="0" x2="26" y2="62" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="50%" stop-color="#7090b8"/><stop offset="100%" stop-color="#1a2440"/></linearGradient>
+        <linearGradient id="vg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00ffee" stop-opacity="0.95"/><stop offset="100%" stop-color="#004499" stop-opacity="0.6"/></linearGradient>
+        <filter id="gl"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <path d="M12 4 L40 4 L48 11 L50 42 L44 54 L8 54 L2 42 L2 11 Z" fill="url(#hg)" stroke="#446688" stroke-width="0.8"/>
+      <path d="M16 13 L36 13 L40 20 L40 44 L12 44 L12 20 Z" fill="#18283e" stroke="#334466" stroke-width="0.5"/>
+      <path d="M14 19 L38 19 L41 27 L38 35 L14 35 L11 27 Z" fill="url(#vg)" filter="url(#gl)"/>
+      <path d="M16 21 L33 21 L35 26 L33 30 L16 30 L14 26 Z" fill="white" opacity="0.12"/>
+      <line x1="14" y1="27" x2="38" y2="27" stroke="#00ffee" stroke-width="0.7" opacity="0.5"/>
+      <rect x="16" y="38" width="4" height="3" rx="0.5" fill="#00ddee" opacity="0.85" id="m1"/>
+      <rect x="22" y="38" width="4" height="3" rx="0.5" fill="#00ddee" opacity="0.6" id="m2"/>
+      <rect x="28" y="38" width="4" height="3" rx="0.5" fill="#00ddee" opacity="0.85" id="m3"/>
+      <path d="M2 21 L0 21 L-1 28 L0 36 L2 36" fill="#bb2200" stroke="#ff3311" stroke-width="0.4"/>
+      <path d="M50 21 L52 21 L53 28 L52 36 L50 36" fill="#bb2200" stroke="#ff3311" stroke-width="0.4"/>
+      <path d="M18 4 L26 1 L34 4" stroke="#aabbdd" stroke-width="1.1" fill="none"/>
+      <circle cx="26" cy="1" r="1.8" fill="#00ffee" opacity="0.9"/>
+      <line x1="18" y1="9" x2="36" y2="9" stroke="#445577" stroke-width="0.5" opacity="0.6"/>
+      <line x1="14" y1="48" x2="38" y2="48" stroke="#334455" stroke-width="0.6"/>
+      <line x1="16" y1="51" x2="36" y2="51" stroke="#334455" stroke-width="0.4"/>
     </svg>
-    <div>
-      <div class="bname">ATLAS</div>
-      <div class="bsub">ShadyPrintables Command Center &nbsp;/&nbsp; Phase 1</div>
+    <div class="wave"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+    <div id="hud">
+      <div class="hi"><div class="hv">6</div><div class="hl">DEPTS</div></div>
+      <div class="hi"><div class="hv">14</div><div class="hl">AGENTS</div></div>
+      <div class="hi"><div class="hv">9</div><div class="hl">ACTIVE</div></div>
+      <div class="hi"><div class="hv" id="hrev">$0</div><div class="hl">REVENUE</div></div>
+      <div class="hi"><div class="hv" id="hord">0</div><div class="hl">ORDERS</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div id="pill"><div class="dot"></div><span style="font-size:9px;letter-spacing:2px;color:#88ffcc;">ALL SYSTEMS LIVE</span></div>
+      <div id="clk"></div>
     </div>
   </div>
+</div>
 
-  <!-- ATLAS 3D FACE -->
-  <div class="face-center">
-    <div class="wf-side wf-left" id="wfL"></div>
-    <div class="face-orb">
-      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<div id="scene">
+  <!-- ORB -->
+  <div id="orbc">
+    <div id="orb">
+      <svg id="orbsvg" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <radialGradient id="fglow" cx="50%" cy="45%" r="50%">
-            <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#003366" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="headGrad" cx="42%" cy="38%" r="60%">
-            <stop offset="0%" stop-color="#0a3a50"/>
-            <stop offset="60%" stop-color="#041825"/>
-            <stop offset="100%" stop-color="#020e1a"/>
-          </radialGradient>
-          <radialGradient id="visorGrad" cx="50%" cy="40%" r="55%">
-            <stop offset="0%" stop-color="#00ffee" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#00aacc" stop-opacity="0.5"/>
-          </radialGradient>
-          <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <filter id="softglow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <radialGradient id="og" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#2a0060"/><stop offset="100%" stop-color="#04010f"/></radialGradient>
+          <filter id="gw"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
-
-        <!-- Outer tech ring — segmented like reference image -->
-        <circle cx="40" cy="40" r="38" stroke="rgba(100,180,220,0.25)" stroke-width="1.5"/>
-        <!-- Tick segments around ring -->
-        <circle cx="40" cy="40" r="35" stroke="none" fill="none"
-          stroke-dasharray="3 5.2" stroke-width="4" stroke="rgba(120,190,230,0.35)"
-          transform="rotate(-90 40 40)"/>
-        <!-- Four notch blocks -->
-        <rect x="37" y="2" width="6" height="5" rx="1" fill="rgba(100,200,240,0.5)"/>
-        <rect x="37" y="73" width="6" height="5" rx="1" fill="rgba(100,200,240,0.35)"/>
-        <rect x="2" y="37" width="5" height="6" rx="1" fill="rgba(100,200,240,0.4)"/>
-        <rect x="73" y="37" width="5" height="6" rx="1" fill="rgba(100,200,240,0.4)"/>
-        <!-- Inner ring -->
-        <circle cx="40" cy="40" r="30" stroke="rgba(0,200,240,0.4)" stroke-width="1.2"/>
-        <!-- Background glow -->
-        <circle cx="40" cy="40" r="29" fill="url(#fglow)"/>
-
-        <!-- HEAD SHAPE — 3D helmet -->
-        <!-- Shadow/depth layer -->
-        <path d="M27 29 Q27 20 40 19 Q53 20 53 29 L55 50 Q55 60 47 63 L40 65 L33 63 Q25 60 25 50 Z"
-          fill="rgba(0,15,30,0.6)" transform="translate(1.5,2)"/>
-        <!-- Main head -->
-        <path d="M27 29 Q27 20 40 19 Q53 20 53 29 L55 50 Q55 60 47 63 L40 65 L33 63 Q25 60 25 50 Z"
-          fill="url(#headGrad)" stroke="rgba(0,180,220,0.55)" stroke-width="1.2"/>
-
-        <!-- Forehead ridge -->
-        <path d="M32 22 Q40 18 48 22" stroke="rgba(0,200,240,0.5)" stroke-width="1" fill="none"/>
-
-        <!-- VISOR BAND — full width glowing -->
-        <rect x="25" y="31" width="30" height="12" rx="3"
-          fill="rgba(0,60,80,0.7)" stroke="rgba(0,200,240,0.35)" stroke-width="0.8"/>
-        <!-- Visor glow -->
-        <rect x="26" y="32" width="28" height="10" rx="2.5"
-          fill="rgba(0,200,240,0.08)"/>
-
-        <!-- LEFT EYE — 3D glowing -->
-        <ellipse cx="32" cy="37" rx="5" ry="3.5" fill="rgba(0,30,50,0.8)"/>
-        <ellipse cx="32" cy="37" rx="4" ry="2.8" fill="url(#visorGrad)" filter="url(#glow)"/>
-        <ellipse cx="31" cy="36" rx="1.5" ry="1" fill="white" opacity="0.7"/>
-
-        <!-- RIGHT EYE -->
-        <ellipse cx="48" cy="37" rx="5" ry="3.5" fill="rgba(0,30,50,0.8)"/>
-        <ellipse cx="48" cy="37" rx="4" ry="2.8" fill="url(#visorGrad)" filter="url(#glow)"/>
-        <ellipse cx="47" cy="36" rx="1.5" ry="1" fill="white" opacity="0.7"/>
-
-        <!-- Nose bridge -->
-        <rect x="38.5" y="43" width="3" height="4" rx="1" fill="rgba(0,140,180,0.4)"/>
-
-        <!-- MOUTH — animated open/close -->
-        <g id="mouthG">
-          <rect id="mouthRect" x="31" y="51" width="18" height="3.5" rx="1.8"
-            fill="rgba(0,200,240,0.65)" stroke="rgba(0,220,255,0.5)" stroke-width="0.8"
-            filter="url(#glow)"/>
+        <circle cx="140" cy="140" r="136" fill="none" stroke="#2a0060" stroke-width="3"/>
+        <circle cx="140" cy="140" r="130" fill="none" stroke="#bf00ff" stroke-width="2.5" filter="url(#gw)" opacity="0.8"/>
+        <g id="seg" style="transform-origin:140px 140px">
+          <path d="M140 10 A130 130 0 0 1 240 57" stroke="#7c00ff" stroke-width="8" fill="none"/>
+          <path d="M240 57 A130 130 0 0 1 270 140" stroke="#330055" stroke-width="8" fill="none"/>
+          <path d="M270 140 A130 130 0 0 1 222 232" stroke="#7c00ff" stroke-width="8" fill="none"/>
+          <path d="M222 232 A130 130 0 0 1 140 270" stroke="#330055" stroke-width="8" fill="none"/>
+          <path d="M140 270 A130 130 0 0 1 40 223" stroke="#7c00ff" stroke-width="8" fill="none"/>
+          <path d="M40 223 A130 130 0 0 1 10 140" stroke="#330055" stroke-width="8" fill="none"/>
+          <path d="M10 140 A130 130 0 0 1 57 47" stroke="#7c00ff" stroke-width="8" fill="none"/>
+          <path d="M57 47 A130 130 0 0 1 140 10" stroke="#330055" stroke-width="8" fill="none"/>
         </g>
-
-        <!-- Jaw/chin detail -->
-        <path d="M33 63 Q40 67 47 63" stroke="rgba(0,180,220,0.4)" stroke-width="1" fill="none"/>
-        <!-- Chin center dot -->
-        <circle cx="40" cy="65" r="1.2" fill="rgba(0,180,220,0.5)"/>
-
-        <!-- HEADPHONES / EAR PIECES — red like reference -->
-        <!-- Left ear -->
-        <rect x="19" y="33" width="7" height="10" rx="3.5"
-          fill="rgba(180,30,30,0.7)" stroke="rgba(220,60,60,0.6)" stroke-width="1"/>
-        <rect x="20.5" y="35" width="4" height="6" rx="2"
-          fill="rgba(255,80,80,0.4)"/>
-        <!-- Right ear -->
-        <rect x="54" y="33" width="7" height="10" rx="3.5"
-          fill="rgba(180,30,30,0.7)" stroke="rgba(220,60,60,0.6)" stroke-width="1"/>
-        <rect x="55.5" y="35" width="4" height="6" rx="2"
-          fill="rgba(255,80,80,0.4)"/>
-
-        <!-- Crown/top detail -->
-        <path d="M34 20 L36 15 L40 13 L44 15 L46 20" stroke="rgba(0,200,240,0.4)" stroke-width="1" fill="rgba(0,30,50,0.5)"/>
-        <circle cx="40" cy="13" r="2" fill="rgba(0,200,240,0.6)" filter="url(#glow)"/>
+        <circle cx="140" cy="140" r="100" fill="url(#og)" stroke="#5500aa" stroke-width="1.5"/>
       </svg>
-    </div>
-    <div class="wf-side" id="wfR"></div>
-  </div>
-
-  <div class="topbar-right">
-    <div class="live-pill"><div class="lpdot"></div>All Systems Live</div>
-    <div id="clk">--:--:--</div>
-  </div>
-</div>
-
-<!-- HUD STRIP -->
-<div class="hudbar">
-  <div class="hc"><div class="hl">Active Depts</div><div class="hv g">3 / 6</div></div>
-  <div class="hc"><div class="hl">Total Agents</div><div class="hv">9</div></div>
-  <div class="hc"><div class="hl">Active Agents</div><div class="hv g">4</div></div>
-  <div class="hc"><div class="hl">Etsy Revenue</div><div class="hv go">$0.00</div></div>
-  <div class="hc"><div class="hl">Total Orders</div><div class="hv">0</div></div>
-  <div class="hc"><div class="hl">Phase Progress</div><div class="hv">35%</div></div>
-</div>
-
-<!-- ACTIVITY LOG (right panel) -->
-<div class="act-panel">
-  <div class="act-top">⚡ Activity Log</div>
-  <div class="act-hud">
-    <div class="act-hud-inner">
-      <div class="hl">Potential Revenue</div>
-      <div class="hv">$42.94</div>
-    </div>
-  </div>
-  <div class="act-scroll">
-    <div class="act-inner" id="actInner">
-      <div class="act-item"><span class="act-tag t-sys">ATLAS</span><span class="act-msg">v6 deployed — Shield HQ + neon orb + 3D face</span></div>
-      <div class="act-item"><span class="act-tag t-gh">GITHUB</span><span class="act-msg">shadioss/command-center live on GitHub Pages</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Wedding Planner #4525260754 — $12.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Meal Planner #4525191829 — $6.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Habit Tracker #4525186513 — $3.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Mental Health Journal #4524967015 — $9.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Kids Activity #4524946002 — $3.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Budget Planner #4524884287 — $5.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-sys">N8N</span><span class="act-msg">3 workflows running — Research · Content · Publisher</span></div>
-      <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">TikTok needs setup — 3 agents idle</span></div>
-      <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">Fiverr needs setup — 2 agents idle</span></div>
-      <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">Sapphire needs setup — 2 agents idle</span></div>
-      <div class="act-item"><span class="act-tag t-sap">SAPPHIRE</span><span class="act-msg">Peptides store added to Atlas — tracking ready</span></div>
-      <div class="act-item"><span class="act-tag t-sys">SYSTEM</span><span class="act-msg">Master HQ Sheet updated — Jun 20 2026</span></div>
-      <!-- duplicate for seamless loop -->
-      <div class="act-item"><span class="act-tag t-sys">ATLAS</span><span class="act-msg">v6 deployed — Shield HQ + neon orb + 3D face</span></div>
-      <div class="act-item"><span class="act-tag t-gh">GITHUB</span><span class="act-msg">shadioss/command-center live on GitHub Pages</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Wedding Planner #4525260754 — $12.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Meal Planner #4525191829 — $6.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Habit Tracker #4525186513 — $3.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Mental Health Journal #4524967015 — $9.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Kids Activity #4524946002 — $3.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-etsy">ETSY</span><span class="act-msg">Budget Planner #4524884287 — $5.99 ACTIVE</span></div>
-      <div class="act-item"><span class="act-tag t-sys">N8N</span><span class="act-msg">3 workflows running — Research · Content · Publisher</span></div>
-      <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">TikTok needs setup — 3 agents idle</span></div>
-      <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">Fiverr needs setup — 2 agents idle</span></div>
-      <div class="act-item"><span class="act-tag t-warn">ALERT</span><span class="act-msg">Sapphire needs setup — 2 agents idle</span></div>
-      <div class="act-item"><span class="act-tag t-sap">SAPPHIRE</span><span class="act-msg">Peptides store added to Atlas — tracking ready</span></div>
-      <div class="act-item"><span class="act-tag t-sys">SYSTEM</span><span class="act-msg">Master HQ Sheet updated — Jun 20 2026</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- MAIN SCENE -->
-<div class="scene">
-  <svg id="svgC"></svg>
-
-  <!-- DEPT PANELS -->
-  <div class="dept d-etsy dept-tl" id="d-etsy">
-    <div class="dh"><div class="dt"><span class="dic">🛍</span>Etsy</div><span class="bdg blive">Live</span></div>
-    <div class="db">
-      <div class="dr"><span class="dl">Revenue</span><span class="dv g">$0.00</span></div>
-      <div class="dr"><span class="dl">Listings</span><span class="dv">6 Active</span></div>
-      <div class="dr"><span class="dl">Orders</span><span class="dv">0</span></div>
-      <div class="az" id="az0"><div class="az-lbl" id="ac0">3 Active · 0 Idle</div></div>
-    </div>
-  </div>
-
-  <div class="dept d-tiktok dept-tr" id="d-tiktok">
-    <div class="dh"><div class="dt"><span class="dic">📱</span>TikTok</div><span class="bdg bnext">Next</span></div>
-    <div class="db">
-      <div class="dr"><span class="dl">Revenue</span><span class="dv d">$0.00</span></div>
-      <div class="dr"><span class="dl">Account</span><span class="dv go">@shadesphysique</span></div>
-      <div class="dr"><span class="dl">Status</span><span class="dv go">Setup Next</span></div>
-      <div class="az" id="az1"><div class="az-lbl" id="ac1">0 Active · 3 Idle</div></div>
-    </div>
-  </div>
-
-  <div class="dept d-n8n dept-l" id="d-n8n">
-    <div class="dh"><div class="dt"><span class="dic">⚡</span>n8n</div><span class="bdg blive">Live</span></div>
-    <div class="db">
-      <div class="dr"><span class="dl">Workflows</span><span class="dv g">3 Active</span></div>
-      <div class="dr"><span class="dl">Capacity</span><span class="dv">2% Used</span></div>
-      <div class="dr"><span class="dl">Status</span><span class="dv g">Running</span></div>
-      <div class="az" id="az2"><div class="az-lbl" id="ac2">3 Active · 0 Idle</div></div>
-    </div>
-  </div>
-
-  <div class="dept d-fiverr dept-r" id="d-fiverr">
-    <div class="dh"><div class="dt"><span class="dic">💼</span>Fiverr</div><span class="bdg bnext">Next</span></div>
-    <div class="db">
-      <div class="dr"><span class="dl">Revenue</span><span class="dv d">$0.00</span></div>
-      <div class="dr"><span class="dl">Gigs</span><span class="dv d">0 Live</span></div>
-      <div class="dr"><span class="dl">Status</span><span class="dv go">Setup Next</span></div>
-      <div class="az" id="az3"><div class="az-lbl" id="ac3">0 Active · 2 Idle</div></div>
-    </div>
-  </div>
-
-  <div class="dept d-research dept-bl" id="d-research">
-    <div class="dh"><div class="dt"><span class="dic">🔬</span>Research AI</div><span class="bdg blive">Live</span></div>
-    <div class="db">
-      <div class="dr"><span class="dl">Mode</span><span class="dv g">Active</span></div>
-      <div class="dr"><span class="dl">Found</span><span class="dv">6 Products</span></div>
-      <div class="dr"><span class="dl">Batch 2</span><span class="dv go">Queued</span></div>
-      <div class="az" id="az4"><div class="az-lbl" id="ac4">1 Active · 0 Idle</div></div>
-    </div>
-  </div>
-
-  <div class="dept d-sapphire dept-br" id="d-sapphire">
-    <div class="dh"><div class="dt"><span class="dic">💎</span>Sapphire</div><span class="bdg bnext">Next</span></div>
-    <div class="db">
-      <div class="dr"><span class="dl">Revenue</span><span class="dv s">$0.00</span></div>
-      <div class="dr"><span class="dl">Orders</span><span class="dv d">0</span></div>
-      <div class="dr"><span class="dl">Products</span><span class="dv d">Peptides</span></div>
-      <div class="az" id="az5"><div class="az-lbl" id="ac5">0 Active · 2 Idle</div></div>
-    </div>
-  </div>
-
-  <!-- CENTER ORB -->
-  <div class="orb-wrap" id="orbWrap">
-    <div class="o-seg-outer"></div>
-    <div class="o-tick"></div>
-    <div class="o-neon"></div>
-    <div class="o-inner-ring"></div>
-    <div class="o-glow"></div>
-    <div class="o-core">
-      <div class="o-lbl">Total Revenue</div>
-      <div class="o-rev">$0.00</div>
-      <div class="o-orders">Orders: <span>0</span></div>
-      <div class="o-ph">Phase 1 Active</div>
-      <div class="o-trk"><div class="o-fill"></div></div>
-      <div class="o-pct">35%</div>
-      <div class="o-stat"><div class="sdt s-warn"></div><span class="o-stxt" style="color:var(--gold);">3 Alerts</span></div>
-      <div class="o-alerts">
-        <div class="oal">⚠ TikTok needs setup</div>
-        <div class="oal">⚠ Fiverr needs setup</div>
-        <div class="oal">⚠ Sapphire needs setup</div>
+      <div id="orbi">
+        <div class="olbl">TOTAL REVENUE</div>
+        <div class="orev">$0.00</div>
+        <div class="ost">📦 Orders: 0</div>
+        <div class="ost">⚡ Status: LIVE</div>
+        <div class="pb"><div class="pbf"></div></div>
+        <div class="oph">◈ PHASE 1 — LAUNCH</div>
+        <div class="oal">⚠ 3 DEPTS NEED SETUP</div>
       </div>
     </div>
   </div>
+
+  <!-- ETSY -->
+  <div class="dept etsy" id="de">
+    <div class="dc">
+      <div class="dh"><span class="di">🛍️</span><span class="dn2">ETSY</span><span class="db2" style="background:#ff6600;color:#fff;">LIVE</span></div>
+      <div class="dbody"><div class="dr2">$0.00</div><div class="ds2">6 listings · ShadyPrintables</div></div>
+      <div class="ac">2 Active · 1 Idle</div><div class="az" id="ae"></div>
+    </div>
+  </div>
+  <!-- TIKTOK -->
+  <div class="dept tiktok" id="dt">
+    <div class="dc">
+      <div class="dh"><span class="di">🎵</span><span class="dn2">TIKTOK</span><span class="db2" style="background:#6600ff;color:#fff;">LIVE</span></div>
+      <div class="dbody"><div class="dr2">$0.00</div><div class="ds2">@shadesphysique</div></div>
+      <div class="ac">3 Active · 0 Idle</div><div class="az" id="at2"></div>
+    </div>
+  </div>
+  <!-- N8N -->
+  <div class="dept n8n" id="dn">
+    <div class="dc">
+      <div class="dh"><span class="di">⚙️</span><span class="dn2">N8N</span><span class="db2" style="background:#00aacc;color:#000;">AUTO</span></div>
+      <div class="dbody"><div class="dr2">3 Flows</div><div class="ds2">shadyagi · Automations</div></div>
+      <div class="ac">2 Active · 0 Idle</div><div class="az" id="an"></div>
+    </div>
+  </div>
+  <!-- FIVERR -->
+  <div class="dept fiverr" id="df">
+    <div class="dc">
+      <div class="dh"><span class="di">💼</span><span class="dn2">FIVERR</span><span class="db2" style="background:#886600;color:#fff;">SETUP</span></div>
+      <div class="dbody"><div class="dr2">$0.00</div><div class="ds2">Gigs pending setup</div></div>
+      <div class="ac">0 Active · 2 Idle</div><div class="az" id="af"></div>
+    </div>
+  </div>
+  <!-- RESEARCH -->
+  <div class="dept research" id="dr">
+    <div class="dc">
+      <div class="dh"><span class="di">🔬</span><span class="dn2">RESEARCH</span><span class="db2" style="background:#cc3300;color:#fff;">AI</span></div>
+      <div class="dbody"><div class="dr2">Running</div><div class="ds2">Market analysis · Trends</div></div>
+      <div class="ac">2 Active · 1 Idle</div><div class="az" id="ar"></div>
+    </div>
+  </div>
+  <!-- SAPPHIRE -->
+  <div class="dept sapphire" id="ds">
+    <div class="dc">
+      <div class="dh"><span class="di">💎</span><span class="dn2">SAPPHIRE</span><span class="db2" style="background:#0044ff;color:#fff;">SETUP</span></div>
+      <div class="dbody"><div class="dr2">$0.00</div><div class="ds2">Peptides website · Orders</div></div>
+      <div class="ac">0 Active · 1 Idle</div><div class="az" id="as2"></div>
+    </div>
+  </div>
+
+  <!-- LOG -->
+  <div id="alog">
+    <div id="alh">◈ SYSTEM LOG</div>
+    <div id="ale"></div>
+  </div>
 </div>
+
 <script>
-function tick(){const n=new Date(),p=v=>String(v).padStart(2,'0');
-  document.getElementById('clk').textContent=p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());}
-tick();setInterval(tick,1000);
-
-// Waveform
-['wfL','wfR'].forEach(id=>{
-  const wf=document.getElementById(id);if(!wf)return;
-  for(let i=0;i<18;i++){
-    const b=document.createElement('div');b.className='wb';
-    const h=Math.random()*20+3,d=(Math.random()*0.4+0.22).toFixed(2),dl=(Math.random()*0.7).toFixed(2);
-    b.style.cssText='--h:'+h+'px;--d:'+d+'s;--dl:'+dl+'s;animation-delay:'+dl+'s;';wf.appendChild(b);}});
-
-// Alien factory
-function mkAlien(active,delay){
-  const el=document.createElement('div');el.className='alien '+(active?'active':'idle');
-  el.style.setProperty('--wdl',(delay||0)+'s');
-  if(active)el.style.setProperty('--ws',(1.2+Math.random())+'s');
-  el.innerHTML='<div class="al-ant"></div><div class="al-hd"></div><div class="al-bd"></div><div class="al-lg"><div class="al-l"></div><div class="al-l"></div></div>';
-  return el;
-}
-
-// [zoneId, active, idle, parentClass]
-const DEPS=[
-  ['az0',3,0,'d-etsy'],['az1',0,3,'d-tiktok'],['az2',3,0,'d-n8n'],
-  ['az3',0,2,'d-fiverr'],['az4',1,0,'d-research'],['az5',0,2,'d-sapphire']
-];
-function spawnAliens(){
-  DEPS.forEach(([zid,a,idle,cls])=>{
-    const z=document.getElementById(zid);if(!z)return;
-    z.querySelectorAll('.alien').forEach(e=>e.remove());
-    const total=a+idle;if(!total)return;
-    const zw=Math.max(z.offsetWidth-12,60);
-    const sp=Math.min(30,Math.floor(zw/(total+0.5)));
-    let x=6;
-    for(let i=0;i<a;i++){const al=mkAlien(true,i*0.3);al.style.left=x+'px';z.appendChild(al);x+=sp;}
-    for(let i=0;i<idle;i++){const al=mkAlien(false,i*0.5);al.style.left=x+'px';al.style.opacity='0.35';z.appendChild(al);x+=sp;}
-  });
-}
-
-// SVG connector lines
-function drawLines(){
-  const svg=document.getElementById('svgC');
-  const scene=document.querySelector('.scene');
-  const orb=document.getElementById('orbWrap');
-  if(!svg||!scene||!orb)return;
-  const sr=scene.getBoundingClientRect();
-  const or=orb.getBoundingClientRect();
-  const cx=or.left-sr.left+or.width/2,cy=or.top-sr.top+or.height/2;
-  const er=or.width/2+24;
-  svg.innerHTML='';
-  ['d-etsy','d-tiktok','d-n8n','d-fiverr','d-research','d-sapphire'].forEach((id,i)=>{
-    const d=document.getElementById(id);if(!d)return;
-    const pr=d.getBoundingClientRect();
-    const px=pr.left-sr.left+pr.width/2,py=pr.top-sr.top+pr.height/2;
-    const dx=px-cx,dy=py-cy,len=Math.sqrt(dx*dx+dy*dy);if(len<1)return;
-    const sx=cx+dx/len*er,sy=cy+dy/len*er,ex=px-dx/len*12,ey=py-dy/len*12;
-    const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
-    ln.setAttribute('x1',sx);ln.setAttribute('y1',sy);ln.setAttribute('x2',ex);ln.setAttribute('y2',ey);
-    ln.setAttribute('stroke','rgba(180,40,255,0.2)');ln.setAttribute('stroke-width','1.5');ln.setAttribute('stroke-dasharray','5 7');
-    svg.appendChild(ln);
-    const pid='lp'+i;
-    const pt=document.createElementNS('http://www.w3.org/2000/svg','path');
-    pt.setAttribute('id',pid);pt.setAttribute('d','M'+sx+','+sy+' L'+ex+','+ey);pt.setAttribute('fill','none');pt.setAttribute('stroke','none');svg.appendChild(pt);
-    const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    dot.setAttribute('r','3');dot.setAttribute('fill','rgba(180,40,255,0.7)');
-    const am=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
-    am.setAttribute('dur',(2+i*0.4).toFixed(1)+'s');am.setAttribute('repeatCount','indefinite');am.setAttribute('begin',(i*0.5).toFixed(1)+'s');
-    const mp=document.createElementNS('http://www.w3.org/2000/svg','mpath');
-    mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#'+pid);am.appendChild(mp);dot.appendChild(am);svg.appendChild(dot);
-  });
-}
-
-setTimeout(()=>{spawnAliens();drawLines();},300);
-window.addEventListener('resize',()=>setTimeout(()=>{drawLines();spawnAliens();},100));
-</script></body></html>
+setInterval(()=>{const n=new Date();document.getElementById('clk').textContent=n.toLocaleTimeString('en-US',{hour12:false});},1000);
+let a=0;
+function rot(){a+=0.3;const s=document.getElementById('seg');if(s)s.style.transform='rotate('+a+'deg)';requestAnimationFrame(rot);}
+rot();
+function mkAlien(color,active){return '<div class="al '+(active?'active':'idle')+'"><svg viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="11" cy="9" rx="7" ry="8" fill="'+color+'" opacity="0.9"/><ellipse cx="8.5" cy="8" rx="2" ry="2.5" fill="#00ffee" opacity="0.9"/><ellipse cx="13.5" cy="8" rx="2" ry="2.5" fill="#00ffee" opacity="0.9"/><ellipse cx="8.5" cy="8" rx="1" ry="1.2" fill="white"/><ellipse cx="13.5" cy="8" rx="1" ry="1.2" fill="white"/><line x1="6" y1="4" x2="3" y2="1" stroke="'+color+'" stroke-width="1.2"/><line x1="16" y1="4" x2="19" y2="1" stroke="'+color+'" stroke-width="1.2"/><circle cx="3" cy="1" r="1.2" fill="'+color+'"/><circle cx="19" cy="1" r="1.2" fill="'+color+'"/><rect x="7" y="17" width="8" height="8" rx="2" fill="'+color+'" opacity="0.8"/><line x1="4" y1="19" x2="7" y2="20" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round"/><line x1="18" y1="19" x2="15" y2="20" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="25" x2="5" y2="28" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round"/><line x1="15" y1="25" x2="17" y2="28" stroke="'+color+'" stroke-width="1.5" stroke-linecap="round"/></svg></div>';}
+const deptData=[{id:'ae',color:'#ff8833',a:2,i:1},{id:'at2',color:'#cc44ff',a:3,i:0},{id:'an',color:'#00ddff',a:2,i:0},{id:'af',color:'#ffdd00',a:0,i:2},{id:'ar',color:'#ff6644',a:2,i:1},{id:'as2',color:'#4499ff',a:0,i:1}];
+deptData.forEach(d=>{const z=document.getElementById(d.id);if(!z)return;let h='';for(let i=0;i<d.a;i++)h+=mkAlien(d.color,true);for(let i=0;i<d.i;i++)h+=mkAlien(d.color,false);z.innerHTML=h;});
+const lgs=[{t:'SYSTEM',c:'#333',tc:'#0ff',m:'Atlas v8 online — Jun 20 2026'},{t:'ETSY',c:'#ff5500',tc:'#fff',m:'6 listings live'},{t:'N8N',c:'#00aacc',tc:'#000',m:'3 automations running'},{t:'TIKTOK',c:'#6600ff',tc:'#fff',m:'@shadesphysique active'},{t:'ALERT',c:'#cc8800',tc:'#000',m:'Fiverr needs setup'},{t:'SAPPHIRE',c:'#0033cc',tc:'#fff',m:'Peptides store pending'},{t:'SYSTEM',c:'#333',tc:'#0ff',m:'All core systems live'}];
+const lc=document.getElementById('ale');
+lgs.forEach(l=>{const d=document.createElement('div');d.className='le';d.innerHTML='<span class="tg" style="background:'+l.c+';color:'+l.tc+'">'+l.t+'</span>'+l.m;lc.appendChild(d);});
+const nl=[{t:'SYSTEM',c:'#333',tc:'#0ff',m:'Revenue scan running...'},{t:'N8N',c:'#00aacc',tc:'#000',m:'Etsy sync triggered'},{t:'TIKTOK',c:'#6600ff',tc:'#fff',m:'3 posts scheduled'},{t:'ETSY',c:'#ff5500',tc:'#fff',m:'Store health: Excellent'}];
+let li=0;
+setInterval(()=>{const l=nl[li%nl.length];const d=document.createElement('div');d.className='le';d.innerHTML='<span class="tg" style="background:'+l.c+';color:'+l.tc+'">'+l.t+'</span>'+l.m;lc.prepend(d);li++;while(lc.children.length>18)lc.removeChild(lc.lastChild);},4500);
+setInterval(()=>{['m1','m2','m3'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.opacity=(0.4+Math.random()*0.6).toFixed(2);});},700);
+</script>
+</body>
+</html>
