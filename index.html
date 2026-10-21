@@ -159,6 +159,9 @@ footer{color:var(--dim);font-size:11px;text-align:center;padding:24px 0 8px;font
   <div class="group-title">BUSINESSES</div>
   <div class="grid" id="gBiz"></div>
 
+  <div class="group-title">SOCIAL</div>
+  <div class="grid" id="social"></div>
+
   <div class="group-title">CLIENTS <span id="clientsTag" style="letter-spacing:.12em"></span></div>
   <div id="clientsBox"></div>
 
@@ -258,6 +261,7 @@ function render(){
   renderCalendar(data.calendar || []);
   renderClients(data.coaching || {locked: true});
   renderStock(data.deltaStock);
+  renderSocial(data.youtube);
   for (const [gid, secs] of Object.entries(SECTIONS)) renderGroup(gid, secs, inbox);
 }
 
@@ -353,6 +357,22 @@ function renderStock(list){
     ${out.length ? `<button class="more" id="soldBtn">${showSold ? 'hide sold out' : '+ show ' + out.length + ' sold out'}</button>` : ''}
     <div class="hint">Live from deltapep.com · change stock in WP Admin → Delta Control</div>`;
   const b = $('soldBtn'); if (b) b.onclick = () => { showSold = !showSold; renderStock(list); };
+}
+
+const num = n => n === null || n === undefined ? '—' : Number(n).toLocaleString('en-US');
+function renderSocial(yt){
+  const ytCard = yt ? `<div class="card cl" style="--accent:#ff3d3d">
+      <div class="hd"><span class="ic">▶️</span><div><div class="nm">YOUTUBE</div><div class="ds">${esc(yt.handle || '')}</div></div></div>
+      <div class="stat">
+        <div><div class="l">Subscribers</div><div class="v">${num(yt.subscribers)}</div></div>
+        <div><div class="l">Videos</div><div class="v">${num(yt.videos)}</div></div>
+        <div><div class="l">Recent views</div><div class="v">${num(yt.recentViews)}</div></div>
+      </div>
+      <div class="sub">Latest uploads</div>
+      <div class="lifts">${(yt.latest || []).map(v => `<div><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px"><a href="${esc(v.url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:none">${esc(v.title)}</a> <span style="color:var(--dim);font-size:10px">${esc(fmtDay(v.published))}</span></span><span>${num(v.views)} views</span></div>`).join('') || '<div class="empty">No uploads found</div>'}</div>
+    </div>` : `<div class="card" style="--accent:#ff3d3d"><div class="hd"><span class="ic">▶️</span><div><div class="nm">YOUTUBE</div><div class="ds">Couldn't load right now</div></div></div></div>`;
+  const later = (icon, name, accent, note) => `<div class="card" style="--accent:${accent}"><div class="hd"><span class="ic">${icon}</span><div><div class="nm">${name}</div><div class="ds">${note}</div></div></div><div class="hint">Text Atlas your numbers, e.g. “IG: 1,240 followers, reel hit 3k views”.</div></div>`;
+  $('social').innerHTML = ytCard + later('📸', 'INSTAGRAM', 'var(--pink)', 'Not connected yet · needs Meta Business setup') + later('🎵', 'TIKTOK', 'var(--cyan)', 'Not connected yet · TikTok API approval required');
 }
 
 function renderClients(c){
