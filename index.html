@@ -350,7 +350,7 @@ function renderStock(list){
   const box = $('stockBox');
   if (!list) { box.innerHTML = '<div class="notice">Could not read stock from deltapep.com right now.</div>'; return; }
   const inS = list.filter(p => p.inStock), out = list.filter(p => !p.inStock), low = inS.filter(p => p.low !== null && p.low !== undefined);
-  const price = p => p.priceRange && p.priceRange[0] !== p.priceRange[1] ? money(p.priceRange[0]) + '–' + money(p.priceRange[1]) : money(p.price);
+  const price = p => p.priceText ? unent(String(p.priceText).replace(/&#0*36;/g, '$').replace(/\$\s+/g, '$')) : (p.price ? money(p.price) : '—');
   const row = p => `<tr><td><a href="${esc(p.url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:none">${esc(unent(p.name))}</a><div style="font-size:11px;color:var(--muted)">${esc(unent(p.category))}</div></td><td class="mono" style="text-align:right;color:var(--muted)">${price(p)}</td><td style="text-align:right"><span class="flag ${!p.inStock ? 'off' : (p.low !== null && p.low !== undefined) ? 'warn' : 'ok'}">${!p.inStock ? 'sold out' : (p.low !== null && p.low !== undefined) ? 'only ' + p.low + ' left' : 'in stock'}</span></td></tr>`;
   box.innerHTML = `<h2>🧪 DELTA STOCK <span class="tag">${inS.length} in stock · ${low.length} low · ${out.length} sold out</span></h2>
     <table class="sales">${inS.map(row).join('')}${showSold ? out.map(row).join('') : ''}</table>
