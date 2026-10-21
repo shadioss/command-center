@@ -163,7 +163,7 @@ footer{color:var(--dim);font-size:11px;text-align:center;padding:24px 0 8px;font
   <div id="clientsBox"></div>
 
   <div class="group-title">DELTA STOCK</div>
-  <div class="panel"><div class="notice">Live stock from deltapep.com will appear here once the WooCommerce connection is added in Atlas.</div></div>
+  <div class="panel" id="stockBox"><div class="notice">Loading stock from deltapep.com…</div></div>
 
   <div class="group-title">PROJECTS</div>
   <div class="grid" id="gProj"></div>
@@ -257,6 +257,7 @@ function render(){
   renderRevenue(rev);
   renderCalendar(data.calendar || []);
   renderClients(data.coaching || {locked: true});
+  renderStock(data.deltaStock);
   for (const [gid, secs] of Object.entries(SECTIONS)) renderGroup(gid, secs, inbox);
 }
 
@@ -337,6 +338,21 @@ function spark(points){
   const ws = points.map(p => p.w), mn = Math.min(...ws), mx = Math.max(...ws), rg = (mx - mn) || 1;
   const pts = points.map((p, i) => `${(i / (points.length - 1)) * 300},${36 - ((p.w - mn) / rg) * 32}`).join(' ');
   return `<svg class="spark" viewBox="0 0 300 40" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="var(--cyan)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+const unent = s => String(s ?? '').replace(/&amp;/g, '&').replace(/&#8211;/g, '–').replace(/&#039;|&#39;/g, "'");
+let showSold = false;
+function renderStock(list){
+  const box = $('stockBox');
+  if (!list) { box.innerHTML = '<div class="notice">Could not read stock from deltapep.com right now.</div>'; return; }
+  const inS = list.filter(p => p.inStock), out = list.filter(p => !p.inStock), low = inS.filter(p => p.low !== null && p.low !== undefined);
+  const price = p => p.priceRange && p.priceRange[0] !== p.priceRange[1] ? money(p.priceRange[0]) + '–' + money(p.priceRange[1]) : money(p.price);
+  const row = p => `<tr><td><a href="${esc(p.url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:none">${esc(unent(p.name))}</a><div style="font-size:11px;color:var(--muted)">${esc(unent(p.category))}</div></td><td class="mono" style="text-align:right;color:var(--muted)">${price(p)}</td><td style="text-align:right"><span class="flag ${!p.inStock ? 'off' : (p.low !== null && p.low !== undefined) ? 'warn' : 'ok'}">${!p.inStock ? 'sold out' : (p.low !== null && p.low !== undefined) ? 'only ' + p.low + ' left' : 'in stock'}</span></td></tr>`;
+  box.innerHTML = `<h2>🧪 DELTA STOCK <span class="tag">${inS.length} in stock · ${low.length} low · ${out.length} sold out</span></h2>
+    <table class="sales">${inS.map(row).join('')}${showSold ? out.map(row).join('') : ''}</table>
+    ${out.length ? `<button class="more" id="soldBtn">${showSold ? 'hide sold out' : '+ show ' + out.length + ' sold out'}</button>` : ''}
+    <div class="hint">Live from deltapep.com · change stock in WP Admin → Delta Control</div>`;
+  const b = $('soldBtn'); if (b) b.onclick = () => { showSold = !showSold; renderStock(list); };
 }
 
 function renderClients(c){
