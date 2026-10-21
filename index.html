@@ -371,8 +371,25 @@ function renderSocial(yt){
       <div class="sub">Latest uploads</div>
       <div class="lifts">${(yt.latest || []).map(v => `<div><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px"><a href="${esc(v.url)}" target="_blank" rel="noopener" style="color:var(--text);text-decoration:none">${esc(v.title)}</a> <span style="color:var(--dim);font-size:10px">${esc(fmtDay(v.published))}</span></span><span>${num(v.views)} views</span></div>`).join('') || '<div class="empty">No uploads found</div>'}</div>
     </div>` : `<div class="card" style="--accent:#ff3d3d"><div class="hd"><span class="ic">▶️</span><div><div class="nm">YOUTUBE</div><div class="ds">Couldn't load right now</div></div></div></div>`;
-  const later = (icon, name, accent, note) => `<div class="card" style="--accent:${accent}"><div class="hd"><span class="ic">${icon}</span><div><div class="nm">${name}</div><div class="ds">${note}</div></div></div><div class="hint">Text Atlas your numbers, e.g. “IG: 1,240 followers, reel hit 3k views”.</div></div>`;
-  $('social').innerHTML = ytCard + later('📸', 'INSTAGRAM', 'var(--pink)', 'Not connected yet · needs Meta Business setup') + later('🎵', 'TIKTOK', 'var(--cyan)', 'Not connected yet · TikTok API approval required');
+  const soc = (data && data.social) || {};
+  const logged = (icon, name, accent, s) => {
+    s = s || {};
+    const has = s.followers !== null && s.followers !== undefined || (s.top && s.top.length);
+    const chg = s.change === null || s.change === undefined ? '—' : (s.change > 0 ? '+' : '') + num(s.change);
+    return `<div class="card cl" style="--accent:${accent}">
+      <div class="hd"><span class="ic">${icon}</span><div><div class="nm">${name}</div><div class="ds">${s.lastDate ? 'Last update ' + esc(fmtDay(s.lastDate)) : 'Logged via Atlas'}</div></div></div>
+      ${has ? `<div class="stat">
+        <div><div class="l">Followers</div><div class="v">${num(s.followers)}</div></div>
+        <div><div class="l">Change</div><div class="v" style="color:${s.change > 0 ? 'var(--green)' : s.change < 0 ? 'var(--red)' : 'var(--muted)'}">${chg}</div></div>
+        <div><div class="l">Views${s.period ? ' · ' + esc(s.period) : ''}</div><div class="v">${num(s.periodViews)}</div></div>
+      </div>
+      <div class="sub">Top posts</div>
+      <div class="lifts">${(s.top || []).map(p => `<div><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px">${esc(p.title || '(untitled)')} <span style="color:var(--dim);font-size:10px">${esc(p.topic || p.format || '')}</span></span><span>${num(p.views)} views</span></div>`).join('') || '<div class="empty">No posts logged yet</div>'}</div>`
+      : `<div class="empty">No numbers yet.</div>`}
+      <div class="hint">Send Atlas a screenshot of your ${name === 'TIKTOK' ? 'TikTok Analytics' : 'Instagram Insights'} (overview + top posts) and it logs everything.</div>
+    </div>`;
+  };
+  $('social').innerHTML = ytCard + logged('📸', 'INSTAGRAM', 'var(--pink)', soc.Instagram) + logged('🎵', 'TIKTOK', 'var(--cyan)', soc.TikTok);
 }
 
 function renderClients(c){
