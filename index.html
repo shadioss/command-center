@@ -90,6 +90,20 @@ table.sales td.amt{text-align:right;font-family:"JetBrains Mono",monospace;color
 .hint{font-size:11px;color:var(--dim);margin-top:10px;font-family:"JetBrains Mono",monospace}
 .notice{border:1px dashed var(--line);border-radius:10px;padding:14px;color:var(--muted);font-size:12px}
 .err-banner{display:none;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.4);color:var(--red);padding:10px 14px;border-radius:10px;margin-bottom:16px;font-size:13px}
+.lock{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.lock input{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:8px 10px;font-family:"JetBrains Mono",monospace;letter-spacing:.15em;text-transform:uppercase;width:180px}
+.lock button{background:var(--cyan);color:#04121a;border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer}
+.cl .stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.cl .stat div{background:var(--panel2);border-radius:8px;padding:8px}
+.cl .stat .l{font-size:9px;letter-spacing:.14em;color:var(--muted);font-family:"JetBrains Mono",monospace;text-transform:uppercase}
+.cl .stat .v{font-family:Orbitron,sans-serif;font-size:16px;margin-top:2px}
+.flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.flag{font-size:10px;font-family:"JetBrains Mono",monospace;border-radius:999px;padding:2px 8px;border:1px solid var(--line)}
+.flag.ok{color:var(--green);border-color:rgba(52,211,153,.4)} .flag.warn{color:var(--amber);border-color:rgba(251,191,36,.4)} .flag.off{color:var(--muted)}
+.spark{width:100%;height:40px;display:block;margin-top:4px}
+.lifts{font-size:12px;margin-top:8px}
+.lifts div{display:flex;justify-content:space-between;padding:4px 0;border-top:1px solid var(--line)}
+.lifts span:last-child{font-family:"JetBrains Mono",monospace;color:var(--cyan)}
 footer{color:var(--dim);font-size:11px;text-align:center;padding:24px 0 8px;font-family:"JetBrains Mono",monospace}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.row.top{grid-template-columns:1fr}.revgrid{grid-template-columns:1fr}}
 @media (max-width:560px){.wrap{padding:12px}.kpis{grid-template-columns:repeat(2,1fr)}.brand h1{font-size:20px}.clock{font-size:16px}.grid{grid-template-columns:1fr}}
@@ -144,6 +158,9 @@ footer{color:var(--dim);font-size:11px;text-align:center;padding:24px 0 8px;font
 
   <div class="group-title">BUSINESSES</div>
   <div class="grid" id="gBiz"></div>
+
+  <div class="group-title">CLIENTS <span id="clientsTag" style="letter-spacing:.12em"></span></div>
+  <div id="clientsBox"></div>
 
   <div class="group-title">DELTA STOCK</div>
   <div class="panel"><div class="notice">Live stock from deltapep.com will appear here once the WooCommerce connection is added in Atlas.</div></div>
@@ -201,7 +218,8 @@ function setStatus(kind, text){ $('dot').className = 'dot ' + kind; $('statusTxt
 async function load(){
   setStatus('load', 'SYNCING');
   try {
-    const r = await fetch(FEED, {cache: 'no-store'});
+    const key = getKey();
+    const r = await fetch(FEED + (key ? '?k=' + encodeURIComponent(key) : ''), {cache: 'no-store'});
     if (!r.ok) throw new Error('Atlas returned ' + r.status);
     data = await r.json();
     render();
@@ -238,6 +256,7 @@ function render(){
 
   renderRevenue(rev);
   renderCalendar(data.calendar || []);
+  renderClients(data.coaching || {locked: true});
   for (const [gid, secs] of Object.entries(SECTIONS)) renderGroup(gid, secs, inbox);
 }
 
@@ -307,6 +326,51 @@ function renderGroup(gid, secs, inbox){
       <ul class="items">${li || '<li class="empty">Nothing here yet</li>'}</ul>${more}
     </div>`;
   }).join('');
+}
+
+function getKey(){ try { return localStorage.getItem('atlas_key') || ''; } catch (e) { return memKey || ''; } }
+let memKey = '';
+function setKey(v){ memKey = v; try { localStorage.setItem('atlas_key', v); } catch (e) {} }
+
+function spark(points){
+  if (!points || points.length < 2) return '';
+  const ws = points.map(p => p.w), mn = Math.min(...ws), mx = Math.max(...ws), rg = (mx - mn) || 1;
+  const pts = points.map((p, i) => `${(i / (points.length - 1)) * 300},${36 - ((p.w - mn) / rg) * 32}`).join(' ');
+  return `<svg class="spark" viewBox="0 0 300 40" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="var(--cyan)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+function renderClients(c){
+  const box = $('clientsBox');
+  if (c.locked) {
+    $('clientsTag').textContent = '· LOCKED';
+    box.innerHTML = `<div class="panel"><div class="lock"><span style="color:var(--muted);font-size:13px">🔒 Client info is locked on this device. Enter your code once:</span><input id="keyIn" placeholder="XXXX-XXXX-XXXX" autocomplete="off"><button id="keyBtn">Unlock</button>${getKey() ? '<span style="color:var(--red);font-size:12px">That code didn\'t work.</span>' : ''}</div></div>`;
+    $('keyBtn').onclick = () => { setKey($('keyIn').value.trim().toUpperCase()); load(); };
+    $('keyIn').onkeydown = e => { if (e.key === 'Enter') $('keyBtn').click(); };
+    return;
+  }
+  const list = c.clients || [];
+  $('clientsTag').textContent = '· ' + list.filter(x => x.status !== 'paused').length + ' ACTIVE' + (c.pendingApprovals ? ' · ' + c.pendingApprovals + ' MESSAGE(S) AWAITING YOUR OK' : '');
+  if (!list.length) { box.innerHTML = '<div class="panel"><div class="notice">No clients yet. Text Atlas: “New client: Mike, fat loss, trains Mon Wed Fri, check-in Sunday, starts at 205”.</div></div>'; return; }
+  box.innerHTML = '<div class="grid">' + list.map(x => {
+    const delta = (x.startWeight && x.currentWeight) ? Math.round((x.currentWeight - x.startWeight) * 10) / 10 : null;
+    const lifts = (x.topLifts || []).map(l => `<div><span>${esc(l.exercise)}</span><span>${l.weight} × ${l.reps}</span></div>`).join('');
+    return `<div class="card cl" style="--accent:#CC2200">
+      <div class="hd"><span class="ic">🏋️</span><div><div class="nm">${esc(String(x.name || '').toUpperCase())}</div><div class="ds">${esc(x.goal || '')}${x.workoutDays ? ' · ' + esc(x.workoutDays) : ''}</div></div></div>
+      <div class="stat">
+        <div><div class="l">Weight</div><div class="v">${x.currentWeight ?? '—'}</div></div>
+        <div><div class="l">Change</div><div class="v" style="color:${delta === null ? 'var(--muted)' : delta <= 0 ? 'var(--green)' : 'var(--amber)'}">${delta === null ? '—' : (delta > 0 ? '+' : '') + delta}</div></div>
+        <div><div class="l">Sessions 7d</div><div class="v">${x.sessionsThisWeek || 0}</div></div>
+      </div>
+      ${spark(x.weightTrend)}
+      ${lifts ? '<div class="sub">Top lifts</div><div class="lifts">' + lifts + '</div>' : '<div class="empty">No workouts logged yet</div>'}
+      <div class="flags">
+        <span class="flag ${x.checkedInThisWeek ? 'ok' : 'warn'}">${x.checkedInThisWeek ? 'checked in' : 'check-in due'}</span>
+        <span class="flag ${x.linked ? 'ok' : 'off'}">${x.linked ? 'on coach bot' : 'not on bot'}</span>
+        ${x.status === 'paused' ? '<span class="flag off">paused</span>' : ''}
+        ${x.lastWorkout ? '<span class="flag off">last session ' + esc(fmtDay(x.lastWorkout)) + '</span>' : ''}
+      </div>
+    </div>`;
+  }).join('') + '</div>';
 }
 
 document.addEventListener('click', e => {
