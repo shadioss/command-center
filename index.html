@@ -90,6 +90,15 @@ table.sales td.amt{text-align:right;font-family:"JetBrains Mono",monospace;color
 .hint{font-size:11px;color:var(--dim);margin-top:10px;font-family:"JetBrains Mono",monospace}
 .notice{border:1px dashed var(--line);border-radius:10px;padding:14px;color:var(--muted);font-size:12px}
 .err-banner{display:none;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.4);color:var(--red);padding:10px 14px;border-radius:10px;margin-bottom:16px;font-size:13px}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.pcol{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;min-width:0}
+.pcol h3{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
+.pcard{background:var(--panel2);border-radius:10px;padding:10px;margin-top:8px;border-left:3px solid var(--violet)}
+.pcard .t{font-size:13px;line-height:1.35}
+.pcard .m{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted);margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+.pcard .m b{color:var(--cyan);font-weight:600}
+@media (max-width:1100px){.pipe{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.pipe{grid-template-columns:1fr}}
 .lock{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .lock input{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:8px 10px;font-family:"JetBrains Mono",monospace;letter-spacing:.15em;text-transform:uppercase;width:180px}
 .lock button{background:var(--cyan);color:#04121a;border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer}
@@ -158,6 +167,9 @@ footer{color:var(--dim);font-size:11px;text-align:center;padding:24px 0 8px;font
 
   <div class="group-title">BUSINESSES</div>
   <div class="grid" id="gBiz"></div>
+
+  <div class="group-title">CONTENT PIPELINE <span id="pipeTag" style="letter-spacing:.12em"></span></div>
+  <div class="pipe" id="pipeline"></div>
 
   <div class="group-title">SOCIAL</div>
   <div class="grid" id="social"></div>
@@ -262,6 +274,7 @@ function render(){
   renderClients(data.coaching || {locked: true});
   renderStock(data.deltaStock);
   renderSocial(data.youtube);
+  renderPipeline(data.pipeline || []);
   for (const [gid, secs] of Object.entries(SECTIONS)) renderGroup(gid, secs, inbox);
 }
 
@@ -390,6 +403,23 @@ function renderSocial(yt){
     </div>`;
   };
   $('social').innerHTML = ytCard + logged('📸', 'INSTAGRAM', 'var(--pink)', soc.Instagram) + logged('🎵', 'TIKTOK', 'var(--cyan)', soc.TikTok);
+}
+
+const PILLAR_COLORS = {'Busy Man Myths': 'var(--violet)', '3-3-3 Method': '#CC2200', 'Transformation': 'var(--green)', 'Mindset': 'var(--blue)', 'Peptide Education': 'var(--cyan)', 'Lifestyle': 'var(--amber)', 'Brand': 'var(--pink)'};
+function renderPipeline(items){
+  const stages = [['idea', '💡 IDEAS'], ['scripted', '✍️ SCRIPTED'], ['filmed', '🎬 FILMED'], ['posted', '📲 POSTED']];
+  const live = items.filter(i => i.status !== 'dropped');
+  $('pipeTag').textContent = '· ' + live.filter(i => i.status !== 'posted').length + ' IN PROGRESS';
+  $('pipeline').innerHTML = stages.map(([key, label]) => {
+    let col = live.filter(i => (i.status || 'idea') === key);
+    col.sort((a, b) => key === 'posted' ? String(b.posted).localeCompare(String(a.posted)) : String(a.planned || '9').localeCompare(String(b.planned || '9')));
+    const shown = key === 'posted' ? col.slice(0, 6) : col;
+    const cards = shown.map(i => `<div class="pcard" style="border-left-color:${PILLAR_COLORS[i.pillar] || 'var(--muted)'}">
+        <div class="t"><span class="mono" style="color:var(--dim)">#${i.id}</span> ${esc(i.title || i.hook)}</div>
+        <div class="m">${i.pillar ? '<span>' + esc(i.pillar) + '</span>' : ''}${i.format ? '<span>' + esc(i.format) + '</span>' : ''}${key === 'posted' ? (i.views ? '<b>' + num(i.views) + ' views</b>' : '<span>results pending</span>') : (i.planned ? '<span style="color:var(--amber)">' + esc(fmtDay(i.planned)) + '</span>' : '')}${key === 'idea' && i.hasScript ? '<span>script ✓</span>' : ''}</div>
+      </div>`).join('');
+    return `<div class="pcol"><h3><span>${label}</span><span>${col.length}</span></h3>${cards || '<div class="empty">Nothing here</div>'}</div>`;
+  }).join('');
 }
 
 function renderClients(c){
